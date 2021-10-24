@@ -61,6 +61,22 @@ public class GroceryStore {
 		return result;
 	}
 
+	public Result changePrice(Request request) {
+		Result result = new Result();
+		Product product = inventory.search(request.getProductId());
+		if (product == null) {
+			result.setResultCode(Result.PRODUCT_NOT_FOUND);
+			return result;
+		}
+		if (product.changePrice(request.getProductCurrentPrice())) {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			result.setProductFields(product);
+		} else {
+			result.setResultCode(Result.OPERATION_FAILED);
+		}
+		return result;
+	}
+
 	/**
 	 * Retrieves a deserialized version of the library from disk
 	 * 

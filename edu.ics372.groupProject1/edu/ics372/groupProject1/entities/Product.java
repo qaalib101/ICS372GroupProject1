@@ -1,6 +1,7 @@
 package edu.ics372.groupProject1.entities;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 
 public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -22,7 +23,8 @@ public class Product implements Serializable {
 	}
 
 	public String getCurrentPrice() {
-		return Double.toString(currentPrice);
+		DecimalFormat df = new DecimalFormat("#.00");
+		return df.format(currentPrice);
 	}
 
 	public String getMinimumReorderLevel() {
@@ -40,5 +42,14 @@ public class Product implements Serializable {
 	public boolean restock(int newQuantity) {
 		quantity += newQuantity;
 		return true;
+	}
+
+	public boolean changePrice(String newPrice) {
+		try {
+			currentPrice = Double.parseDouble(newPrice);
+			return true;
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
 	}
 }

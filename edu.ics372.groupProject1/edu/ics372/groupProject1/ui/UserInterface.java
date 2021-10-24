@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -24,6 +25,7 @@ public class UserInterface {
 	private static UserInterface userInterface;
 	private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	private static GroceryStore store;
+	private static final DecimalFormat decimalFormat = new DecimalFormat("#.00");
 	private static final int EXIT = 0;
 	private static final int ENROLL_MEMBER = 1;
 	private static final int REMOVE_MEMBER = 2;
@@ -169,6 +171,25 @@ public class UserInterface {
 	}
 
 	/**
+	 * Converts the string to a double
+	 * 
+	 * @param prompt the string for prompting
+	 * @return the integer corresponding to the string
+	 * 
+	 */
+	public double getDoubleNumber(String prompt) {
+		do {
+			try {
+				String item = getToken(prompt);
+				Double number = Double.valueOf(item);
+				return number.intValue();
+			} catch (NumberFormatException nfe) {
+				System.out.println("Please input a double number ");
+			}
+		} while (true);
+	}
+
+	/**
 	 * Prompts for a command from the keyboard
 	 * 
 	 * @return a valid command
@@ -240,6 +261,25 @@ public class UserInterface {
 			}
 		} while (true);
 
+	}
+
+	public void changePrice() {
+		Request.instance().setProductId(getToken("Enter product Id: "));
+		Request.instance().setProductCurrentPrice(
+				decimalFormat.format(getDoubleNumber("Enter new product price (with two ending decimal places): ")));
+		Result result = store.changePrice(Request.instance());
+		switch (result.getResultCode()) {
+		case Result.PRODUCT_NOT_FOUND:
+			System.out.println("No product with id " + Request.instance().getProductId());
+			break;
+		case Result.OPERATION_FAILED:
+			System.out.println("Changing price failed for product with id " + Request.instance().getProductId());
+			break;
+		case Result.OPERATION_COMPLETED:
+			System.out
+					.println("Changed price of " + result.getProductName() + " to $" + result.getProductCurrentPrice());
+			break;
+		}
 	}
 
 	/**
