@@ -5,24 +5,25 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Iterator;
 
 import edu.ics372.groupProject1.collections.Inventory;
 import edu.ics372.groupProject1.collections.MemberList;
-import edu.ics372.groupProject1.iterators.SafeMemberIterator;
-import edu.ics372.groupProject1.iterators.SafeProductIterator;
+import edu.ics372.groupProject1.collections.OrderList;
+import edu.ics372.groupProject1.entities.Order;
+import edu.ics372.groupProject1.entities.Product;
 
-public class Cooperative {
+public class GroceryStore {
 	private static final long serialVersionUID = 1L;
 	private Inventory inventory = Inventory.getInstance();
 	private MemberList members = MemberList.getInstance();
-	private static Cooperative coop;
+	private OrderList orders = OrderList.getInstance();
+	private static GroceryStore store;
 
 	/**
 	 * Private for the singleton pattern Creates the catalog and member collection
 	 * objects
 	 */
-	private Cooperative() {
+	private GroceryStore() {
 	}
 
 	/**
@@ -30,26 +31,48 @@ public class Cooperative {
 	 * 
 	 * @return the singleton object
 	 */
-	public static Cooperative instance() {
-		if (coop == null) {
-			return coop = new Cooperative();
+	public static GroceryStore instance() {
+		if (store == null) {
+			return store = new GroceryStore();
 		} else {
-			return coop;
+			return store;
 		}
+	}
+
+	public Result processShipment(Request request) {
+		Result result = new Result();
+		String productId = request.getProductId();
+		Product product = inventory.search(productId);
+		if (product == null) {
+			result.setResultCode(Result.PRODUCT_NOT_FOUND);
+			return result;
+		}
+		Order order = orders.search(productId);
+		if (order == null) {
+			result.setResultCode(Result.NO_OUTSTANDING_ORDER);
+			return result;
+		}
+		if (product.restock(Integer.parseInt(order.getAmount())) && orders.removeOrder(productId)) {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			result.setProductFields(product);
+		} else {
+			result.setResultCode(Result.OPERATION_FAILED);
+		}
+		return result;
 	}
 
 	/**
 	 * Retrieves a deserialized version of the library from disk
 	 * 
-	 * @return a Library object
+	 * @return a GroceryStore object
 	 */
-	public static Cooperative retrieve() {
+	public static GroceryStore retrieve() {
 		try {
-			FileInputStream file = new FileInputStream("CooperativeData");
+			FileInputStream file = new FileInputStream("GroceryStoreData");
 			ObjectInputStream input = new ObjectInputStream(file);
-			coop = (Cooperative) input.readObject();
+			store = (GroceryStore) input.readObject();
 //			Member.retrieve(input);
-			return coop;
+			return store;
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 			return null;
@@ -68,36 +91,13 @@ public class Cooperative {
 		try {
 			FileOutputStream file = new FileOutputStream("CooperativeData");
 			ObjectOutputStream output = new ObjectOutputStream(file);
-			output.writeObject(coop);
-//			Member.save(output);
+			output.writeObject(store);
 			file.close();
 			return true;
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 			return false;
 		}
-	}
-
-	/**
-	 * Returns an iterator to Member info. The Iterator returned is a safe one, in
-	 * the sense that only copies of the Member fields are assembled into the
-	 * objects returned via next().
-	 * 
-	 * @return an Iterator to Result - only the Member fields are valid.
-	 */
-	public Iterator<Result> getMembers() {
-		return new SafeMemberIterator(members.iterator());
-	}
-
-	/**
-	 * Returns an iterator to Book info. The Iterator returned is a safe one, in the
-	 * sense that only copies of the Book fields are assembled into the objects
-	 * returned via next().
-	 * 
-	 * @return an Iterator to Result - only the Book fields are valid.
-	 */
-	public Iterator<Result> getProducts() {
-		return new SafeProductIterator(inventory.iterator());
 	}
 
 	/**

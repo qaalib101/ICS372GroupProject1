@@ -9,7 +9,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
 
-import edu.ics372.groupProject1.facade.Cooperative;
+import edu.ics372.groupProject1.facade.GroceryStore;
+import edu.ics372.groupProject1.facade.Request;
+import edu.ics372.groupProject1.facade.Result;
 
 /**
  * 
@@ -21,7 +23,7 @@ import edu.ics372.groupProject1.facade.Cooperative;
 public class UserInterface {
 	private static UserInterface userInterface;
 	private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-	private static Cooperative coop;
+	private static GroceryStore store;
 	private static final int EXIT = 0;
 	private static final int ENROLL_MEMBER = 1;
 	private static final int REMOVE_MEMBER = 2;
@@ -47,7 +49,12 @@ public class UserInterface {
 		if (yesOrNo("Look for saved data and  use it?")) {
 			retrieve();
 		} else {
-			coop = Cooperative.instance();
+			if (yesOrNo("Do you want to generate a test bed and invoke the functionality using asserts?")) {
+				System.out.println("To be implemented");
+				store = GroceryStore.instance();
+			} else {
+				store = GroceryStore.instance();
+			}
 		}
 
 	}
@@ -205,12 +212,43 @@ public class UserInterface {
 	}
 
 	/**
+	 * Method to be called to process a shipment.
+	 */
+	private void processShipment() {
+		do {
+			Request.instance().setProductId(getToken("Enter product Id: "));
+			Result result = store.processShipment(Request.instance());
+			switch (result.getResultCode()) {
+			case Result.PRODUCT_NOT_FOUND:
+				System.out.println("No product with id " + Request.instance().getProductId());
+				break;
+			case Result.NO_OUTSTANDING_ORDER:
+				System.out.println(
+						"No outstanding order exists for product with id " + Request.instance().getProductId());
+				break;
+			case Result.OPERATION_FAILED:
+				System.out.println("Order failed to process for product with id " + Request.instance().getProductId());
+				break;
+			case Result.OPERATION_COMPLETED:
+				System.out.println("Order processed successfully\n" + "Product Id: " + result.getProductId() + "\n"
+						+ "Product Name: " + result.getProductName() + "\n" + "New Stock Amount: "
+						+ result.getProductQuantity());
+				break;
+			}
+			if (!yesOrNo("Process more shipments?")) {
+				break;
+			}
+		} while (true);
+
+	}
+
+	/**
 	 * Method to be called for saving the coop object. Uses the appropriate
 	 * Cooperative method for saving.
 	 * 
 	 */
 	private void save() {
-		if (coop.save()) {
+		if (store.save()) {
 			System.out.println(" The library has been successfully saved in the file CooperativeData \n");
 		} else {
 			System.out.println(" There has been an error in saving \n");
@@ -224,13 +262,13 @@ public class UserInterface {
 	 */
 	private void retrieve() {
 		try {
-			if (coop == null) {
-				coop = Cooperative.retrieve();
-				if (coop != null) {
+			if (store == null) {
+				store = GroceryStore.retrieve();
+				if (store != null) {
 					System.out.println(" The library has been successfully retrieved from the file CooperativeData \n");
 				} else {
 					System.out.println("File doesnt exist; creating new coop");
-					coop = Cooperative.instance();
+					store = GroceryStore.instance();
 				}
 			}
 		} catch (Exception cnfe) {
@@ -257,6 +295,7 @@ public class UserInterface {
 			case RETRIEVE_PRODUCT:
 				break;
 			case PROCESS_SHIPMENT:
+				processShipment();
 				break;
 			case CHANGE_PRICE:
 				break;
