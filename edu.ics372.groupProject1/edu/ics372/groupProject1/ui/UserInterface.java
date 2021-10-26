@@ -1,4 +1,6 @@
 //testing
+//second comment
+
 package edu.ics372.groupProject1.ui;
 
 import java.io.BufferedReader;
