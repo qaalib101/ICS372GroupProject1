@@ -29,7 +29,6 @@ public class Cart implements Serializable {
 	 *
 	 */
 
-	// https://www.baeldung.com/java-stream-sum PLEASE USE FOR SUMMING INVENTORY
 	public double calculateCartTotal(List<CartItem> cartItems) {
 
 		this.totalPrice = cartItems.stream().mapToDouble(i -> i.getTotalItemPrice()).sum();
