@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Member implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -13,6 +15,7 @@ public class Member implements Serializable {
 	private String id;
 	private static final String MEMBER_STRING = "M";
 	private static int idCounter;
+	private List<Transaction> transactions = new LinkedList<Transaction>(); // make "List" Class for generics
 
 	/**
 	 * Creates a single member

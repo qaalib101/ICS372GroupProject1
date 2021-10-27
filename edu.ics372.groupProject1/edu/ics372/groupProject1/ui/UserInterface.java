@@ -221,8 +221,8 @@ public class UserInterface {
 		System.out.println(ENROLL_MEMBER + " to add a member");
 		System.out.println(REMOVE_MEMBER + " to  add books");
 		System.out.println(RETRIEVE_MEMBER + " to  issue books to a  member");
-		System.out.println(ADD_PRODUCT + " to  return books ");
-		System.out.println(CHECKOUT_CART + " to  renew books ");
+		System.out.println(ADD_PRODUCT + " to  add product");
+		System.out.println(CHECKOUT_CART + " to  add checkout cart");
 		System.out.println(RETRIEVE_PRODUCT + " to  remove books");
 		System.out.println(PROCESS_SHIPMENT + " to  place a hold on a book");
 		System.out.println(CHANGE_PRICE + " to  remove a hold on a book");
@@ -233,6 +233,31 @@ public class UserInterface {
 		System.out.println(SAVE + " to  save data");
 		System.out.println(RETRIEVE + " to  retrieve data");
 		System.out.println(HELP + " for help");
+	}
+
+	/**
+	 * Method to be called for checkout a cart. Prompts the user for the appropriate
+	 * values and uses the appropriate Library method for checking out the cart.
+	 * 
+	 */
+	public void checkoutCart() {
+		Request.instance().setMemberId(getToken("Enter member id"));
+		Result result = store.searchMembership(Request.instance());
+		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+			System.out.println("No member with id " + Request.instance().getMemberId());
+			return;
+		}
+		// accepting product and quantity area: to be implemented
+		do {
+			Request.instance().setBookId(getToken("Enter book id"));
+			result = library.issueBook(Request.instance());
+			if (result.getResultCode() == Result.OPERATION_COMPLETED) {
+				System.out.println("Book " + result.getBookTitle() + " issued to " + result.getMemberName()
+						+ " is due on " + result.getBookDueDate());
+			} else {
+				System.out.println("Book could not be issued");
+			}
+		} while (yesOrNo("Issue more books?"));
 	}
 
 	/**

@@ -8,6 +8,15 @@ public class DataTransfer {
 	private String productCurrentPrice;
 	private String productMinimumReorderLevel;
 	private String productQuantity;
+	private String memberId;
+
+	public String getMemberId() {
+		return memberId;
+	}
+
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
+	}
 
 	public DataTransfer() {
 		reset();

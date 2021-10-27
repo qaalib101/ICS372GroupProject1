@@ -99,6 +99,24 @@ public class GroceryStore {
 	}
 
 	/**
+	 * Searches for a given member
+	 * 
+	 * @param memberId id of the member
+	 * @return true iff the member is in the member list collection
+	 */
+	public Result searchMembership(Request request) {
+		Result result = new Result();
+		Member member = members.search(request.getMemberId());
+		if (member == null) {
+			result.setResultCode(Result.NO_SUCH_MEMBER);
+		} else {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			result.setMemberFields(member);
+		}
+		return result;
+	}
+
+	/**
 	 * Serializes the Library object
 	 * 
 	 * @return true iff the data could be saved
