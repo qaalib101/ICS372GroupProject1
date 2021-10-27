@@ -1,12 +1,9 @@
 package edu.ics372.groupProject1.entities;
 
-import java.util.List;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
-
-import com.sun.jdi.InvalidTypeException;
+import java.util.List;
 
 import edu.ics372.groupProject1.collections.Inventory;
 
@@ -27,20 +24,16 @@ public class Cart implements Serializable {
 	}
 
 	/**
-	 * calculateCartTotal Method
-	 *Calculates and returns the running cart total as double.
+	 * calculateCartTotal Method Calculates and returns the running cart total as
+	 * double.
 	 *
 	 */
-	
-	//https://www.baeldung.com/java-stream-sum PLEASE USE FOR SUMMING INVENTORY
-	public double calculateCartTotal(ArrayList cartItems) {
-		
-		totalPrice = cartItems.stream()
-				.map(CartItem -> CartItem.getTotalItemPrice())
-				.reduce(0, double::sum);
-		
+
+	// https://www.baeldung.com/java-stream-sum PLEASE USE FOR SUMMING INVENTORY
+	public double calculateCartTotal(List<CartItem> cartItems) {
+
+		this.totalPrice = cartItems.stream().mapToDouble(i -> i.getTotalItemPrice()).sum();
 		return totalPrice;
-		
 	}
 
 	/**
