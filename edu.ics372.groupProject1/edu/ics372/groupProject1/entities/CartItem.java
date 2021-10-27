@@ -3,8 +3,7 @@ package edu.ics372.groupProject1.entities;
 /**
  * @author jquin
  *
- *CartItem Class
- *Holds data for specific Item in the Cart. 
+ *         CartItem Class Holds data for specific Item in the Cart.
  *
  *
  */
@@ -37,5 +36,7 @@ public class CartItem {
 	public int getNumberOfUnits() {
 		return this.numberOfUnits;
 	}
+
+	// add possible cartItemIsProduct() for checking?
 
 }

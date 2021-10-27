@@ -1,5 +1,6 @@
 package edu.ics372.groupProject1.entities;
 
+import java.util.List;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -7,7 +8,6 @@ import java.util.Iterator;
 
 import com.sun.jdi.InvalidTypeException;
 
-import InitialDelivACode.Node;
 import edu.ics372.groupProject1.collections.Inventory;
 
 /**
@@ -18,7 +18,7 @@ import edu.ics372.groupProject1.collections.Inventory;
  */
 public class Cart implements Serializable {
 	private double totalPrice;
-	private ArrayList<CartItem> cartItems;
+	private List<CartItem> cartItems;
 
 	public Cart() {
 		super();
@@ -34,9 +34,11 @@ public class Cart implements Serializable {
 	
 	//https://www.baeldung.com/java-stream-sum PLEASE USE FOR SUMMING INVENTORY
 	public double calculateCartTotal(ArrayList cartItems) {
-		for(int index=0; index < cartItems.size(); index++) {
-			cartItems.get(index).
-		}
+		
+		totalPrice = cartItems.stream()
+				.map(CartItem -> CartItem.getTotalItemPrice())
+				.reduce(0, double::sum);
+		
 		return totalPrice;
 		
 	}
@@ -57,29 +59,19 @@ public class Cart implements Serializable {
 
 	/**
 	 * cartItemProductIDValid Method Checks whether the Product to be entered is
-	 * valid
-	 *
+	 * valid !!CHECK IF THIS WORKS!!
 	 */
 	public boolean cartItemProductIDValid(CartItem cartItem) {
-		// cycle through list of all products and check each ID if
-		// it exists in the list
-		Iterator inventoryItr = Inventory.getInstance().iterator();
-
-		while (inventoryItr.hasNext()) {
-			String currentID = inventoryItr.next().getProductID();
-			int result = ProductIDComparator.compare(cartItem.getProduct().getId(), currentID);
-			if (result == 0) {
-				return true;
-			}
-		}
-		return false;
+		boolean isValid = Inventory.getInstance().getInventoryList().stream()
+				.anyMatch(cartItem1 -> cartItem1.getId().equals(cartItem.getProduct().getId()));
+		return isValid;
 	}
 
 	/**
 	 * getCartItems Method return a list of all the items in the cart.
 	 *
 	 */
-	public ArrayList<CartItem> getCartItems() {
+	public List<CartItem> getCartItems() {
 		return this.cartItems;
 	}
 
