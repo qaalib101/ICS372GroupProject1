@@ -1,6 +1,7 @@
 package edu.ics372.groupProject1.iterators;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import edu.ics372.groupProject1.entities.Member;
 import edu.ics372.groupProject1.facade.Result;
@@ -25,6 +26,11 @@ public class SafeMemberIterator implements Iterator<Result> {
 
 	@Override
 	public Result next() {
-		return null;
+		if (iterator.hasNext()) {
+			result.setMemberFields(iterator.next());
+		} else {
+			throw new NoSuchElementException("No such element");
+		}
+		return result;
 	}
 }

@@ -1,6 +1,7 @@
 package edu.ics372.groupProject1.iterators;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import edu.ics372.groupProject1.entities.Product;
 import edu.ics372.groupProject1.facade.Result;
@@ -20,14 +21,17 @@ public class SafeProductIterator implements Iterator<Result> {
 
 	@Override
 	public boolean hasNext() {
-		// TODO Auto-generated method stub
-		return false;
+		return iterator.hasNext();
 	}
 
 	@Override
 	public Result next() {
-		// TODO Auto-generated method stub
-		return null;
+		if (iterator.hasNext()) {
+			result.setProductFields(iterator.next());
+		} else {
+			throw new NoSuchElementException("No such element");
+		}
+		return result;
 	}
 
 }
