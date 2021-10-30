@@ -13,16 +13,15 @@ public class Transaction implements Serializable {
 	// Instance variables
 	private int memberID;
 	private String date1;
-	private String date2;	//Possibly remove this second date?
 	private String id;
-	private static int transactionID;
+	private static int transactionCounter;
 
 	// Basic constructor method
 	public Transaction(int memberID, String date1, String date2) {
 		this.memberID = memberID;
 		this.date1 = date1;
 		this.date2 = date2;
-		this.id = "T" + ++transactionID;
+		this.id = "T" + ++transactionCounter;
 	}
 	
 	public void printTransaction() {
