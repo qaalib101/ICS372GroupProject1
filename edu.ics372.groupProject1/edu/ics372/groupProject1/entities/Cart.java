@@ -2,7 +2,6 @@ package edu.ics372.groupProject1.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import edu.ics372.groupProject1.collections.Inventory;
@@ -51,7 +50,7 @@ public class Cart implements Serializable {
 
 	/**
 	 * cartItemProductIDValid Method Checks whether the Product to be entered is
-	 * valid !!CHECK IF THIS WORKS!!
+	 * valid
 	 */
 	public boolean cartItemProductIDValid(CartItem cartItem) {
 		boolean isValid = Inventory.getInstance().getInventoryList().stream()
@@ -65,18 +64,6 @@ public class Cart implements Serializable {
 	 */
 	public List<CartItem> getCartItems() {
 		return this.cartItems;
-	}
-
-	/**
-	 * productIDComparator.compare productID field comparator
-	 *
-	 */
-	class ProductIDComparator implements Comparator<Product> {
-
-		public int compare(Product product1, Product product2) {
-			return product1.getId().compareTo(product2.getId());
-		}
-
 	}
 
 }

@@ -229,12 +229,13 @@ public class UserInterface {
 		System.out.println(PRINT_TRANSACTIONS + " to  process holds");
 		System.out.println(LIST_MEMBERS + " to  print transactions");
 		System.out.println(LIST_PRODUCTS + " to  print all members");
-		System.out.println(LIST_ORDERS + " to  print all books");
+		System.out.println(LIST_ORDERS + " to  print list of all products");
 		System.out.println(SAVE + " to  save data");
 		System.out.println(RETRIEVE + " to  retrieve data");
 		System.out.println(HELP + " for help");
 	}
 
+	/* TODO complete refactoring UserInterface checkoutCart method for use */
 	/**
 	 * Method to be called for checkout a cart. Prompts the user for the appropriate
 	 * values and uses the appropriate Library method for checking out the cart.
@@ -249,15 +250,16 @@ public class UserInterface {
 		}
 		// accepting product and quantity area: to be implemented
 		do {
-			Request.instance().setBookId(getToken("Enter book id"));
-			result = library.issueBook(Request.instance());
+			Request.instance().setProductId(getToken("Enter product id"));
+			result = store.checkOutProduct(Request.instance());
 			if (result.getResultCode() == Result.OPERATION_COMPLETED) {
-				System.out.println("Book " + result.getBookTitle() + " issued to " + result.getMemberName()
-						+ " is due on " + result.getBookDueDate());
+				System.out.println("Product " + result.getProductName() + " checked out" + " remaining inventory "
+						+ result.getProductQuantity()); // might need to adjuest to insure checkign inventory and not
+														// checkout out item total
 			} else {
-				System.out.println("Book could not be issued");
+				System.out.println("Product could not be checked out");
 			}
-		} while (yesOrNo("Issue more books?"));
+		} while (yesOrNo("Check out more products?"));
 	}
 
 	/**

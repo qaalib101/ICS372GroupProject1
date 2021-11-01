@@ -6,9 +6,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+//import org.oobook.libraryv1.business.entities.Book;
+//import org.oobook.libraryv1.business.facade.Request;
+//import org.oobook.libraryv1.business.facade.Result;
+
 import edu.ics372.groupProject1.collections.Inventory;
 import edu.ics372.groupProject1.collections.MemberList;
 import edu.ics372.groupProject1.collections.OrderList;
+import edu.ics372.groupProject1.entities.Member;
 import edu.ics372.groupProject1.entities.Order;
 import edu.ics372.groupProject1.entities.Product;
 
@@ -113,6 +118,40 @@ public class GroceryStore {
 			result.setResultCode(Result.OPERATION_COMPLETED);
 			result.setMemberFields(member);
 		}
+		return result;
+	}
+
+	/*
+	 * To be implemented checkOutProduct
+	 * 
+	 */
+	public Result checkOutProduct(Request request) {
+		Result result = new Result();
+		Product product = inventory.search(request.getProductId());
+		if (product == null) {
+			result.setResultCode(Result.PRODUCT_NOT_FOUND);
+			return result;
+
+		} else {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+		}
+//		result.setBookFields(product);
+//		if (product.getBorrower() != null) {
+//			result.setResultCode(Result.PRODUCT_CHECKED_OUT); //THIS NEED TO BE FOLLOWED UP
+//			return result;
+//		}
+//		Member member = members.search(request.getMemberId());
+//		if (member == null) {
+//			result.setResultCode(Result.NO_SUCH_MEMBER);
+//			return result;
+//		}
+//		result.setMemberFields(member);
+//		if (!(product.issue(member) && member.issue(product))) {
+//			result.setResultCode(Result.OPERATION_FAILED);
+//		} else {
+//			result.setResultCode(Result.OPERATION_COMPLETED);
+//			result.setBookFields(product);
+//		}
 		return result;
 	}
 
