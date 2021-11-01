@@ -13,7 +13,7 @@ public class Transaction implements Serializable {
 	// Instance variables
 	private int memberID;
 	private String date1;
-	private String date2;	//Possibly remove this second date?
+	private String date2; // Possibly remove this second date?
 	private String id;
 	private static int transactionID;
 
@@ -24,7 +24,7 @@ public class Transaction implements Serializable {
 		this.date2 = date2;
 		this.id = "T" + ++transactionID;
 	}
-	
+
 	public void printTransaction() {
 		// NOTE: A user may visit the store more then one times in a single day
 		// print date on which the user visit for each visit
@@ -35,8 +35,8 @@ public class Transaction implements Serializable {
 	// Instance methods
 	public boolean isValidMemberID() {
 		/*
-		 * iterate through memberList check if one
-		 * of the member's id matches the memberID given
+		 * iterate through memberList check if one of the member's id matches the
+		 * memberID given
 		 */
 		return false;
 	}
@@ -99,7 +99,7 @@ public class Transaction implements Serializable {
 	public String toString() {
 		return "Transaction [memberID=" + memberID + ", date1=" + date1 + ", date2=" + date2 + "]";
 	}
-	
+
 	public static void save(ObjectOutputStream output) throws IOException {
 		output.writeObject(transactionID);
 	}
