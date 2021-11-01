@@ -10,6 +10,8 @@ public class Member implements Serializable {
 	private String name;
 	private String address;
 	private String phone;
+	private String date;
+	private double fee;
 	private String id;
 	private static final String MEMBER_STRING = "M";
 	private static int idCounter;
@@ -20,17 +22,21 @@ public class Member implements Serializable {
 	 * @param name    name of the member
 	 * @param address address of the member
 	 * @param phone   phone number of the member
+	 * @param date    date the member joins
+	 * @param fee     amount member pays as fee
 	 */
-	public Member(String name, String address, String phone) {
+	public Member(String name, String address, String phone, String date, double fee) {
 		this.name = name;
 		this.address = address;
 		this.phone = phone;
+		this.date = date;
+		this.fee = fee;
 		id = MEMBER_STRING + ++idCounter;
 	}
 
 	/**
 	 * Getter for name
-	 * 
+	 *
 	 * @return member name
 	 */
 	public String getName() {
@@ -53,6 +59,24 @@ public class Member implements Serializable {
 	 */
 	public String getAddress() {
 		return address;
+	}
+
+	/**
+	 * Getter for date
+	 * 
+	 * @return date joined
+	 */
+	public String getDate() {
+		return date;
+	}
+
+	/**
+	 * Getter for fee
+	 * 
+	 * @return fee
+	 */
+	public double getFee() {
+		return fee;
 	}
 
 	/**
@@ -97,7 +121,8 @@ public class Member implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		String string = "Member name " + name + " address " + address + " id " + id + "phone " + phone;
+		String string = "Member name: " + name + "\naddress: " + address + "\nphone number: " + phone
+				+ "\ndate joined: " + date + "\nfee paid: " + fee + "\nID: " + id;
 		return string;
 	}
 
