@@ -19,14 +19,23 @@ public class DataTransfer {
 	private String productCurrentPrice;
 	private String productMinimumReorderLevel;
 	private String productQuantity;
+	private String memberId;
 	private String orderProductName;
 	private String orderProductId;
 	private String amountOrdered;
+
+	public String getMemberId() {
+		return memberId;
+	}
+
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
+	}
 	
 	/*
 	 * This sets all fields to "none"
 	 */
-	
+
 	public DataTransfer() {
 		reset();
 	}

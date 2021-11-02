@@ -9,8 +9,14 @@ public class AutomatedTester {
 
 	}
 
+	// implement
+	private void testCheckOutCart() {
+
+	}
+
 	public void testAll() {
 		testProcessShipment();
+		testCheckOutCart();
 	}
 
 	public static void main(String[] args) {

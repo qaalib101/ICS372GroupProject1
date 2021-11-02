@@ -221,18 +221,45 @@ public class UserInterface {
 		System.out.println(ENROLL_MEMBER + " to add a member");
 		System.out.println(REMOVE_MEMBER + " to  add books");
 		System.out.println(RETRIEVE_MEMBER + " to  issue books to a  member");
-		System.out.println(ADD_PRODUCT + " to  return books ");
-		System.out.println(CHECKOUT_CART + " to  renew books ");
+		System.out.println(ADD_PRODUCT + " to  add product");
+		System.out.println(CHECKOUT_CART + " to  add checkout cart");
 		System.out.println(RETRIEVE_PRODUCT + " to  remove books");
 		System.out.println(PROCESS_SHIPMENT + " to  place a hold on a book");
 		System.out.println(CHANGE_PRICE + " to  remove a hold on a book");
 		System.out.println(PRINT_TRANSACTIONS + " to  process holds");
 		System.out.println(LIST_MEMBERS + " to  print transactions");
 		System.out.println(LIST_PRODUCTS + " to  print all members");
-		System.out.println(LIST_ORDERS + " to  print all books");
+		System.out.println(LIST_ORDERS + " to  print list of all products");
 		System.out.println(SAVE + " to  save data");
 		System.out.println(RETRIEVE + " to  retrieve data");
 		System.out.println(HELP + " for help");
+	}
+
+	/* TODO complete refactoring UserInterface checkoutCart method for use */
+	/**
+	 * Method to be called for checkout a cart. Prompts the user for the appropriate
+	 * values and uses the appropriate Library method for checking out the cart.
+	 * 
+	 */
+	public void checkoutCart() {
+		Request.instance().setMemberId(getToken("Enter member id"));
+		Result result = store.searchMembership(Request.instance());
+		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+			System.out.println("No member with id " + Request.instance().getMemberId());
+			return;
+		}
+		// accepting product and quantity area: to be implemented
+		do {
+			Request.instance().setProductId(getToken("Enter product id"));
+			result = store.checkOutProduct(Request.instance());
+			if (result.getResultCode() == Result.OPERATION_COMPLETED) {
+				System.out.println("Product " + result.getProductName() + " checked out" + " remaining inventory "
+						+ result.getProductQuantity()); // might need to adjuest to insure checkign inventory and not
+														// checkout out item total
+			} else {
+				System.out.println("Product could not be checked out");
+			}
+		} while (yesOrNo("Check out more products?"));
 	}
 
 	/**
