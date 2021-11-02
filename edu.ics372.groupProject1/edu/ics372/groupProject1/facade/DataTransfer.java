@@ -1,14 +1,28 @@
 package edu.ics372.groupProject1.facade;
 
+import edu.ics372.groupProject1.entities.Member;
 import edu.ics372.groupProject1.entities.Product;
+import edu.ics372.groupProject1.entities.Order;
+
+/*
+ * The DataTransfer class is used to transfer data between the UserInterface and the GroceryStore class.
+ * It also supports iteration for Member, Product and Order class by copying their fields 
+ * and sending that information in either direction.
+ */
 
 public class DataTransfer {
+	private String memberId;
+	private String memberName;
+	private String memberAddress;
 	private String productId;
 	private String productName;
 	private String productCurrentPrice;
 	private String productMinimumReorderLevel;
 	private String productQuantity;
 	private String memberId;
+	private String orderProductName;
+	private String orderProductId;
+	private String amountOrdered;
 
 	public String getMemberId() {
 		return memberId;
@@ -17,10 +31,50 @@ public class DataTransfer {
 	public void setMemberId(String memberId) {
 		this.memberId = memberId;
 	}
+	
+	/*
+	 * This sets all fields to "none"
+	 */
 
 	public DataTransfer() {
 		reset();
 	}
+
+	public String getMemberId() {
+		return memberId;
+	}
+
+	public void setMemberId(String memberID) {
+		this.memberId = memberID;
+	}
+
+	public String getMemberName() {
+		return memberName;
+	}
+
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
+
+	public String getMemberAddress() {
+		return memberAddress;
+	}
+
+	public void setMemberAddress(String memberAddress) {
+		this.memberAddress = memberAddress;
+	}
+	
+	/*
+	 * Sets all member field using the member parameter
+	 * @param member whose field should be copied
+	 */
+	public void setMemberFields(Member member) {
+		memberId = member.getId();
+		memberName = member.getName();
+		memberAddress = member.getAddress();
+	}
+
+	
 
 	public String getProductId() {
 		return productId;
@@ -57,10 +111,12 @@ public class DataTransfer {
 	public String getProductQuantity() {
 		return productQuantity;
 	}
-
-	public void setProductQuantity(String productQuantity) {
-		this.productQuantity = productQuantity;
-	}
+	
+	/*
+	 * sets all product fields using the product parameter
+	 * @param product whose field should be copied
+	 * 
+	 */
 
 	public void setProductFields(Product product) {
 		productId = product.getId();
@@ -68,6 +124,46 @@ public class DataTransfer {
 		productQuantity = product.getQuantity();
 		productCurrentPrice = product.getCurrentPrice();
 		productMinimumReorderLevel = product.getMinimumReorderLevel();
+	}
+
+	public String getOrderProductName() {
+		return orderProductName;
+	}
+
+	public void setOrderProductName(String orderProductName) {
+		this.orderProductName = orderProductName;
+	}
+
+	public String getOrderProductId() {
+		return orderProductId;
+	}
+
+	public void setOrderProductId(String orderProductId) {
+		this.orderProductId = orderProductId;
+	}
+
+	public String getAmountOrdered() {
+		return amountOrdered;
+	}
+
+	public void setAmountOrdered(String orderAmountOrdered) {
+		this.amountOrdered = orderAmountOrdered;
+	}
+
+	public void setProductQuantity(String productQuantity) {
+		this.productQuantity = productQuantity;
+	}
+	
+	/*
+	 * sets all order fields using the order parameter
+	 * @param product whose field should be copied
+	 * 
+	 */
+
+	public void setOrderFields(Order order) {
+		orderProductId = order.getProductId();
+		orderProductName = order.getProductName();
+		amountOrdered = order.getAmount();
 	}
 
 	/**
