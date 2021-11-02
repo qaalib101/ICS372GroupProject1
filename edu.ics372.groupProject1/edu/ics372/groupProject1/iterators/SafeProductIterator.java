@@ -11,7 +11,9 @@ public class SafeProductIterator implements Iterator<Result> {
 	private Result result = new Result();
 
 	/**
-	 * The user of SafeIterator must supply an Iterator to Book.
+	 * This safe iterator class help support the iteration to Product.
+	 * It does so by setting the the Product fields into the class result
+	 * and returns the result.
 	 * 
 	 * @param iterator Iterator<Product>
 	 */

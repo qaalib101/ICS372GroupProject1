@@ -1,8 +1,8 @@
 package edu.ics372.groupProject1.facade;
 
 import edu.ics372.groupProject1.entities.Member;
-import edu.ics372.groupProject1.entities.Order;
 import edu.ics372.groupProject1.entities.Product;
+import edu.ics372.groupProject1.entities.Order;
 
 /*
  * The DataTransfer class is used to transfer data between the UserInterface and the GroceryStore class.
@@ -19,19 +19,9 @@ public class DataTransfer {
 	private String productCurrentPrice;
 	private String productMinimumReorderLevel;
 	private String productQuantity;
-	private String memberId;
 	private String orderProductName;
 	private String orderProductId;
 	private String amountOrdered;
-
-
-	public String getMemberId() {
-		return memberId;
-	}
-
-	public void setMemberId(String memberId) {
-		this.memberId = memberId;
-	}
 	
 	/*
 	 * This sets all fields to "none"
@@ -166,6 +156,46 @@ public class DataTransfer {
 		orderProductId = order.getProductId();
 		orderProductName = order.getProductName();
 		amountOrdered = order.getAmountOrdered();
+	}
+
+	public String getOrderProductName() {
+		return orderProductName;
+	}
+
+	public void setOrderProductName(String orderProductName) {
+		this.orderProductName = orderProductName;
+	}
+
+	public String getOrderProductId() {
+		return orderProductId;
+	}
+
+	public void setOrderProductId(String orderProductId) {
+		this.orderProductId = orderProductId;
+	}
+
+	public String getAmountOrdered() {
+		return amountOrdered;
+	}
+
+	public void setAmountOrdered(String orderAmountOrdered) {
+		this.amountOrdered = orderAmountOrdered;
+	}
+
+	public void setProductQuantity(String productQuantity) {
+		this.productQuantity = productQuantity;
+	}
+	
+	/*
+	 * sets all order fields using the order parameter
+	 * @param product whose field should be copied
+	 * 
+	 */
+
+	public void setOrderFields(Order order) {
+		orderProductId = order.getProductId();
+		orderProductName = order.getProductName();
+		amountOrdered = order.getAmount();
 	}
 
 	/**

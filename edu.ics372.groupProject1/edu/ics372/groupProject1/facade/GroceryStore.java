@@ -7,10 +7,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Iterator;
 
-//import org.oobook.libraryv1.business.entities.Book;
-//import org.oobook.libraryv1.business.facade.Request;
-//import org.oobook.libraryv1.business.facade.Result;
-
 import edu.ics372.groupProject1.collections.Inventory;
 import edu.ics372.groupProject1.collections.MemberList;
 import edu.ics372.groupProject1.collections.OrderList;
@@ -218,37 +214,34 @@ public class GroceryStore {
 			return false;
 		}
 	}
-
+	
 	/**
-	 * Returns an iterator to Member info. The Iterator returned is a safe one, in
-	 * the sense that only copies of the Member fields are assembled into the
-	 * objects returned via next().
+	 * Returns an iterator to Order info. The Iterator returns only copies of the Member fields and are assembled into the objects
+	 * returned via next().
 	 * 
 	 * @return an Iterator to Result - only the Member fields are valid.
 	 */
-	public Iterator<Result> getMembers() {
+	public Iterator<Result> listMembers() {
 		return new SafeMemberIterator(members.iterator());
 	}
 
 	/**
-	 * Returns an iterator to Book info. The Iterator returned is a safe one, in the
-	 * sense that only copies of the Book fields are assembled into the objects
+	 * Returns an iterator to Product info. The Iterator returns copies of the Product fields and are assembled into the objects
 	 * returned via next().
 	 * 
 	 * @return an Iterator to Result - only the Book fields are valid.
 	 */
-	public Iterator<Result> getProducts() {
+	public Iterator<Result> listProducts() {
 		return new SafeProductIterator(inventory.iterator());
 	}
 
 	/**
-	 * Returns an iterator to Book info. The Iterator returned is a safe one, in the
-	 * sense that only copies of the Book fields are assembled into the objects
+	 * Returns an iterator to Order info. The Iterator returns copies of the Order fields are assembled into the objects
 	 * returned via next().
 	 * 
 	 * @return an Iterator to Result - only the Book fields are valid.
 	 */
-	public Iterator<Result> getOrders() {
+	public Iterator<Result> listOrders() {
 		return new SafeOrderIterator(orders.iterator());
 	}
 
