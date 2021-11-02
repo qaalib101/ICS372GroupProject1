@@ -29,7 +29,7 @@ public class SafeOrderIterator implements Iterator<Result> {
 	@Override
 	public Result next() {
 		if (iterator.hasNext()) {
-			result.setFieldOrder(iterator.next());
+			result.setOrderField(iterator.next());
 		} else {
 			throw new NoSuchElementException("No such element");
 		}

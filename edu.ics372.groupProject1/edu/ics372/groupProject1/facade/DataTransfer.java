@@ -152,7 +152,7 @@ public class DataTransfer {
 	 * 
 	 */
 
-	public void setFieldOrder(Order order) {
+	public void setOrderField(Order order) {
 		orderProductId = order.getProductId();
 		orderProductName = order.getProductName();
 		amountOrdered = order.getAmountOrdered();
