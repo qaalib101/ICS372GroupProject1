@@ -1,8 +1,8 @@
 package edu.ics372.groupProject1.facade;
 
 import edu.ics372.groupProject1.entities.Member;
-import edu.ics372.groupProject1.entities.Product;
 import edu.ics372.groupProject1.entities.Order;
+import edu.ics372.groupProject1.entities.Product;
 
 /*
  * The DataTransfer class is used to transfer data between the UserInterface and the GroceryStore class.
@@ -23,6 +23,7 @@ public class DataTransfer {
 	private String orderProductName;
 	private String orderProductId;
 	private String amountOrdered;
+
 
 	public String getMemberId() {
 		return memberId;
@@ -63,9 +64,10 @@ public class DataTransfer {
 	public void setMemberAddress(String memberAddress) {
 		this.memberAddress = memberAddress;
 	}
-	
+
 	/*
 	 * Sets all member field using the member parameter
+	 * 
 	 * @param member whose field should be copied
 	 */
 	public void setMemberFields(Member member) {
@@ -73,8 +75,6 @@ public class DataTransfer {
 		memberName = member.getName();
 		memberAddress = member.getAddress();
 	}
-
-	
 
 	public String getProductId() {
 		return productId;
@@ -111,9 +111,10 @@ public class DataTransfer {
 	public String getProductQuantity() {
 		return productQuantity;
 	}
-	
+
 	/*
 	 * sets all product fields using the product parameter
+	 * 
 	 * @param product whose field should be copied
 	 * 
 	 */
@@ -122,8 +123,8 @@ public class DataTransfer {
 		productId = product.getId();
 		productName = product.getName();
 		productQuantity = product.getQuantity();
-		productCurrentPrice = product.getCurrentPrice();
-		productMinimumReorderLevel = product.getMinimumReorderLevel();
+		productCurrentPrice = product.getPrice();
+		productMinimumReorderLevel = product.getReorderLevel();
 	}
 
 	public String getOrderProductName() {
@@ -153,9 +154,10 @@ public class DataTransfer {
 	public void setProductQuantity(String productQuantity) {
 		this.productQuantity = productQuantity;
 	}
-	
+
 	/*
 	 * sets all order fields using the order parameter
+	 * 
 	 * @param product whose field should be copied
 	 * 
 	 */
@@ -163,7 +165,7 @@ public class DataTransfer {
 	public void setOrderFields(Order order) {
 		orderProductId = order.getProductId();
 		orderProductName = order.getProductName();
-		amountOrdered = order.getAmount();
+		amountOrdered = order.getAmountOrdered();
 	}
 
 	/**

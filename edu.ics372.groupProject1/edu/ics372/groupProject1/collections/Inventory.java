@@ -23,6 +23,22 @@ public class Inventory implements Iterable<Product>, Serializable {
 		return inventory;
 	}
 
+	/**
+	 * Inserts a product into inventory
+	 * 
+	 * @param product the product to be inserted
+	 * @return true if the product could be inserted. Currently always true
+	 */
+	public boolean insertProduct(Product product) {
+		products.add(product);
+		return true;
+	}
+
+	private void add(Product product) {
+		// TODO Auto-generated method stub
+
+	}
+
 	public Product search(String productID) {
 		for (Iterator<Product> iterator = products.iterator(); iterator.hasNext();) {
 			Product product = (Product) iterator.next();

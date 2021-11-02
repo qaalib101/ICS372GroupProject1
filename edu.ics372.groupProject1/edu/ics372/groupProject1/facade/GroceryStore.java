@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Iterator;
 
 //import org.oobook.libraryv1.business.entities.Book;
 //import org.oobook.libraryv1.business.facade.Request;
@@ -16,6 +17,9 @@ import edu.ics372.groupProject1.collections.OrderList;
 import edu.ics372.groupProject1.entities.Member;
 import edu.ics372.groupProject1.entities.Order;
 import edu.ics372.groupProject1.entities.Product;
+import edu.ics372.groupProject1.iterators.SafeMemberIterator;
+import edu.ics372.groupProject1.iterators.SafeOrderIterator;
+import edu.ics372.groupProject1.iterators.SafeProductIterator;
 
 public class GroceryStore {
 	private static final long serialVersionUID = 1L;
@@ -57,7 +61,7 @@ public class GroceryStore {
 			result.setResultCode(Result.NO_OUTSTANDING_ORDER);
 			return result;
 		}
-		if (product.restock(Integer.parseInt(order.getAmount())) && orders.removeOrder(productId)) {
+		if (product.restock(Integer.parseInt(order.getAmountOrdered())) && orders.removeOrder(productId)) {
 			result.setResultCode(Result.OPERATION_COMPLETED);
 			result.setProductFields(product);
 		} else {
@@ -79,6 +83,48 @@ public class GroceryStore {
 		} else {
 			result.setResultCode(Result.OPERATION_FAILED);
 		}
+		return result;
+	}
+
+	/**
+	 * creates a member with the given parameters and adds it to members
+	 * 
+	 * @param name    name of the member
+	 * @param address address of the member
+	 * @param phone   phone number of the member
+	 * @param date    date the member joins
+	 * @param fee     amount member pays as fee
+	 * @return true if the member was successfully created
+	 */
+	public boolean addMember(String name, String address, String phone, String date, double fee) {
+		Member newMember = new Member(name, address, phone, date, fee);
+		boolean result = members.insertMember(newMember);
+		return result;
+	}
+
+	/**
+	 * removes a member with the given id from members
+	 * 
+	 * @param id the member's id
+	 * @return true if the member was successfully removed
+	 */
+	public boolean removeMember(String id) {
+		return members.removeMember(id);
+	}
+
+	/**
+	 * creates a product with the given parameters and adds it to inventory
+	 * 
+	 * @param name         name of the product
+	 * @param price        price of the product
+	 * @param reorderLevel reorder level of the product
+	 * @return true if the product was successfully created
+	 */
+	public boolean addProduct(String name, double price, int reorderLevel) {
+		Product newProduct = new Product(name, price, reorderLevel);
+		boolean result = inventory.insertProduct(newProduct);
+		// I'm a little confused about how ordering will be implemented
+//		Order(name, price, reorderLevel * 2);
 		return result;
 	}
 
@@ -172,7 +218,7 @@ public class GroceryStore {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Returns an iterator to Member info. The Iterator returned is a safe one, in
 	 * the sense that only copies of the Member fields are assembled into the
@@ -183,7 +229,6 @@ public class GroceryStore {
 	public Iterator<Result> getMembers() {
 		return new SafeMemberIterator(members.iterator());
 	}
-	
 
 	/**
 	 * Returns an iterator to Book info. The Iterator returned is a safe one, in the
@@ -195,7 +240,7 @@ public class GroceryStore {
 	public Iterator<Result> getProducts() {
 		return new SafeProductIterator(inventory.iterator());
 	}
-	
+
 	/**
 	 * Returns an iterator to Book info. The Iterator returned is a safe one, in the
 	 * sense that only copies of the Book fields are assembled into the objects
@@ -206,7 +251,7 @@ public class GroceryStore {
 	public Iterator<Result> getOrders() {
 		return new SafeOrderIterator(orders.iterator());
 	}
-	
+
 	@Override
 	public String toString() {
 		return inventory + "\n" + members;

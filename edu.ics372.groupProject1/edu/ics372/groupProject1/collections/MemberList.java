@@ -27,11 +27,43 @@ public class MemberList implements Iterable<Member>, Serializable {
 	 * Inserts a member into the collection
 	 * 
 	 * @param member the member to be inserted
-	 * @return true iff the member could be inserted. Currently always true
+	 * @return true if the member could be inserted. Currently always true
 	 */
 	public boolean insertMember(Member member) {
 		members.add(member);
 		return true;
+	}
+
+	/**
+	 * Checks whether a member with a given member id exists.
+	 * 
+	 * @param memberID the id of the member
+	 * @return true if the member exists
+	 * 
+	 */
+	public Member search(String memberID) {
+		for (Iterator<Member> iterator = members.iterator(); iterator.hasNext();) {
+			Member member = (Member) iterator.next();
+			if (member.getId().equals(memberID)) {
+				return member;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Removes a member from the catalog
+	 * 
+	 * @param memberID member id
+	 * @return true if the member could be removed
+	 */
+	public boolean removeMember(String memberId) {
+		Member member = search(memberId);
+		if (member == null) {
+			return false;
+		} else {
+			return members.remove(member);
+		}
 	}
 
 	public Iterator<Member> iterator() {
