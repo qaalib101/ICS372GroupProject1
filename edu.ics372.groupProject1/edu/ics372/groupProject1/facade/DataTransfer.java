@@ -22,7 +22,7 @@ public class DataTransfer {
 	private String orderProductName;
 	private String orderProductId;
 	private String amountOrdered;
-	
+
 	/*
 	 * This sets all fields to "none"
 	 */
@@ -141,7 +141,7 @@ public class DataTransfer {
 		this.amountOrdered = orderAmountOrdered;
 	}
 
-	public void setProductQuantity(String productQuantity) {
+	public void set(String productQuantity) {
 		this.productQuantity = productQuantity;
 	}
 
@@ -152,50 +152,10 @@ public class DataTransfer {
 	 * 
 	 */
 
-	public void setOrderFields(Order order) {
+	public void setFieldOrder(Order order) {
 		orderProductId = order.getProductId();
 		orderProductName = order.getProductName();
 		amountOrdered = order.getAmountOrdered();
-	}
-
-	public String getOrderProductName() {
-		return orderProductName;
-	}
-
-	public void setOrderProductName(String orderProductName) {
-		this.orderProductName = orderProductName;
-	}
-
-	public String getOrderProductId() {
-		return orderProductId;
-	}
-
-	public void setOrderProductId(String orderProductId) {
-		this.orderProductId = orderProductId;
-	}
-
-	public String getAmountOrdered() {
-		return amountOrdered;
-	}
-
-	public void setAmountOrdered(String orderAmountOrdered) {
-		this.amountOrdered = orderAmountOrdered;
-	}
-
-	public void setProductQuantity(String productQuantity) {
-		this.productQuantity = productQuantity;
-	}
-	
-	/*
-	 * sets all order fields using the order parameter
-	 * @param product whose field should be copied
-	 * 
-	 */
-
-	public void setOrderFields(Order order) {
-		orderProductId = order.getProductId();
-		orderProductName = order.getProductName();
-		amountOrdered = order.getAmount();
 	}
 
 	/**
