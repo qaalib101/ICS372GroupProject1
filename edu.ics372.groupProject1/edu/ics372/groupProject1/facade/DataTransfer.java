@@ -141,7 +141,7 @@ public class DataTransfer {
 		this.amountOrdered = orderAmountOrdered;
 	}
 
-	public void set(String productQuantity) {
+	public void setProductQuantity(String productQuantity) {
 		this.productQuantity = productQuantity;
 	}
 
