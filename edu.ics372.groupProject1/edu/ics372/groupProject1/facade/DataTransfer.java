@@ -26,7 +26,7 @@ public class DataTransfer {
 	/*
 	 * This sets all fields to "none"
 	 */
-	
+
 	public DataTransfer() {
 		reset();
 	}
@@ -54,9 +54,10 @@ public class DataTransfer {
 	public void setMemberAddress(String memberAddress) {
 		this.memberAddress = memberAddress;
 	}
-	
+
 	/*
 	 * Sets all member field using the member parameter
+	 * 
 	 * @param member whose field should be copied
 	 */
 	public void setMemberFields(Member member) {
@@ -64,8 +65,6 @@ public class DataTransfer {
 		memberName = member.getName();
 		memberAddress = member.getAddress();
 	}
-
-	
 
 	public String getProductId() {
 		return productId;
@@ -102,9 +101,10 @@ public class DataTransfer {
 	public String getProductQuantity() {
 		return productQuantity;
 	}
-	
+
 	/*
 	 * sets all product fields using the product parameter
+	 * 
 	 * @param product whose field should be copied
 	 * 
 	 */
@@ -113,8 +113,49 @@ public class DataTransfer {
 		productId = product.getId();
 		productName = product.getName();
 		productQuantity = product.getQuantity();
-		productCurrentPrice = product.getCurrentPrice();
-		productMinimumReorderLevel = product.getMinimumReorderLevel();
+		productCurrentPrice = product.getPrice();
+		productMinimumReorderLevel = product.getReorderLevel();
+	}
+
+	public String getOrderProductName() {
+		return orderProductName;
+	}
+
+	public void setOrderProductName(String orderProductName) {
+		this.orderProductName = orderProductName;
+	}
+
+	public String getOrderProductId() {
+		return orderProductId;
+	}
+
+	public void setOrderProductId(String orderProductId) {
+		this.orderProductId = orderProductId;
+	}
+
+	public String getAmountOrdered() {
+		return amountOrdered;
+	}
+
+	public void setAmountOrdered(String orderAmountOrdered) {
+		this.amountOrdered = orderAmountOrdered;
+	}
+
+	public void setProductQuantity(String productQuantity) {
+		this.productQuantity = productQuantity;
+	}
+
+	/*
+	 * sets all order fields using the order parameter
+	 * 
+	 * @param product whose field should be copied
+	 * 
+	 */
+
+	public void setOrderFields(Order order) {
+		orderProductId = order.getProductId();
+		orderProductName = order.getProductName();
+		amountOrdered = order.getAmountOrdered();
 	}
 
 	public String getOrderProductName() {
