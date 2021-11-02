@@ -3,6 +3,10 @@ package edu.ics372.groupProject1.entities;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 
+/**
+ * @author jquin
+ *
+ */
 public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
@@ -54,5 +58,14 @@ public class Product implements Serializable {
 		} catch (NumberFormatException nfe) {
 			return false;
 		}
+	}
+
+	/**
+	 * @author jquin productInfo method Business Process #6. Retrieve product info
+	 *         print string of Product name, ID, price per unit and current stock.
+	 */
+	public String productInfo() {
+		return "Product [name:" + name + ", ID: " + id + ", Price: " + currentPrice + ", Stock: " + quantity;
+
 	}
 }

@@ -56,6 +56,11 @@ public class Inventory implements Iterable<Product>, Serializable {
 	 */
 	public Iterator<Product> iterator() {
 		return products.iterator();
+
+	}
+
+	public List<Product> getInventoryList() {
+		return products;
 	}
 
 	/**
