@@ -299,7 +299,7 @@ public class UserInterface {
 	}
 
 	/**
-	 * Gets and prints all books.
+	 * Display all products
 	 */
 	public void getProducts() {
 		Iterator<Result> iterator = store.getProducts();
@@ -312,6 +312,10 @@ public class UserInterface {
 		}
 		System.out.println("End of listing");
 	}
+	
+	/**
+	 * Display all outstanding orders that has not been fulfilled
+	 */
 	
 	public void getOrders() {
 		Iterator<Result> iterator = store.getOrders();

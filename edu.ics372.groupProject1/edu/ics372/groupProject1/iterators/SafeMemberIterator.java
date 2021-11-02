@@ -11,9 +11,11 @@ public class SafeMemberIterator implements Iterator<Result> {
 	private Result result = new Result();
 
 	/**
-	 * The user of SafeIterator must supply an Iterator to Book.
+	 * This safe iterator class help support the iteration to Member.
+	 * It does so by setting the the member fields into the class result
+	 * and returns the result.
 	 * 
-	 * @param iterator Iterator<Book>
+	 * @param iterator Iterator<Member>
 	 */
 	public SafeMemberIterator(Iterator<Member> iterator) {
 		this.iterator = iterator;
