@@ -1,5 +1,3 @@
-//testing
-//second comment
 
 package edu.ics372.groupProject1.ui;
 
@@ -11,6 +9,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import edu.ics372.groupProject1.facade.GroceryStore;
@@ -284,6 +283,47 @@ public class UserInterface {
 			break;
 		}
 	}
+	
+	/**
+	 * Displays all members
+	 */
+	public void getMembers() {
+		Iterator<Result> iterator = store.getMembers();
+		System.out.println("List of Members (name, id, address)");
+		while (iterator.hasNext()) {
+			Result result = iterator.next();
+			System.out.println(result.getMemberName() + " " + result.getMemberId() + " " + result.getMemberAddress());
+					
+		}
+		System.out.println("End of listing");
+	}
+
+	/**
+	 * Gets and prints all books.
+	 */
+	public void getProducts() {
+		Iterator<Result> iterator = store.getProducts();
+		System.out.println("List of Prodcuts (name, id, minimum reorder level)");
+		while (iterator.hasNext()) {
+			Result result = iterator.next();
+			System.out.println(result.getProductName() + " " + result.getProductId() + " " 
+					+ result.getProductMinimumReorderLevel());
+					
+		}
+		System.out.println("End of listing");
+	}
+	
+	public void getOrders() {
+		Iterator<Result> iterator = store.getOrders();
+		System.out.println("List of Orders (name, id, amount ordered)");
+		while (iterator.hasNext()) {
+			Result result = iterator.next();
+			System.out.println(result.getOrderProductName() + " " + result.getOrderProductId() + " " 
+					+ result.getAmountOrdered());
+					
+		}
+		System.out.println("End of listing");
+	}
 
 	/**
 	 * Method to be called for saving the coop object. Uses the appropriate
@@ -345,12 +385,16 @@ public class UserInterface {
 			case PRINT_TRANSACTIONS:
 				break;
 			case LIST_MEMBERS:
+				getMembers();
 				break;
 			case LIST_PRODUCTS:
+				getProducts();
 				break;
 			case LIST_ORDERS:
+				getOrders();
 				break;
 			case RETRIEVE:
+				retrieve();
 				break;
 			case SAVE:
 				save();

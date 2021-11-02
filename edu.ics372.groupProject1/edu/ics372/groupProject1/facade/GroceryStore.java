@@ -5,12 +5,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Iterator;
 
 import edu.ics372.groupProject1.collections.Inventory;
 import edu.ics372.groupProject1.collections.MemberList;
 import edu.ics372.groupProject1.collections.OrderList;
 import edu.ics372.groupProject1.entities.Order;
 import edu.ics372.groupProject1.entities.Product;
+import edu.ics372.groupProject1.iterators.SafeMemberIterator;
+import edu.ics372.groupProject1.iterators.SafeOrderIterator;
+import edu.ics372.groupProject1.iterators.SafeProductIterator;
 
 public class GroceryStore {
 	private static final long serialVersionUID = 1L;
@@ -115,11 +119,41 @@ public class GroceryStore {
 			return false;
 		}
 	}
+	
+	/**
+	 * Returns an iterator to Member info. The Iterator returned is a safe one, in
+	 * the sense that only copies of the Member fields are assembled into the
+	 * objects returned via next().
+	 * 
+	 * @return an Iterator to Result - only the Member fields are valid.
+	 */
+	public Iterator<Result> getMembers() {
+		return new SafeMemberIterator(members.iterator());
+	}
+	
 
 	/**
-	 * String form of the library
+	 * Returns an iterator to Product info. The Iterator returned is a safe one, in the
+	 * sense that only copies of the Book fields are assembled into the objects
+	 * returned via next().
 	 * 
+	 * @return an Iterator to Result - only the Product fields are valid.
 	 */
+	public Iterator<Result> getProducts() {
+		return new SafeProductIterator(inventory.iterator());
+	}
+	
+	/**
+	 * Returns an iterator to Order info. The Iterator returned is a safe one, in the
+	 * sense that only copies of the Book fields are assembled into the objects
+	 * returned via next().
+	 * 
+	 * @return an Iterator to Result - only the Order fields are valid.
+	 */
+	public Iterator<Result> getOrders() {
+		return new SafeOrderIterator(orders.iterator());
+	}
+	
 	@Override
 	public String toString() {
 		return inventory + "\n" + members;
