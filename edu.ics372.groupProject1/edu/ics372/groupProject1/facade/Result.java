@@ -6,7 +6,6 @@ public class Result extends DataTransfer {
 	public static final int NO_OUTSTANDING_ORDER = 3;
 	public static final int OPERATION_COMPLETED = 4;
 	public static final int OPERATION_FAILED = 5;
-	public static final int PRODUCT_CHECKED_OUT = 6;
 
 	private int resultCode;
 
