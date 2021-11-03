@@ -76,6 +76,14 @@ public class GroceryStore {
 		}
 		return result;
 	}
+	
+	public Iterator<Result> getTransactions(Request request) {
+		Member member = members.search(request.getMemberId());
+		if (member == null) {
+			return new LinkedList<Result>().iterator();
+		}
+		return member.getTransactionsBetweenDate(request.getDate1(), request.getDate2());
+	}
 
 	/**
 	 * Retrieves a deserialized version of the library from disk
