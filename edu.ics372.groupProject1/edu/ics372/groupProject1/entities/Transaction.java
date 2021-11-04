@@ -7,12 +7,10 @@ import java.util.GregorianCalendar;
 public class Transaction implements Serializable {
 	// Instance variables
 	private static final long serialVersionUID = 1L;
-	private String memberID;
 	private Calendar date;
-	private double total;
+	private double totalPrice;
 
-	public Transaction(String memberID, double total) {
-		this.memberID = memberID;
+	public Transaction(double total) {
 		this.total = total;
 		date = new GregorianCalendar();
 	}
@@ -47,12 +45,8 @@ public class Transaction implements Serializable {
 	}
 
 	// Getter & Setter plus toString() methods
-	public String getMemberID() {
-		return memberID;
-	}
-
-	public String getTotal() {
-		return "Total: " + total;
+	public String getTotalPrice() {
+		return "TotalPrice: " + totalPrice;
 	}
 
 	public String getDate() {
@@ -61,7 +55,7 @@ public class Transaction implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Transaction [memberID=" + memberID + ", date=" + date + "]";
+		return "Transaction [totalPrice: " + totalPrice + ", date=" + date + "]";
 	}
 	
 	public static void save(ObjectOutputStream output) throws IOException {
