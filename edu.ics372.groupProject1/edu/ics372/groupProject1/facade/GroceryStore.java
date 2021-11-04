@@ -82,7 +82,7 @@ public class GroceryStore {
 		if (member == null) {
 			return new LinkedList<Result>().iterator();
 		}
-		return member.getTransactionsBetweenDate(request.getDate1(), request.getDate2());
+		return member.getTransactionsBetweenDate(request.getStartDate(), request.getEndDate());
 	}
 
 	/**
