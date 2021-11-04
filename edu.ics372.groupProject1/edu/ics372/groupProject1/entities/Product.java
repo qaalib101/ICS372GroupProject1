@@ -3,32 +3,39 @@ package edu.ics372.groupProject1.entities;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 
+/**
+ * @author jquin
+ *
+ */
 public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
-	private double currentPrice;
+	private double price;
 	private String id;
-	private int minimumReorderLevel;
+	private int reorderLevel;
 	private int quantity;
+	private static final String PRODUCT_STRING = "P";
+	private static int idCounter;
 
-	public Product(String name, double currentPrice, int minimumReorderLevel) {
+	public Product(String name, double price, int reorderLevel) {
 		this.name = name;
-		this.currentPrice = currentPrice;
-		this.minimumReorderLevel = minimumReorderLevel;
+		this.price = price;
+		this.reorderLevel = reorderLevel;
 		this.quantity = 0;
+		id = PRODUCT_STRING + ++idCounter;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public String getCurrentPrice() {
+	public String getPrice() {
 		DecimalFormat df = new DecimalFormat("#.00");
-		return df.format(currentPrice);
+		return df.format(price);
 	}
 
-	public String getMinimumReorderLevel() {
-		return Integer.toString(minimumReorderLevel);
+	public String getReorderLevel() {
+		return Integer.toString(reorderLevel);
 	}
 
 	public String getQuantity() {
@@ -46,10 +53,19 @@ public class Product implements Serializable {
 
 	public boolean changePrice(String newPrice) {
 		try {
-			currentPrice = Double.parseDouble(newPrice);
+			price = Double.parseDouble(newPrice);
 			return true;
 		} catch (NumberFormatException nfe) {
 			return false;
 		}
+	}
+
+	/**
+	 * @author jquin productInfo method Business Process #6. Retrieve product info
+	 *         print string of Product name, ID, price per unit and current stock.
+	 */
+	public String productInfo() {
+		return "Product [name:" + name + ", ID: " + id + ", Price: " + currentPrice + ", Stock: " + quantity;
+
 	}
 }

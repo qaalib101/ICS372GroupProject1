@@ -1,21 +1,17 @@
-//testing
-//second comment
 
 package edu.ics372.groupProject1.ui;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import edu.ics372.groupProject1.facade.GroceryStore;
 import edu.ics372.groupProject1.facade.Request;
 import edu.ics372.groupProject1.facade.Result;
+import edu.ics372.groupProject1.tests.TestBed;
 
 /**
  * 
@@ -55,7 +51,7 @@ public class UserInterface {
 			retrieve();
 		} else {
 			if (yesOrNo("Do you want to generate a test bed and invoke the functionality using asserts?")) {
-				System.out.println("To be implemented");
+				TestBed.generateTestBed();
 				store = GroceryStore.instance();
 			} else {
 				store = GroceryStore.instance();
@@ -154,26 +150,6 @@ public class UserInterface {
 	}
 
 	/**
-	 * Prompts for a date and gets a date object
-	 * 
-	 * @param prompt the prompt
-	 * @return the data as a Calendar object
-	 */
-	public Calendar getDate(String prompt) {
-		do {
-			try {
-				Calendar date = new GregorianCalendar();
-				String item = getToken(prompt);
-				DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.SHORT);
-				date.setTime(dateFormat.parse(item));
-				return date;
-			} catch (Exception fe) {
-				System.out.println("Please input a date as mm/dd/yy");
-			}
-		} while (true);
-	}
-
-	/**
 	 * Converts the string to a double
 	 * 
 	 * @param prompt the string for prompting
@@ -219,20 +195,93 @@ public class UserInterface {
 		System.out.println("Enter a number between 0 and 12 as explained below:");
 		System.out.println(EXIT + " to Exit\n");
 		System.out.println(ENROLL_MEMBER + " to add a member");
-		System.out.println(REMOVE_MEMBER + " to  add books");
-		System.out.println(RETRIEVE_MEMBER + " to  issue books to a  member");
-		System.out.println(ADD_PRODUCT + " to  return books ");
-		System.out.println(CHECKOUT_CART + " to  renew books ");
-		System.out.println(RETRIEVE_PRODUCT + " to  remove books");
-		System.out.println(PROCESS_SHIPMENT + " to  place a hold on a book");
-		System.out.println(CHANGE_PRICE + " to  remove a hold on a book");
-		System.out.println(PRINT_TRANSACTIONS + " to  process holds");
-		System.out.println(LIST_MEMBERS + " to  print transactions");
-		System.out.println(LIST_PRODUCTS + " to  print all members");
-		System.out.println(LIST_ORDERS + " to  print all books");
-		System.out.println(SAVE + " to  save data");
-		System.out.println(RETRIEVE + " to  retrieve data");
+		System.out.println(REMOVE_MEMBER + " to remove a member");
+		System.out.println(RETRIEVE_MEMBER + " to retrieve a member");
+		System.out.println(ADD_PRODUCT + " to add a product");
+		System.out.println(CHECKOUT_CART + " to checkout a cart");
+		System.out.println(RETRIEVE_PRODUCT + " to retrieve a product");
+		System.out.println(PROCESS_SHIPMENT + " to process a shipment");
+		System.out.println(CHANGE_PRICE + " to change the price of a product");
+		System.out.println(PRINT_TRANSACTIONS + " to print transactions");
+		System.out.println(LIST_MEMBERS + " to list all members");
+		System.out.println(LIST_PRODUCTS + " to list all products");
+		System.out.println(LIST_ORDERS + " to list all outstanding orders");
+		System.out.println(SAVE + " to save data");
+		System.out.println(RETRIEVE + " to retrieve data");
 		System.out.println(HELP + " for help");
+	}
+
+	/* TODO complete refactoring UserInterface checkoutCart method for use */
+	/**
+	 * Method to be called for checkout a cart. Prompts the user for the appropriate
+	 * values and uses the appropriate Library method for checking out the cart.
+	 * 
+	 */
+	public void checkoutCart() {
+		Request.instance().setMemberId(getToken("Enter member id"));
+		Result result = store.searchMembership(Request.instance());
+		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+			System.out.println("No member with id " + Request.instance().getMemberId());
+			return;
+		}
+		// accepting product and quantity area: to be implemented
+		do {
+			Request.instance().setProductId(getToken("Enter product id"));
+			result = store.checkOutProduct(Request.instance());
+			if (result.getResultCode() == Result.OPERATION_COMPLETED) {
+				System.out.println("Product " + result.getProductName() + " checked out" + " remaining inventory "
+						+ result.getProductQuantity()); // might need to adjuest to insure checkign inventory and not
+														// checkout out item total
+			} else {
+				System.out.println("Product could not be checked out");
+			}
+		} while (yesOrNo("Check out more products?"));
+	}
+
+	/**
+	 * Prompts the user for information that is used to create a member.
+	 */
+	private void enrollMember() {
+		String name = getName("Please enter the member's name: ");
+		String address = getToken("Please enter the member's address: ");
+		String phone = getToken("Please enter the member's phone number (no formatting): ");
+		String date = getToken("Please enter the current date (mm/dd/yy): ");
+		double fee = getDoubleNumber("Please enter the fee paid: ");
+		if (store.addMember(name, address, phone, date, fee) == true) {
+			System.out.println("Member successfully created.");
+			// TODO print member info after creation
+		}
+	}
+
+	/**
+	 * Removes a member with the given member ID.
+	 */
+	private void removeMember() {
+		String id = getToken("Please enter the member ID: ");
+		if (store.removeMember(id) == true) {
+			System.out.println("Member successfully removed.");
+		} else {
+			System.out.println("Error: invalid member ID");
+		}
+	}
+
+	private void retrieveMember() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void addProduct() {
+		String name = getName("Please enter the product name: ");
+		double price = getDoubleNumber("Please enter the price: ");
+		int reorderLevel = getNumber("Please enter the product's minimum reorder level: ");
+		if (store.addProduct(name, price, reorderLevel) == true) {
+			System.out.println("Product successfully added.");
+		}
+	}
+
+	private void retrieveProduct() {
+		// TODO Auto-generated method stub
+
 	}
 
 	/**
@@ -284,44 +333,51 @@ public class UserInterface {
 			break;
 		}
 	}
-	
+
+	private void printTransactions() {
+		// TODO Auto-generated method stub
+	}
+
 	/**
 	 * Displays all members
 	 */
-	public void getMembers() {
-		Iterator<Result> iterator = store.getMembers();
+	public void listMembers() {
+		Iterator<Result> iterator = store.listMembers();
 		System.out.println("List of Members (name, id, address)");
 		while (iterator.hasNext()) {
 			Result result = iterator.next();
 			System.out.println(result.getMemberName() + " " + result.getMemberId() + " " + result.getMemberAddress());
-					
+
 		}
 		System.out.println("End of listing");
 	}
 
 	/**
-	 * Gets and prints all books.
+	 * Gets and prints all products.
 	 */
-	public void getProducts() {
-		Iterator<Result> iterator = store.getProducts();
+	public void listProducts() {
+		Iterator<Result> iterator = store.listProducts();
 		System.out.println("List of Prodcuts (name, id, minimum reorder level)");
 		while (iterator.hasNext()) {
 			Result result = iterator.next();
-			System.out.println(result.getProductName() + " " + result.getProductId() + " " 
+			System.out.println(result.getProductName() + " " + result.getProductId() + " "
 					+ result.getProductMinimumReorderLevel());
-					
+
 		}
 		System.out.println("End of listing");
 	}
 	
-	public void getOrders() {
-		Iterator<Result> iterator = store.getOrders();
+	/**
+	 * Display all outstanding orders that has not been fulfilled
+	 */
+
+	public void listOrders() {
+		Iterator<Result> iterator = store.listOrders();
 		System.out.println("List of Orders (name, id, amount ordered)");
 		while (iterator.hasNext()) {
 			Result result = iterator.next();
-			System.out.println(result.getOrderProductName() + " " + result.getOrderProductId() + " " 
-					+ result.getAmountOrdered());
-					
+			System.out.println(
+					result.getOrderProductName() + " " + result.getOrderProductId() + " " + result.getAmountOrdered());					
 		}
 		System.out.println("End of listing");
 	}
@@ -345,18 +401,8 @@ public class UserInterface {
 		// for which you want records as mm/dd/yy"));
 		//
 	}
-
-	/**
-	 * Method to be called for saving the coop object. Uses the appropriate
-	 * Cooperative method for saving.
-	 * 
-	 */
-	private void save() {
-		if (store.save()) {
-			System.out.println(" The library has been successfully saved in the file CooperativeData \n");
-		} else {
-			System.out.println(" There has been an error in saving \n");
 		}
+		System.out.println("End of listing");
 	}
 
 	/**
@@ -380,6 +426,19 @@ public class UserInterface {
 		}
 	}
 
+	/**
+	 * Method to be called for saving the coop object. Uses the appropriate
+	 * Cooperative method for saving.
+	 * 
+	 */
+	private void save() {
+		if (store.save()) {
+			System.out.println(" The library has been successfully saved in the file CooperativeData \n");
+		} else {
+			System.out.println(" There has been an error in saving \n");
+		}
+	}
+
 	// add methods for business processes
 	public void process() {
 		int command;
@@ -387,31 +446,43 @@ public class UserInterface {
 		while ((command = getCommand()) != EXIT) {
 			switch (command) {
 			case ENROLL_MEMBER:
+				enrollMember();
 				break;
 			case REMOVE_MEMBER:
+				removeMember();
 				break;
 			case RETRIEVE_MEMBER:
+				retrieveMember();
 				break;
 			case ADD_PRODUCT:
+				addProduct();
 				break;
 			case CHECKOUT_CART:
+				checkoutCart();
 				break;
 			case RETRIEVE_PRODUCT:
+				retrieveProduct();
 				break;
 			case PROCESS_SHIPMENT:
 				processShipment();
 				break;
 			case CHANGE_PRICE:
+				changePrice();
 				break;
 			case PRINT_TRANSACTIONS:
+				printTransactions();
 				break;
 			case LIST_MEMBERS:
+				listMembers();
 				break;
 			case LIST_PRODUCTS:
+				listProducts();
 				break;
 			case LIST_ORDERS:
+				listOrders();
 				break;
 			case RETRIEVE:
+				retrieve();
 				break;
 			case SAVE:
 				save();

@@ -69,6 +69,11 @@ public class AutomatedTester {
 		// assert Library.instance().searchMembership(Request.instance()) == null;
 	}
 
+	// implement
+	private void testCheckOutCart() {
+
+	}
+
 	public void testAll() {
 		testAddMember();
 		testAddProduct();

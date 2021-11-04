@@ -9,6 +9,7 @@ public class Order implements Serializable {
 	private int amountOrdered;
 
 	public Order(String productId, String productName, int amountOrdered) {
+
 	}
 
 	public String getProductName() {
@@ -19,7 +20,7 @@ public class Order implements Serializable {
 		return this.productId;
 	}
 
-	public String getAmount() {
+	public String getAmountOrdered() {
 		return Integer.toString(this.amountOrdered);
 	}
 }
