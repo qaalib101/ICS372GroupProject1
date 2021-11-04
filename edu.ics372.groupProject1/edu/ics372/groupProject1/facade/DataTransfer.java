@@ -165,12 +165,12 @@ public class DataTransfer {
 	 * 
 	 */
 
-	public String getTransactionTotal() {
-		return transactionTotal;
+	public String getTransactionTotalPrice() {
+		return transactionTotalPrice;
 	}
 
-	public void setTransactionTotal(String transactionTotal) {
-		this.transactionTotal = transactionTotal;
+	public void setTransactionTotalPrice(String transactionTotalPrice) {
+		this.transactionTotalPrice = transactionTotalPrice;
 	}
 
 	public String getTransactionDate() {
@@ -179,6 +179,18 @@ public class DataTransfer {
 
 	public void setTransactionDate(String calendar) {
 		this.transactionDate = calendar;
+	}
+	
+	/*
+	 * sets all transaction fields using the transaction parameter
+	 * 
+	 * @param transaction whose field should be copied
+	 * 
+	 */
+
+	public void setTransactionFields(Transaction transaction) {
+		setTransactionDate(transaction.getDate());
+		setTransactionTotalPrice(transaction.getTotalPrice());
 	}
 
 	/**
