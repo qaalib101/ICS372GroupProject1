@@ -36,6 +36,26 @@ public class Member implements Serializable {
 		this.fee = fee;
 		id = MEMBER_STRING + ++idCounter;
 	}
+	
+	/**
+	 * Gets an iterator to a collection of selected transactions
+	 * 
+	 * @param date the date for which the transactions have to be retrieved
+	 * @return the iterator to the collection
+	 */
+	public Iterator<Result> getTransactionsBetweenDates(Calendar date1, Calendar date2) {
+		return new SafeTransactionIterator(
+				new FilteredIterator(transactions.iterator(), transaction -> transaction.datesInRange(date1, date2)));
+	}
+
+	/**
+	 * Returns the list of all transactions for this member.
+	 * 
+	 * @return the iterator to the list of Transaction objects
+	 */
+	public Iterator<Transaction> getTransactions() {
+		return transactions.iterator();
+	}
 
 	/**
 	 * Getter for name

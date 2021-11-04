@@ -22,7 +22,8 @@ public class DataTransfer {
 	private String orderProductName;
 	private String orderProductId;
 	private String amountOrdered;
-
+	private String transactionDate;
+	private String transactionTotal;
 	/*
 	 * This sets all fields to "none"
 	 */
@@ -156,6 +157,41 @@ public class DataTransfer {
 		orderProductId = order.getProductId();
 		orderProductName = order.getProductName();
 		amountOrdered = order.getAmountOrdered();
+	}
+	
+	/*
+	 * sets all transaction fields using the transaction parameter
+	 * 
+	 * @param transaction whose field should be copied
+	 * 
+	 */
+
+	public String getTransactionTotalPrice() {
+		return transactionTotalPrice;
+	}
+
+	public void setTransactionTotalPrice(String transactionTotalPrice) {
+		this.transactionTotalPrice = transactionTotalPrice;
+	}
+
+	public String getTransactionDate() {
+		return transactionDate;
+	}
+
+	public void setTransactionDate(String calendar) {
+		this.transactionDate = calendar;
+	}
+	
+	/*
+	 * sets all transaction fields using the transaction parameter
+	 * 
+	 * @param transaction whose field should be copied
+	 * 
+	 */
+
+	public void setTransactionFields(Transaction transaction) {
+		setTransactionDate(transaction.getDate());
+		setTransactionTotalPrice(transaction.getTotalPrice());
 	}
 
 	/**

@@ -377,8 +377,30 @@ public class UserInterface {
 		while (iterator.hasNext()) {
 			Result result = iterator.next();
 			System.out.println(
-					result.getOrderProductName() + " " + result.getOrderProductId() + " " + result.getAmountOrdered());
+					result.getOrderProductName() + " " + result.getOrderProductId() + " " + result.getAmountOrdered());					
+		}
+		System.out.println("End of listing");
+	}
+	
+	/*
+	 * Prints all transactions for a member within a date range
+	 */
 
+	public void getTransactions() {
+		// String date1, date2;
+		Request.instance().setMemberId(getToken("Enter member id"));
+		Request.instance().setDate1(getDate("Please enter the first date for which you want records from mm/dd/yy"));
+		Request.instance().setDate2(getDate("Please enter the second date for which you want records to mm/dd/yy"));
+		Iterator<Result> result = store.getTransactions(Request.instance());
+		while (result.hasNext()) {
+			Result transaction = result.next();
+			System.out.println(transaction.getTransactionDate() + " " + transaction.getTransactionTotal() + "\n");
+		}
+		System.out.println("\n End of transactions \n");
+		// Request.instance().setTransactionDate(getToken("Please enter the first date
+		// for which you want records as mm/dd/yy"));
+		//
+	}
 		}
 		System.out.println("End of listing");
 	}
