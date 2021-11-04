@@ -34,7 +34,7 @@ public class Member implements Serializable {
 	 * @param date the date for which the transactions have to be retrieved
 	 * @return the iterator to the collection
 	 */
-	public Iterator<Result> getTransactionsBetweenDate(Calendar date1, Calendar date2) {
+	public Iterator<Result> getTransactionsBetweenDates(Calendar date1, Calendar date2) {
 		return new SafeTransactionIterator(
 				new FilteredIterator(transactions.iterator(), transaction -> transaction.datesInRange(date1, date2)));
 	}
