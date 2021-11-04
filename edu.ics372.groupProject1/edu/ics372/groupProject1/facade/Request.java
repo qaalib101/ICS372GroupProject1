@@ -2,7 +2,7 @@ package edu.ics372.groupProject1.facade;
 
 public class Request extends DataTransfer {
 	private static Request request;
-	private Calendar date, date1, date2;
+	private Calendar date, startDate, endDate;
 	private double total;
 	
 	private Request() {
@@ -31,23 +31,19 @@ public class Request extends DataTransfer {
 		return date;
 	}
 
-	public Calendar getDate1() {
-		return date1;
+	public Calendar getStartDate() {
+		return startDate;
 	}
 
-	public void setDate1(Calendar date1) {
-		this.date1 = date1;
+	public void setStartDate(Calendar startDate) {
+		this.startDate = startDate;
 	}
 
-	public Calendar getDate2() {
-		return date2;
+	public Calendar getEndDate() {
+		return endDate;
 	}
 
-	public void setDate2(Calendar date2) {
-		this.date2 = date2;
-	}
-
-	public double getTotal() {
-		return total;
+	public void setEndDate(Calendar endDate) {
+		this.endDate = endDate;
 	}
 }
