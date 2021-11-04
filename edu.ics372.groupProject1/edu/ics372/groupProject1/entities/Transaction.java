@@ -10,8 +10,8 @@ public class Transaction implements Serializable {
 	private Calendar date;
 	private double totalPrice;
 
-	public Transaction(double total) {
-		this.total = total;
+	public Transaction(double totalPrice) {
+		this.totalPrice = totalPrice;
 		date = new GregorianCalendar();
 	}
 
@@ -40,8 +40,8 @@ public class Transaction implements Serializable {
 		return false;
 	}
 
-	private String setDateToString(Calendar calDate1) {
-		return calDate1.get(Calendar.MONTH) + "/" + calDate1.get(Calendar.DATE) + "/" + calDate1.get(Calendar.YEAR);
+	private String setDateToString(Calendar date) {
+		return date.get(Calendar.MONTH) + "/" + date.get(Calendar.DATE) + "/" + date.get(Calendar.YEAR);
 	}
 
 	// Getter & Setter plus toString() methods
@@ -57,13 +57,4 @@ public class Transaction implements Serializable {
 	public String toString() {
 		return "Transaction [totalPrice: " + totalPrice + ", date=" + date + "]";
 	}
-	
-	public static void save(ObjectOutputStream output) throws IOException {
-		output.writeObject(transactionID);
-	}
-
-	public static void retrieve(ObjectInputStream input) throws IOException, ClassNotFoundException {
-		transactionID = (int) input.readObject();
-	}
-
 }
