@@ -11,11 +11,12 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
-import edu.ics372.groupProject1.facade.GroceryStore;
-import edu.ics372.groupProject1.facade.Request;
-import edu.ics372.groupProject1.facade.Result;
+import groupProject1.facade.GroceryStore;
+import groupProject1.facade.Request;
+import groupProject1.facade.Result;
 
 /**
  * 
@@ -148,7 +149,7 @@ public class UserInterface {
 				Integer number = Integer.valueOf(item);
 				return number.intValue();
 			} catch (NumberFormatException nfe) {
-				System.out.println("Please input a number ");
+				System.out.println("Please input a number: ");
 			}
 		} while (true);
 	}
@@ -216,23 +217,77 @@ public class UserInterface {
 	 * 
 	 */
 	public void help() {
-		System.out.println("Enter a number between 0 and 12 as explained below:");
-		System.out.println(EXIT + " to Exit\n");
-		System.out.println(ENROLL_MEMBER + " to add a member");
-		System.out.println(REMOVE_MEMBER + " to  add books");
-		System.out.println(RETRIEVE_MEMBER + " to  issue books to a  member");
-		System.out.println(ADD_PRODUCT + " to  return books ");
-		System.out.println(CHECKOUT_CART + " to  renew books ");
-		System.out.println(RETRIEVE_PRODUCT + " to  remove books");
-		System.out.println(PROCESS_SHIPMENT + " to  place a hold on a book");
-		System.out.println(CHANGE_PRICE + " to  remove a hold on a book");
-		System.out.println(PRINT_TRANSACTIONS + " to  process holds");
-		System.out.println(LIST_MEMBERS + " to  print transactions");
-		System.out.println(LIST_PRODUCTS + " to  print all members");
-		System.out.println(LIST_ORDERS + " to  print all books");
-		System.out.println(SAVE + " to  save data");
-		System.out.println(RETRIEVE + " to  retrieve data");
+		System.out.println("Enter a number between 0 and 15 as explained below:");
+		System.out.println(EXIT + "  to Exit");
+		System.out.println(ENROLL_MEMBER + "  to add a member");
+		System.out.println(REMOVE_MEMBER + "  to remove a member");
+		System.out.println(RETRIEVE_MEMBER + "  to retrieve a member");
+		System.out.println(ADD_PRODUCT + "  to add a product");
+		System.out.println(CHECKOUT_CART + "  to checkout a member's cart");
+		System.out.println(RETRIEVE_PRODUCT + "  to retrieve a product");
+		System.out.println(PROCESS_SHIPMENT + "  to process a shipment");
+		System.out.println(CHANGE_PRICE + "  to change a product's price");
+		System.out.println(PRINT_TRANSACTIONS + "  to print transactions");
+		System.out.println(LIST_MEMBERS + " to print all members");
+		System.out.println(LIST_PRODUCTS + " to print all products");
+		System.out.println(LIST_ORDERS + " to print all outstanding orders");
+		System.out.println(SAVE + " to save data");
+		System.out.println(RETRIEVE + " to retrieve data");
 		System.out.println(HELP + " for help");
+	}
+
+	/**
+	 * Method to be called for adding a member
+	 */
+	public void addMember() {
+		Request.instance().setMemberName(getName("Enter member name"));
+		Request.instance().setMemberAddress(getName("Enter address"));
+		Request.instance().setMemberPhone(getName("Enter phone"));
+		// Possibly change the getToken to getDate for logical sense purpose
+		Request.instance()
+				.setMemberDate(getToken("Please enter the first date for which you want records from mm/dd/yy"));
+		Request.instance().setMemberFee(decimalFormat.format(getDoubleNumber("Enter the member fee as 0.00")));
+		Result result = store.addMember(Request.instance());
+		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+			System.out.println("Could not add member");
+		} else {
+			System.out.println(result.getMemberName() + "'s id is " + result.getMemberId());
+		}
+	}
+
+	/**
+	 * Method to be called for removing a member
+	 */
+	public void removeMember() {
+
+	}
+
+	/**
+	 * Method to be called for retrieving a member
+	 */
+	public void retrieveMember() {
+
+	}
+
+	/**
+	 * Method to be called for adding a product
+	 */
+	public void addProduct() {
+
+	}
+
+	/**
+	 * Method to be called for checking out a member's cart
+	 */
+	public void checkoutCart() {
+
+	}
+
+	/**
+	 * Method to be called for retrieving a product
+	 */
+	public void retrieveProduct() {
+
 	}
 
 	/**
@@ -268,7 +323,7 @@ public class UserInterface {
 
 	public void changePrice() {
 		Request.instance().setProductId(getToken("Enter product Id: "));
-		Request.instance().setProductCurrentPrice(
+		Request.instance().setProductPrice(
 				decimalFormat.format(getDoubleNumber("Enter new product price (with two ending decimal places): ")));
 		Result result = store.changePrice(Request.instance());
 		switch (result.getResultCode()) {
@@ -279,12 +334,32 @@ public class UserInterface {
 			System.out.println("Changing price failed for product with id " + Request.instance().getProductId());
 			break;
 		case Result.OPERATION_COMPLETED:
-			System.out
-					.println("Changed price of " + result.getProductName() + " to $" + result.getProductCurrentPrice());
+			System.out.println("Changed price of " + result.getProductName() + " to $" + result.getProductPrice());
 			break;
 		}
 	}
-	
+
+	/*
+	 * Prints all transactions for a member within a date range
+	 */
+
+	public void printTransactions() {
+		// String date1, date2;
+		Request.instance().setMemberId(getToken("Enter member id"));
+		Request.instance()
+				.setStartDate(getDate("Please enter the first date for which you want records from mm/dd/yy"));
+		Request.instance().setEndDate(getDate("Please enter the second date for which you want records to mm/dd/yy"));
+		Iterator<Result> result = store.getTransactions(Request.instance());
+		while (result.hasNext()) {
+			Result transaction = result.next();
+			System.out.println(transaction.getTransactionDate() + " " + transaction.getTransactionTotalPrice() + "\n");
+		}
+		System.out.println("\n End of transactions \n");
+		// Request.instance().setTransactionDate(getToken("Please enter the first date
+		// for which you want records as mm/dd/yy"));
+		//
+	}
+
 	/**
 	 * Displays all members
 	 */
@@ -294,56 +369,36 @@ public class UserInterface {
 		while (iterator.hasNext()) {
 			Result result = iterator.next();
 			System.out.println(result.getMemberName() + " " + result.getMemberId() + " " + result.getMemberAddress());
-					
+
 		}
 		System.out.println("End of listing");
 	}
 
 	/**
-	 * Gets and prints all books.
+	 * Gets and prints all Products.
 	 */
 	public void getProducts() {
 		Iterator<Result> iterator = store.getProducts();
 		System.out.println("List of Prodcuts (name, id, minimum reorder level)");
 		while (iterator.hasNext()) {
 			Result result = iterator.next();
-			System.out.println(result.getProductName() + " " + result.getProductId() + " " 
+			System.out.println(result.getProductName() + " " + result.getProductId() + " "
 					+ result.getProductMinimumReorderLevel());
-					
+
 		}
 		System.out.println("End of listing");
 	}
-	
+
 	public void getOrders() {
 		Iterator<Result> iterator = store.getOrders();
 		System.out.println("List of Orders (name, id, amount ordered)");
 		while (iterator.hasNext()) {
 			Result result = iterator.next();
-			System.out.println(result.getOrderProductName() + " " + result.getOrderProductId() + " " 
-					+ result.getAmountOrdered());
-					
+			System.out.println(
+					result.getOrderProductName() + " " + result.getOrderProductId() + " " + result.getAmountOrdered());
+
 		}
 		System.out.println("End of listing");
-	}
-	
-	/*
-	 * Prints all transactions for a member within a date range
-	 */
-
-	public void getTransactions() {
-		// String date1, date2;
-		Request.instance().setMemberId(getToken("Enter member id"));
-		Request.instance().setDate1(getDate("Please enter the first date for which you want records from mm/dd/yy"));
-		Request.instance().setDate2(getDate("Please enter the second date for which you want records to mm/dd/yy"));
-		Iterator<Result> result = store.getTransactions(Request.instance());
-		while (result.hasNext()) {
-			Result transaction = result.next();
-			System.out.println(transaction.getTransactionDate() + " " + transaction.getTransactionTotal() + "\n");
-		}
-		System.out.println("\n End of transactions \n");
-		// Request.instance().setTransactionDate(getToken("Please enter the first date
-		// for which you want records as mm/dd/yy"));
-		//
 	}
 
 	/**
@@ -387,34 +442,46 @@ public class UserInterface {
 		while ((command = getCommand()) != EXIT) {
 			switch (command) {
 			case ENROLL_MEMBER:
+				addMember();
 				break;
 			case REMOVE_MEMBER:
+				removeMember();
 				break;
 			case RETRIEVE_MEMBER:
+				retrieveMember();
 				break;
 			case ADD_PRODUCT:
+				addProduct();
 				break;
 			case CHECKOUT_CART:
+				checkoutCart();
 				break;
 			case RETRIEVE_PRODUCT:
+				retrieveProduct();
 				break;
 			case PROCESS_SHIPMENT:
 				processShipment();
 				break;
 			case CHANGE_PRICE:
+				changePrice();
 				break;
 			case PRINT_TRANSACTIONS:
+				printTransactions();
 				break;
 			case LIST_MEMBERS:
+				getMembers();
 				break;
 			case LIST_PRODUCTS:
+				getProducts();
 				break;
 			case LIST_ORDERS:
-				break;
-			case RETRIEVE:
+				getOrders();
 				break;
 			case SAVE:
 				save();
+				break;
+			case RETRIEVE:
+				retrieve();
 				break;
 			case HELP:
 				help();
