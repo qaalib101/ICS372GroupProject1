@@ -57,21 +57,21 @@ public class GroceryStore {
 
 	public Result removeMember(Request request) {
 		Result result = new Result();
-		Member member = members.search(request.instance().getMemberId());
-		boolean memberExist = members.insertMember(member);
+		boolean memberExist = members.removeMember(request.getMemberId());
 		if (memberExist) {
 			result.setResultCode(Result.OPERATION_COMPLETED);
-			members.removeMember(member);
+		} else {
+			result.setResultCode(Result.OPERATION_FAILED);
 		}
 		return result;
 	}
 
 	public Result retrieveMember(Request request) {
 		Result result = new Result();
-		Member member = members.search(request.instance().getMemberId());
+		Member member = members.searchByName(request.getMemberName());
 		if (member != null) {
 			result.setResultCode(Result.OPERATION_COMPLETED);
-			members.removeMember(member);
+			result.setMemberFields(member);
 		} else {
 			result.setResultCode(Result.OPERATION_FAILED);
 		}
@@ -100,6 +100,13 @@ public class GroceryStore {
 
 	public Result retrieveProduct(Request request) {
 		Result result = new Result();
+		Product product = inventory.searchByName(request.getProductName());
+		if (product != null) {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			result.setProductFields(product);
+		} else {
+			result.setResultCode(Result.OPERATION_FAILED);
+		}
 		return result;
 	}
 
@@ -161,22 +168,22 @@ public class GroceryStore {
 	}
 
 	/**
-	 * Returns an iterator to Book info. The Iterator returned is a safe one, in the
-	 * sense that only copies of the Book fields are assembled into the objects
-	 * returned via next().
+	 * Returns an iterator to Product info. The Iterator returned is a safe one, in
+	 * the sense that only copies of the Product fields are assembled into the
+	 * objects returned via next().
 	 * 
-	 * @return an Iterator to Result - only the Book fields are valid.
+	 * @return an Iterator to Result - only the Product fields are valid.
 	 */
 	public Iterator<Result> getProducts() {
 		return new SafeProductIterator(inventory.iterator());
 	}
 
 	/**
-	 * Returns an iterator to Book info. The Iterator returned is a safe one, in the
-	 * sense that only copies of the Book fields are assembled into the objects
+	 * Returns an iterator to Orders info. The Iterator returned is a safe one, in
+	 * the sense that only copies of the Order fields are assembled into the objects
 	 * returned via next().
 	 * 
-	 * @return an Iterator to Result - only the Book fields are valid.
+	 * @return an Iterator to Result - only the Order fields are valid.
 	 */
 	public Iterator<Result> getOrders() {
 		return new SafeOrderIterator(orders.iterator());
