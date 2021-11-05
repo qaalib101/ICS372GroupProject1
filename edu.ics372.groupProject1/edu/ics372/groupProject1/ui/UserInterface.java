@@ -236,7 +236,7 @@ public class UserInterface {
 		System.out.println(HELP + " for help");
 	}
 
-	/**
+	//**
 	 * Method to be called for adding a member
 	 */
 	public void addMember() {
@@ -251,7 +251,8 @@ public class UserInterface {
 		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
 			System.out.println("Could not add member");
 		} else {
-			System.out.println(result.getMemberName() + "'s id is " + result.getMemberId());
+			System.out.println(
+					result.getMemberName() + "\n" + result.getMemberAddress() + "\n" + result.getMemberPhone() + "\n");
 		}
 	}
 
@@ -259,21 +260,47 @@ public class UserInterface {
 	 * Method to be called for removing a member
 	 */
 	public void removeMember() {
-
+		Request.instance().setMemberId((getToken("Enter the memberId to remove: ")));
+		Result result = store.removeMember(Request.instance());
+		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+			System.out.println("Could not remove member");
+		} else {
+			System.out.println("Member has been removed");
+		}
 	}
 
 	/**
 	 * Method to be called for retrieving a member
 	 */
 	public void retrieveMember() {
-
+		Request.instance().setMemberName(getName("Enter the member's name"));
+		Result result = store.retrieveMember(Request.instance());
+		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+			System.out.println("Could not retrieve member");
+		} else {
+			System.out.println("Member retrieved");
+			System.out.println("Address: " + result.getMemberAddress() + "\nFee: " + result.getMemberFee() + "\nId: "
+					+ result.getMemberId());
+		}
 	}
 
 	/**
 	 * Method to be called for adding a product
 	 */
 	public void addProduct() {
-
+		Request.instance().setProductName(getName("Enter the product's name: "));
+		Request.instance().setProductPrice(getToken("Enter the products price: "));
+		Request.instance().setProductMinimumReorderLevel(getToken("Enter the product's minimum reorder level: "));
+		Result result = store.addProduct(Request.instance());
+		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+			System.out.println("Could not add product");
+		} else {
+			// if a product is added twice, then the system orders more of that product by
+			// twice the minimum reorder level
+			System.out.println("Product added");
+			System.out.println(result.getProductName() + "\n" + result.getProductPrice() + "\n"
+					+ result.getProductMinimumReorderLevel() + "\n");
+		}
 	}
 
 	/**
@@ -287,7 +314,15 @@ public class UserInterface {
 	 * Method to be called for retrieving a product
 	 */
 	public void retrieveProduct() {
-
+		Request.instance().setProductName(getName("Enter the product's name: "));
+		Result result = store.retrieveProduct(Request.instance());
+		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+			System.out.println("Could not retrieve product");
+		} else {
+			System.out.println("Product retrieved");
+			System.out.println("ID: " + result.getProductId() + "\nPrice: " + result.getProductPrice() + "\nQuantity: "
+					+ result.getProductQuantity());
+		}
 	}
 
 	/**
@@ -349,9 +384,9 @@ public class UserInterface {
 		Request.instance()
 				.setStartDate(getDate("Please enter the first date for which you want records from mm/dd/yy"));
 		Request.instance().setEndDate(getDate("Please enter the second date for which you want records to mm/dd/yy"));
-		Iterator<Result> result = store.getTransactions(Request.instance());
-		while (result.hasNext()) {
-			Result transaction = result.next();
+		Iterator<Result> iterator = store.getTransactions(Request.instance());
+		while (iterator.hasNext()) {
+			Result transaction = iterator.next();
 			System.out.println(transaction.getTransactionDate() + " " + transaction.getTransactionTotalPrice() + "\n");
 		}
 		System.out.println("\n End of transactions \n");
