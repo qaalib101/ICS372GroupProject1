@@ -17,6 +17,7 @@ public class Member implements Serializable {
 	private String id;
 	private static final String MEMBER_STRING = "M";
 	private static int idCounter;
+	private Cart cart;
 	private List<Transaction> transactions = new LinkedList<Transaction>(); // make "List" Class for generics
 
 	/**
@@ -34,7 +35,12 @@ public class Member implements Serializable {
 		this.phone = phone;
 		this.date = date;
 		this.fee = fee;
+		this.cart = new Cart();
 		id = MEMBER_STRING + ++idCounter;
+	}
+
+	public Cart getCart() {
+		return cart;
 	}
 
 	/**

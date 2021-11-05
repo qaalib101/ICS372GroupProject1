@@ -3,10 +3,6 @@ package edu.ics372.groupProject1.entities;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 
-/**
- * @author jquin
- *
- */
 public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
@@ -51,6 +47,17 @@ public class Product implements Serializable {
 		return true;
 	}
 
+	public void autoRestock() {
+		if (this.quantity <= this.reorderLevel) {
+			this.quantity += 2 * this.reorderLevel;
+		}
+	}
+
+	public void decrementQuantity(int unitsSold) {
+
+		this.quantity -= unitsSold;
+	}
+
 	public boolean changePrice(String newPrice) {
 		try {
 			price = Double.parseDouble(newPrice);
@@ -60,10 +67,6 @@ public class Product implements Serializable {
 		}
 	}
 
-	/**
-	 * @author jquin productInfo method Business Process #6. Retrieve product info
-	 *         print string of Product name, ID, price per unit and current stock.
-	 */
 	public String productInfo() {
 		return "Product [name:" + name + ", ID: " + id + ", Price: " + currentPrice + ", Stock: " + quantity;
 

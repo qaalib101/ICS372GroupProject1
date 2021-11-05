@@ -31,7 +31,7 @@ public class UserInterface {
 	private static final int RETRIEVE_MEMBER = 3;
 	private static final int ADD_PRODUCT = 4;
 	private static final int CHECKOUT_CART = 5;
-	private static final int RETRIEVE_PRODUCT = 6;
+	private static final int RETRIEVE_PRODUCT_INFO = 6;
 	private static final int PROCESS_SHIPMENT = 7;
 	private static final int CHANGE_PRICE = 8;
 	private static final int PRINT_TRANSACTIONS = 9;
@@ -199,7 +199,7 @@ public class UserInterface {
 		System.out.println(RETRIEVE_MEMBER + " to retrieve a member");
 		System.out.println(ADD_PRODUCT + " to add a product");
 		System.out.println(CHECKOUT_CART + " to checkout a cart");
-		System.out.println(RETRIEVE_PRODUCT + " to retrieve a product");
+		System.out.println(RETRIEVE_PRODUCT_INFO + " to retrieve a product");
 		System.out.println(PROCESS_SHIPMENT + " to process a shipment");
 		System.out.println(CHANGE_PRICE + " to change the price of a product");
 		System.out.println(PRINT_TRANSACTIONS + " to print transactions");
@@ -211,11 +211,15 @@ public class UserInterface {
 		System.out.println(HELP + " for help");
 	}
 
-	/* TODO complete refactoring UserInterface checkoutCart method for use */
 	/**
-	 * Method to be called for checkout a cart. Prompts the user for the appropriate
-	 * values and uses the appropriate Library method for checking out the cart.
+	 * Checks out a members cart. Requests the member ID, Product ID, and quantity.
+	 * returns message whether the product was successfully checked out. If
+	 * successful checkout requests if more products to be checked out. When
+	 * completed prints a list of all products checked out with product name, price,
+	 * quantity and total.
 	 * 
+	 * @param N/A
+	 * @return void
 	 */
 	public void checkoutCart() {
 		Request.instance().setMemberId(getToken("Enter member id"));
@@ -224,18 +228,21 @@ public class UserInterface {
 			System.out.println("No member with id " + Request.instance().getMemberId());
 			return;
 		}
-		// accepting product and quantity area: to be implemented
+
 		do {
-			Request.instance().setProductId(getToken("Enter product id"));
+			Request.instance().setProductId(getToken("Enter product id:"));
+			Request.instance().setProductCartQuantity(getToken("Enter quantity of product:"));
 			result = store.checkOutProduct(Request.instance());
 			if (result.getResultCode() == Result.OPERATION_COMPLETED) {
-				System.out.println("Product " + result.getProductName() + " checked out" + " remaining inventory "
-						+ result.getProductQuantity()); // might need to adjuest to insure checkign inventory and not
-														// checkout out item total
+				System.out.println("product checked out");
 			} else {
 				System.out.println("Product could not be checked out");
 			}
 		} while (yesOrNo("Check out more products?"));
+
+		store.calculateCartTotalPrice(Request.instance());
+		store.printCheckOut(Request.instance());
+
 	}
 
 	/**
@@ -279,9 +286,24 @@ public class UserInterface {
 		}
 	}
 
+	/**
+	 * Retrieves the requested product by given name.
+	 * 
+	 * @param N/A
+	 * @return void
+	 */
 	private void retrieveProduct() {
-		// TODO Auto-generated method stub
-
+		Request.instance().setProductName(getToken("Enter product name"));
+		Result result = store.retrieveProductInfo(Request.instance());
+		switch (result.getResultCode()) {
+		case Result.PRODUCT_NOT_FOUND:
+			System.out.println("No product found with name " + Request.instance().getProductName());
+			break;
+		case Result.OPERATION_COMPLETED:
+			System.out.println("ProductID: " + Request.instance().getProductId() + " Product Unit Price: "
+					+ Request.instance().getProductCurrentPrice() + " Product Inventory Level: "
+					+ Request.instance().getProductQuantity());
+		}
 	}
 
 	/**
@@ -366,7 +388,7 @@ public class UserInterface {
 		}
 		System.out.println("End of listing");
 	}
-	
+
 	/**
 	 * Display all outstanding orders that has not been fulfilled
 	 */
@@ -438,7 +460,7 @@ public class UserInterface {
 			case CHECKOUT_CART:
 				checkoutCart();
 				break;
-			case RETRIEVE_PRODUCT:
+			case RETRIEVE_PRODUCT_INFO:
 				retrieveProduct();
 				break;
 			case PROCESS_SHIPMENT:

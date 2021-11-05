@@ -10,6 +10,7 @@ import java.util.Iterator;
 import edu.ics372.groupProject1.collections.Inventory;
 import edu.ics372.groupProject1.collections.MemberList;
 import edu.ics372.groupProject1.collections.OrderList;
+import edu.ics372.groupProject1.entities.CartItem;
 import edu.ics372.groupProject1.entities.Member;
 import edu.ics372.groupProject1.entities.Order;
 import edu.ics372.groupProject1.entities.Product;
@@ -164,37 +165,97 @@ public class GroceryStore {
 	}
 
 	/*
-	 * To be implemented checkOutProduct
+	 * Checks out product. Adds item to the cart, collects the quantity from the
+	 * cartItem updates the inventory level and if necessary reorders the item.
+	 * 
+	 * @param productId of the product
+	 * 
+	 * @return true if request is completed
 	 * 
 	 */
 	public Result checkOutProduct(Request request) {
 		Result result = new Result();
-		Product product = inventory.search(request.getProductId());
+		String productId = request.getProductId();
+		String memberId = request.getMemberId();
+		Member member = members.search(memberId);
+		Product product = inventory.search(productId);
 		if (product == null) {
 			result.setResultCode(Result.PRODUCT_NOT_FOUND);
 			return result;
 
 		} else {
+			int productCartQuantity = Integer.parseInt(request.getProductCartQuantity());
+			CartItem cartItem = new CartItem(product, productCartQuantity);
+			if (!member.getCart().addCartItem(cartItem)) {
+				result.setResultCode(Result.OPERATION_FAILED);
+			}
 			result.setResultCode(Result.OPERATION_COMPLETED);
+			product.decrementQuantity(productCartQuantity);
+			product.autoRestock();
 		}
-//		result.setBookFields(product);
-//		if (product.getBorrower() != null) {
-//			result.setResultCode(Result.PRODUCT_CHECKED_OUT); //THIS NEED TO BE FOLLOWED UP
-//			return result;
-//		}
-//		Member member = members.search(request.getMemberId());
-//		if (member == null) {
-//			result.setResultCode(Result.NO_SUCH_MEMBER);
-//			return result;
-//		}
-//		result.setMemberFields(member);
-//		if (!(product.issue(member) && member.issue(product))) {
-//			result.setResultCode(Result.OPERATION_FAILED);
-//		} else {
-//			result.setResultCode(Result.OPERATION_COMPLETED);
-//			result.setBookFields(product);
-//		}
+
 		return result;
+	}
+
+	/**
+	 * Retrieves product info by name
+	 * 
+	 * @param product name
+	 * 
+	 * @return result code
+	 */
+	public Result retrieveProductInfo(Request request) {
+		Result result = new Result();
+		String productName = request.getProductName();
+		Product product = inventory.searchByName(productName);
+
+		if (product != null) {
+			request.setProductId(product.getId());
+			request.setProductCurrentPrice(product.getPrice());
+			request.setProductQuantity(product.getQuantity());
+			result.setResultCode(Result.OPERATION_COMPLETED);
+		} else {
+			result.setResultCode(Result.PRODUCT_NOT_FOUND);
+		}
+		return result;
+	}
+
+	/*
+	 * Calculates carts total
+	 * 
+	 * @param memberId
+	 * 
+	 * @return true if request is completed
+	 * 
+	 */
+	public Result calculateCartTotalPrice(Request request) {
+		Result result = new Result();
+		String memberId = request.getMemberId();
+		Member member = members.search(memberId);
+		member.getCart().calculateCartTotal(member.getCart().getCartItems());
+		request.setCartTotalPrice(String.valueOf(member.getCart().getTotalPrice()));
+		result.setResultCode(Result.OPERATION_COMPLETED);
+		return result;
+
+	}
+
+	/*
+	 * Prints cart checkout message
+	 * 
+	 * @param memberId
+	 * 
+	 * @return true if request is completed
+	 * 
+	 */
+	public void printCheckOut(Request request) {
+		String itemDetails = "";
+		String memberId = request.getMemberId();
+		Member member = members.search(memberId);
+		for (int index = 0; index < member.getCart().getCartItems().size(); index++) {
+			itemDetails = member.getCart().getCartItems().get(index).printItemDetails();
+			System.out.println(itemDetails);
+		}
+
 	}
 
 	/**
@@ -214,10 +275,10 @@ public class GroceryStore {
 			return false;
 		}
 	}
-	
+
 	/**
-	 * Returns an iterator to Order info. The Iterator returns only copies of the Member fields and are assembled into the objects
-	 * returned via next().
+	 * Returns an iterator to Order info. The Iterator returns only copies of the
+	 * Member fields and are assembled into the objects returned via next().
 	 * 
 	 * @return an Iterator to Result - only the Member fields are valid.
 	 */
@@ -226,8 +287,8 @@ public class GroceryStore {
 	}
 
 	/**
-	 * Returns an iterator to Product info. The Iterator returns copies of the Product fields and are assembled into the objects
-	 * returned via next().
+	 * Returns an iterator to Product info. The Iterator returns copies of the
+	 * Product fields and are assembled into the objects returned via next().
 	 * 
 	 * @return an Iterator to Result - only the Book fields are valid.
 	 */
@@ -236,8 +297,8 @@ public class GroceryStore {
 	}
 
 	/**
-	 * Returns an iterator to Order info. The Iterator returns copies of the Order fields are assembled into the objects
-	 * returned via next().
+	 * Returns an iterator to Order info. The Iterator returns copies of the Order
+	 * fields are assembled into the objects returned via next().
 	 * 
 	 * @return an Iterator to Result - only the Book fields are valid.
 	 */

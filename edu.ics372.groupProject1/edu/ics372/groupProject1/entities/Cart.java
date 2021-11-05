@@ -1,6 +1,7 @@
 package edu.ics372.groupProject1.entities;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import edu.ics372.groupProject1.collections.Inventory;
 public class Cart implements Serializable {
 	private double totalPrice;
 	private List<CartItem> cartItems;
+	DecimalFormat df = new DecimalFormat("0.00");
 
 	public Cart() {
 		super();
@@ -31,6 +33,10 @@ public class Cart implements Serializable {
 	public double calculateCartTotal(List<CartItem> cartItems) {
 
 		this.totalPrice = cartItems.stream().mapToDouble(i -> i.getTotalItemPrice()).sum();
+		return totalPrice;
+	}
+
+	public double getTotalPrice() {
 		return totalPrice;
 	}
 
@@ -64,6 +70,10 @@ public class Cart implements Serializable {
 	 */
 	public List<CartItem> getCartItems() {
 		return this.cartItems;
+	}
+
+	public void printCartTotal() {
+		System.out.println("Total                    $" + df.format(getTotalPrice()));
 	}
 
 }

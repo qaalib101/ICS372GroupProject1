@@ -49,6 +49,16 @@ public class Inventory implements Iterable<Product>, Serializable {
 		return null;
 	}
 
+	public Product searchByName(String productName) {
+		for (Iterator<Product> iterator = products.iterator(); iterator.hasNext();) {
+			Product product = (Product) iterator.next();
+			if (product.getName().equals(productName)) {
+				return product;
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * Returns an iterator to all books
 	 * 

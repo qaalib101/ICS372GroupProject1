@@ -1,8 +1,8 @@
 package edu.ics372.groupProject1.facade;
 
 import edu.ics372.groupProject1.entities.Member;
-import edu.ics372.groupProject1.entities.Product;
 import edu.ics372.groupProject1.entities.Order;
+import edu.ics372.groupProject1.entities.Product;
 
 /*
  * The DataTransfer class is used to transfer data between the UserInterface and the GroceryStore class.
@@ -22,10 +22,37 @@ public class DataTransfer {
 	private String orderProductName;
 	private String orderProductId;
 	private String amountOrdered;
+	private String productCartQuantity;
+	private String cartTotalPrice;
+	private String checkoutLineItem;
 
 	/*
 	 * This sets all fields to "none"
 	 */
+
+	public String getCheckoutLineItem() {
+		return checkoutLineItem;
+	}
+
+	public void setCheckoutLineItem(String checkoutLineItem) {
+		this.checkoutLineItem = checkoutLineItem;
+	}
+
+	public String getCartTotalPrice() {
+		return cartTotalPrice;
+	}
+
+	public void setCartTotalPrice(String cartTotalPrice) {
+		this.cartTotalPrice = cartTotalPrice;
+	}
+
+	public String getProductCartQuantity() {
+		return productCartQuantity;
+	}
+
+	public void setProductCartQuantity(String productCartQuantity) {
+		this.productCartQuantity = productCartQuantity;
+	}
 
 	public DataTransfer() {
 		reset();
