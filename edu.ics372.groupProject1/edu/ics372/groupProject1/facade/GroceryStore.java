@@ -45,6 +45,13 @@ public class GroceryStore {
 		}
 	}
 
+	/**
+	 * -----------
+	 * 
+	 * @param ----------
+	 * @return ---------
+	 * 
+	 */
 	public Result processShipment(Request request) {
 		Result result = new Result();
 		String productId = request.getProductId();
@@ -67,6 +74,13 @@ public class GroceryStore {
 		return result;
 	}
 
+	/**
+	 * -----------
+	 * 
+	 * @param ----------
+	 * @return ---------
+	 * 
+	 */
 	public Result changePrice(Request request) {
 		Result result = new Result();
 		Product product = inventory.search(request.getProductId());
@@ -168,9 +182,9 @@ public class GroceryStore {
 	 * Checks out product. Adds item to the cart, collects the quantity from the
 	 * cartItem updates the inventory level and if necessary reorders the item.
 	 * 
-	 * @param productId of the product
+	 * @param Request
 	 * 
-	 * @return true if request is completed
+	 * @return Result
 	 * 
 	 */
 	public Result checkOutProduct(Request request) {
@@ -200,6 +214,14 @@ public class GroceryStore {
 		return result;
 	}
 
+	/**
+	 * Builds StringBuilder list of products to be reordered during checkout
+	 * process.
+	 * 
+	 * @param Request
+	 * @return void
+	 * 
+	 */
 	private void buildReorderList(Request request) {
 		String memberId = request.getMemberId();
 		Member member = members.search(memberId);
@@ -213,9 +235,9 @@ public class GroceryStore {
 	/**
 	 * Retrieves product info by name
 	 * 
-	 * @param product name
+	 * @param Request
 	 * 
-	 * @return result code
+	 * @return Result
 	 */
 	public Result retrieveProductInfo(Request request) {
 		Result result = new Result();
@@ -236,9 +258,9 @@ public class GroceryStore {
 	/*
 	 * Calculates carts total
 	 * 
-	 * @param memberId
+	 * @param Request
 	 * 
-	 * @return true if request is completed
+	 * @return Result
 	 * 
 	 */
 	public Result calculateCartTotalPrice(Request request) {
@@ -255,9 +277,9 @@ public class GroceryStore {
 	/*
 	 * Prints cart checkout message
 	 * 
-	 * @param memberId
+	 * @param Request
 	 * 
-	 * @return true if request is completed
+	 * @return void
 	 * 
 	 */
 	public void printCheckOut(Request request) {

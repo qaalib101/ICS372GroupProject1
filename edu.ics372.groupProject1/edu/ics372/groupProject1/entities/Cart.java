@@ -10,7 +10,8 @@ import edu.ics372.groupProject1.collections.Inventory;
 /**
  * @author jquin
  *
- *         Cart Class Holds a list of products to be checked out by the customer
+ *         Cart Class Holds a list of products to be checked out by the
+ *         customer.
  *
  */
 public class Cart implements Serializable {
@@ -27,11 +28,12 @@ public class Cart implements Serializable {
 	}
 
 	/**
-	 * calculateCartTotal Method Calculates and returns the running cart total as
-	 * double.
-	 *
+	 * calculateCartTotal calculates cart total for current cart instance.
+	 * 
+	 * @param List<CartItem>
+	 * @return double
+	 * 
 	 */
-
 	public double calculateCartTotal(List<CartItem> cartItems) {
 
 		this.totalPrice = cartItems.stream().mapToDouble(i -> i.getTotalItemPrice()).sum();
@@ -43,8 +45,7 @@ public class Cart implements Serializable {
 	}
 
 	/**
-	 * addCartItem Method Adds CartItem to the Cart ArrayList returns True if
-	 * successful, False if failed or exception
+	 * addCartItem method adds CartItem to the Cart ArrayList
 	 *
 	 * @param CartItem
 	 * @return boolean
@@ -99,6 +100,13 @@ public class Cart implements Serializable {
 		return this.cartItems;
 	}
 
+	/**
+	 * printCartTotal prints the total of all cart items per specified requirements.
+	 * 
+	 * @param N/A
+	 * @return void
+	 * 
+	 */
 	public void printCartTotal() {
 		String total = "Grand Total";
 		String totalString = String.format("%30s                      $%6s", total, df.format(getTotalPrice()));

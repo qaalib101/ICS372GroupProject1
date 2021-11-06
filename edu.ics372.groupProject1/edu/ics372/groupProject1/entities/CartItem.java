@@ -4,10 +4,10 @@ import java.text.DecimalFormat;
 
 /**
  * @author jquin
- *
- *         CartItem Class Holds data for specific Item in the Cart.
- *
- *
+ * 
+ *         CartItem class holds data regarding the current checkout instance.
+ * 
+ * 
  */
 public class CartItem {
 
@@ -40,11 +40,16 @@ public class CartItem {
 		return this.numberOfUnits;
 	}
 
+	/**
+	 * printItemDetails prints CartItem details in specified format.
+	 * 
+	 * @param N/A
+	 * @return String
+	 * 
+	 */
 	public String printItemDetails() {
 		return String.format("%30s %8d     $%6s $%6s ", getProduct().getName(), getNumberOfUnits(),
 				df.format(getUnitPrice()), df.format(getTotalItemPrice()));
 	}
-
-	// add possible cartItemIsProduct() for checking?
 
 }

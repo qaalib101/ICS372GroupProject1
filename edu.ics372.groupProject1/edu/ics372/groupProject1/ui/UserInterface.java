@@ -345,6 +345,13 @@ public class UserInterface {
 
 	}
 
+	/**
+	 * Updates a products Price
+	 * 
+	 * @param N/A
+	 * @return void
+	 * 
+	 */
 	public void changePrice() {
 		Request.instance().setProductId(getToken("Enter product Id: "));
 		Request.instance().setProductCurrentPrice(
