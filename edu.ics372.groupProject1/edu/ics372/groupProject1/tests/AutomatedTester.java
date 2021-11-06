@@ -1,9 +1,9 @@
 package edu.ics372.groupProject1.tests;
 
-import edu.ics372.groupProject1.facade.GroceryStore;
 import edu.ics372.groupProject1.entities.Cart;
 import edu.ics372.groupProject1.entities.Member;
 import edu.ics372.groupProject1.entities.Product;
+import edu.ics372.groupProject1.facade.GroceryStore;
 import edu.ics372.groupProject1.facade.Request;
 import edu.ics372.groupProject1.facade.Result;
 
@@ -44,22 +44,22 @@ public class AutomatedTester {
 
 	public void testAddProduct() {
 		for (int count = 0; count < products.length; count++) {
-			Request.instance().setProductPrice(price[count]);
+			Request.instance().setProductCurrentPrice(price[count]);
 			Request.instance().setProductName(storeItems[count]);
 			Request.instance().setProductMinimumReorderLevel(ids[count]);
 			Result result = store.instance().addProduct(Request.instance());
 			assert result.getResultCode() == Result.OPERATION_COMPLETED;
 			assert result.getProductName().equals(storeItems[count]);
-			assert result.getProductPrice().equals(price[count]);
-			assert result.getProductPrice().equals(reorderLevel[count]);
+			assert result.getProductCurrentPrice().equals(price[count]);
+			assert result.getProductMinimumReorderLevel().equals(reorderLevel[count]);
 		}
 	}
-	
-	public void testAddItemToCart() {
-		for(int count = 0; count < cart.length; count++) {
-			Request.instance()
-		}
-	}
+
+//	public void testAddItemToCart() {
+//		for(int count = 0; count < cart.length; count++) {
+//			Request.instance()
+//		}
+//	}
 
 	public void testSearchMembership() {
 		Request.instance().setMemberId("M1");
@@ -70,7 +70,7 @@ public class AutomatedTester {
 	}
 
 	// implement
-	private void testCheckOutCart() {
+	private void testListMembers() {
 
 	}
 

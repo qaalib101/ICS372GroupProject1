@@ -1,10 +1,12 @@
 package edu.ics372.groupProject1.facade;
 
+import java.util.Calendar;
+
 public class Request extends DataTransfer {
 	private static Request request;
 	private Calendar date, startDate, endDate;
 	private double total;
-	
+
 	private Request() {
 
 	}
@@ -20,7 +22,7 @@ public class Request extends DataTransfer {
 		}
 		return request;
 	}
-	
+
 	/*
 	 * Store more helper methods for printing out transactions
 	 * 
@@ -29,6 +31,10 @@ public class Request extends DataTransfer {
 
 	public Calendar getDate() {
 		return date;
+	}
+
+	public void setDate(Calendar date) {
+		this.date = date;
 	}
 
 	public Calendar getStartDate() {

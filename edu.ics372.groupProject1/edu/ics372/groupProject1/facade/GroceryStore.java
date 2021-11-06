@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import edu.ics372.groupProject1.collections.Inventory;
 import edu.ics372.groupProject1.collections.MemberList;
@@ -81,7 +82,7 @@ public class GroceryStore {
 		}
 		return result;
 	}
-	
+
 	public Iterator<Result> getTransactions(Request request) {
 		Member member = members.search(request.getMemberId());
 		if (member == null) {
@@ -100,9 +101,17 @@ public class GroceryStore {
 	 * @param fee     amount member pays as fee
 	 * @return true if the member was successfully created
 	 */
-	public boolean addMember(String name, String address, String phone, String date, double fee) {
-		Member newMember = new Member(name, address, phone, date, fee);
-		boolean result = members.insertMember(newMember);
+	public Result addMember(Request request) {
+		Result result = new Result();
+		Double fee = Double.valueOf(request.getMemberFee());
+		Member newMember = new Member(request.getMemberName(), request.getMemberAddress(), request.getMemberPhone(),
+				request.getDate(), fee);
+		if (members.insertMember(newMember)) {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			result.setMemberFields(newMember);
+			return result;
+		}
+		result.setResultCode(Result.OPERATION_FAILED);
 		return result;
 	}
 
@@ -112,8 +121,14 @@ public class GroceryStore {
 	 * @param id the member's id
 	 * @return true if the member was successfully removed
 	 */
-	public boolean removeMember(String id) {
-		return members.removeMember(id);
+	public Result removeMember(Request request) {
+		Result result = new Result();
+		if (members.removeMember(request.getMemberId())) {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			return result;
+		}
+		result.setResultCode(Result.OPERATION_FAILED);
+		return result;
 	}
 
 	/**
@@ -124,12 +139,20 @@ public class GroceryStore {
 	 * @param reorderLevel reorder level of the product
 	 * @return true if the product was successfully created
 	 */
-	public boolean addProduct(String name, double price, int reorderLevel) {
-		Product newProduct = new Product(name, price, reorderLevel);
-		boolean result = inventory.insertProduct(newProduct);
+	public Result addProduct(Request request) {
+		Result result = new Result();
+		Double price = Double.valueOf(request.getProductCurrentPrice());
+		int reorderLevel = Integer.parseInt(request.getProductMinimumReorderLevel());
+		Product newProduct = new Product(request.getProductName(), price, reorderLevel);
+		if (inventory.insertProduct(newProduct)) {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			result.setProductFields(newProduct);
+			return result;
+		}
+		result.setResultCode(Result.OPERATION_FAILED);
+		return result;
 		// I'm a little confused about how ordering will be implemented
 //		Order(name, price, reorderLevel * 2);
-		return result;
 	}
 
 	/**
@@ -222,10 +245,10 @@ public class GroceryStore {
 			return false;
 		}
 	}
-	
+
 	/**
-	 * Returns an iterator to Order info. The Iterator returns only copies of the Member fields and are assembled into the objects
-	 * returned via next().
+	 * Returns an iterator to Order info. The Iterator returns only copies of the
+	 * Member fields and are assembled into the objects returned via next().
 	 * 
 	 * @return an Iterator to Result - only the Member fields are valid.
 	 */
@@ -234,8 +257,8 @@ public class GroceryStore {
 	}
 
 	/**
-	 * Returns an iterator to Product info. The Iterator returns copies of the Product fields and are assembled into the objects
-	 * returned via next().
+	 * Returns an iterator to Product info. The Iterator returns copies of the
+	 * Product fields and are assembled into the objects returned via next().
 	 * 
 	 * @return an Iterator to Result - only the Book fields are valid.
 	 */
@@ -244,8 +267,8 @@ public class GroceryStore {
 	}
 
 	/**
-	 * Returns an iterator to Order info. The Iterator returns copies of the Order fields are assembled into the objects
-	 * returned via next().
+	 * Returns an iterator to Order info. The Iterator returns copies of the Order
+	 * fields are assembled into the objects returned via next().
 	 * 
 	 * @return an Iterator to Result - only the Book fields are valid.
 	 */

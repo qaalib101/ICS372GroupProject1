@@ -4,7 +4,11 @@ package edu.ics372.groupProject1.ui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
@@ -169,6 +173,26 @@ public class UserInterface {
 	}
 
 	/**
+	 * Prompts for a date and gets a date object
+	 * 
+	 * @param prompt the prompt
+	 * @return the data as a Calendar object
+	 */
+	public Calendar getDate(String prompt) {
+		do {
+			try {
+				Calendar date = new GregorianCalendar();
+				String item = getToken(prompt);
+				DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+				date.setTime(dateFormat.parse(item));
+				return date;
+			} catch (Exception fe) {
+				System.out.println("Please input a date as dd/MM/yyyy");
+			}
+		} while (true);
+	}
+
+	/**
 	 * Prompts for a command from the keyboard
 	 * 
 	 * @return a valid command
@@ -241,45 +265,65 @@ public class UserInterface {
 	/**
 	 * Prompts the user for information that is used to create a member.
 	 */
-	private void enrollMember() {
-		String name = getName("Please enter the member's name: ");
-		String address = getToken("Please enter the member's address: ");
-		String phone = getToken("Please enter the member's phone number (no formatting): ");
-		String date = getToken("Please enter the current date (mm/dd/yy): ");
-		double fee = getDoubleNumber("Please enter the fee paid: ");
-		if (store.addMember(name, address, phone, date, fee) == true) {
+	public void enrollMember() {
+		Request.instance().setMemberName(getName("Please enter the member's name: "));
+		Request.instance().setMemberAddress(getToken("Please enter the member's address: "));
+		Request.instance().setMemberPhone(getToken("Please enter the member's phone number (no formatting): "));
+		Request.instance().setMemberFee(getDoubleNumber("Please enter the fee paid: "));
+		Request.instance().setDate(getDate("Please enter the current date (mm/dd/yyyy): "));
+		Result result = store.addMember(Request.instance());
+
+		switch (result.getResultCode()) {
+		case Result.OPERATION_FAILED:
+			System.out.println("Member enrollment failed");
+			break;
+		case Result.OPERATION_COMPLETED:
 			System.out.println("Member successfully created.");
-			// TODO print member info after creation
+			break;
 		}
 	}
 
 	/**
 	 * Removes a member with the given member ID.
 	 */
-	private void removeMember() {
-		String id = getToken("Please enter the member ID: ");
-		if (store.removeMember(id) == true) {
+	public void removeMember() {
+		Request.instance().setMemberId(getToken("Please enter the member ID: "));
+		Result result = store.removeMember(Request.instance());
+
+		switch (result.getResultCode()) {
+		case Result.OPERATION_FAILED:
+			System.out.println("Member removal failed");
+			break;
+		case Result.OPERATION_COMPLETED:
 			System.out.println("Member successfully removed.");
-		} else {
-			System.out.println("Error: invalid member ID");
+			break;
 		}
 	}
 
-	private void retrieveMember() {
+	public void retrieveMember() {
 		// TODO Auto-generated method stub
 
 	}
 
-	private void addProduct() {
-		String name = getName("Please enter the product name: ");
-		double price = getDoubleNumber("Please enter the price: ");
-		int reorderLevel = getNumber("Please enter the product's minimum reorder level: ");
-		if (store.addProduct(name, price, reorderLevel) == true) {
+	public void addProduct() {
+		Request.instance().setProductName(getName("Please enter the product name: "));
+		Request.instance().setProductCurrentPrice(Double.toString(getDoubleNumber("Please enter the price: ")));
+		Request.instance().setProductMinimumReorderLevel(
+				Integer.toString(getNumber("Please enter the product's minimum reorder level: ")));
+		Result result = store.addProduct(Request.instance());
+
+		switch (result.getResultCode()) {
+		case Result.OPERATION_FAILED:
+			System.out.println("Product addition failed");
+			break;
+		case Result.OPERATION_COMPLETED:
 			System.out.println("Product successfully added.");
+			break;
 		}
+
 	}
 
-	private void retrieveProduct() {
+	public void retrieveProduct() {
 		// TODO Auto-generated method stub
 
 	}
@@ -287,7 +331,7 @@ public class UserInterface {
 	/**
 	 * Method to be called to process a shipment.
 	 */
-	private void processShipment() {
+	public void processShipment() {
 		do {
 			Request.instance().setProductId(getToken("Enter product Id: "));
 			Result result = store.processShipment(Request.instance());
@@ -366,7 +410,7 @@ public class UserInterface {
 		}
 		System.out.println("End of listing");
 	}
-	
+
 	/**
 	 * Display all outstanding orders that has not been fulfilled
 	 */
@@ -377,11 +421,11 @@ public class UserInterface {
 		while (iterator.hasNext()) {
 			Result result = iterator.next();
 			System.out.println(
-					result.getOrderProductName() + " " + result.getOrderProductId() + " " + result.getAmountOrdered());					
+					result.getOrderProductName() + " " + result.getOrderProductId() + " " + result.getAmountOrdered());
 		}
 		System.out.println("End of listing");
 	}
-	
+
 	/*
 	 * Prints all transactions for a member within a date range
 	 */
@@ -389,20 +433,18 @@ public class UserInterface {
 	public void getTransactions() {
 		// String date1, date2;
 		Request.instance().setMemberId(getToken("Enter member id"));
-		Request.instance().setDate1(getDate("Please enter the first date for which you want records from mm/dd/yy"));
-		Request.instance().setDate2(getDate("Please enter the second date for which you want records to mm/dd/yy"));
+		Request.instance()
+				.setStartDate(getDate("Please enter the first date for which you want records from mm/dd/yy"));
+		Request.instance().setEndDate(getDate("Please enter the second date for which you want records to mm/dd/yy"));
 		Iterator<Result> result = store.getTransactions(Request.instance());
 		while (result.hasNext()) {
 			Result transaction = result.next();
-			System.out.println(transaction.getTransactionDate() + " " + transaction.getTransactionTotal() + "\n");
+			System.out.println(transaction.getTransactionDate() + " " + transaction.getTransactionTotalPrice() + "\n");
 		}
 		System.out.println("\n End of transactions \n");
 		// Request.instance().setTransactionDate(getToken("Please enter the first date
 		// for which you want records as mm/dd/yy"));
 		//
-	}
-		}
-		System.out.println("End of listing");
 	}
 
 	/**

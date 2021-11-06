@@ -1,8 +1,9 @@
 package edu.ics372.groupProject1.facade;
 
 import edu.ics372.groupProject1.entities.Member;
-import edu.ics372.groupProject1.entities.Product;
 import edu.ics372.groupProject1.entities.Order;
+import edu.ics372.groupProject1.entities.Product;
+import edu.ics372.groupProject1.entities.Transaction;
 
 /*
  * The DataTransfer class is used to transfer data between the UserInterface and the GroceryStore class.
@@ -14,6 +15,8 @@ public class DataTransfer {
 	private String memberId;
 	private String memberName;
 	private String memberAddress;
+	private String memberPhone;
+	private String memberFee;
 	private String productId;
 	private String productName;
 	private String productCurrentPrice;
@@ -23,7 +26,7 @@ public class DataTransfer {
 	private String orderProductId;
 	private String amountOrdered;
 	private String transactionDate;
-	private String transactionTotal;
+	private String transactionTotalPrice;
 	/*
 	 * This sets all fields to "none"
 	 */
@@ -56,6 +59,22 @@ public class DataTransfer {
 		this.memberAddress = memberAddress;
 	}
 
+	public String getMemberPhone() {
+		return memberPhone;
+	}
+
+	public void setMemberPhone(String memberPhone) {
+		this.memberPhone = memberPhone;
+	}
+
+	public String getMemberFee() {
+		return memberPhone;
+	}
+
+	public void setMemberFee(double memberFee) {
+		this.memberFee = Double.toString(memberFee);
+	}
+
 	/*
 	 * Sets all member field using the member parameter
 	 * 
@@ -65,6 +84,8 @@ public class DataTransfer {
 		memberId = member.getId();
 		memberName = member.getName();
 		memberAddress = member.getAddress();
+		memberPhone = member.getPhone();
+		memberFee = member.getFee();
 	}
 
 	public String getProductId() {
@@ -158,7 +179,7 @@ public class DataTransfer {
 		orderProductName = order.getProductName();
 		amountOrdered = order.getAmountOrdered();
 	}
-	
+
 	/*
 	 * sets all transaction fields using the transaction parameter
 	 * 
@@ -181,7 +202,7 @@ public class DataTransfer {
 	public void setTransactionDate(String calendar) {
 		this.transactionDate = calendar;
 	}
-	
+
 	/*
 	 * sets all transaction fields using the transaction parameter
 	 * 
