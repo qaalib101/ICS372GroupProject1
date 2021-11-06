@@ -25,10 +25,28 @@ public class DataTransfer {
 	private String productCartQuantity;
 	private String cartTotalPrice;
 	private String checkoutLineItem;
+	private String isProductReordered;
+	private StringBuilder productsToBeReordered;
 
 	/*
 	 * This sets all fields to "none"
 	 */
+
+	public StringBuilder getProductsToBeReordered() {
+		return productsToBeReordered;
+	}
+
+	public void setProductsToBeReordered(StringBuilder productsToBeReordered) {
+		this.productsToBeReordered = productsToBeReordered;
+	}
+
+	public String getIsProductReordered() {
+		return isProductReordered;
+	}
+
+	public void setIsProductReordered(String isProductReordered) {
+		this.isProductReordered = isProductReordered;
+	}
 
 	public String getCheckoutLineItem() {
 		return checkoutLineItem;

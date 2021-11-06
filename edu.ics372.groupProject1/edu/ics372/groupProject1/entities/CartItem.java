@@ -41,8 +41,8 @@ public class CartItem {
 	}
 
 	public String printItemDetails() {
-		return String.format("%8s %-3d $%-5f $%-5f \n", getProduct(), getNumberOfUnits(), df.format(getUnitPrice()),
-				df.format(getTotalItemPrice()));
+		return String.format("%30s %8d     $%6s $%6s ", getProduct().getName(), getNumberOfUnits(),
+				df.format(getUnitPrice()), df.format(getTotalItemPrice()));
 	}
 
 	// add possible cartItemIsProduct() for checking?

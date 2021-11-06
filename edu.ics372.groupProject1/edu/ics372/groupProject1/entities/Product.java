@@ -47,10 +47,12 @@ public class Product implements Serializable {
 		return true;
 	}
 
-	public void autoRestock() {
+	public boolean autoRestock() {
 		if (this.quantity <= this.reorderLevel) {
 			this.quantity += 2 * this.reorderLevel;
+			return true;
 		}
+		return false;
 	}
 
 	public void decrementQuantity(int unitsSold) {
@@ -68,7 +70,7 @@ public class Product implements Serializable {
 	}
 
 	public String productInfo() {
-		return "Product [name:" + name + ", ID: " + id + ", Price: " + currentPrice + ", Stock: " + quantity;
+		return "Product [name:" + name + ", ID: " + id + ", Price: " + getPrice() + ", Stock: " + quantity;
 
 	}
 }

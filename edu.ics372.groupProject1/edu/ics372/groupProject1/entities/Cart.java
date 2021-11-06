@@ -16,12 +16,14 @@ import edu.ics372.groupProject1.collections.Inventory;
 public class Cart implements Serializable {
 	private double totalPrice;
 	private List<CartItem> cartItems;
+	private List<Product> reorderList;
 	DecimalFormat df = new DecimalFormat("0.00");
 
 	public Cart() {
 		super();
 		this.totalPrice = 0;
 		this.cartItems = new ArrayList<CartItem>();
+		this.reorderList = new ArrayList<Product>();
 	}
 
 	/**
@@ -44,6 +46,9 @@ public class Cart implements Serializable {
 	 * addCartItem Method Adds CartItem to the Cart ArrayList returns True if
 	 * successful, False if failed or exception
 	 *
+	 * @param CartItem
+	 * @return boolean
+	 *
 	 */
 	public boolean addCartItem(CartItem cartItem) {
 		try {
@@ -52,6 +57,28 @@ public class Cart implements Serializable {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+
+	public List<Product> getReorderList() {
+		return reorderList;
+	}
+
+	/**
+	 * addToReorderList Method Adds Products that have been checked out that have
+	 * broken the reorder threshold.
+	 * 
+	 * @param Product
+	 * @return boolean
+	 *
+	 */
+	public boolean addToReorderList(Product product) {
+		try {
+			reorderList.add(product);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+
 	}
 
 	/**
@@ -73,7 +100,10 @@ public class Cart implements Serializable {
 	}
 
 	public void printCartTotal() {
-		System.out.println("Total                    $" + df.format(getTotalPrice()));
+		String total = "Grand Total";
+		String totalString = String.format("%30s                      $%6s", total, df.format(getTotalPrice()));
+		System.out.println("___________________________________________________________");
+		System.out.println(totalString);
 	}
 
 }

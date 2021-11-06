@@ -222,7 +222,7 @@ public class UserInterface {
 	 * @return void
 	 */
 	public void checkoutCart() {
-		Request.instance().setMemberId(getToken("Enter member id"));
+		Request.instance().setMemberId(getToken("Enter member id:"));
 		Result result = store.searchMembership(Request.instance());
 		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
 			System.out.println("No member with id " + Request.instance().getMemberId());
@@ -235,13 +235,21 @@ public class UserInterface {
 			result = store.checkOutProduct(Request.instance());
 			if (result.getResultCode() == Result.OPERATION_COMPLETED) {
 				System.out.println("product checked out");
+			} else if (result.getResultCode() == Result.PRODUCT_NOT_FOUND) {
+				System.out.println("Product not found");
 			} else {
 				System.out.println("Product could not be checked out");
 			}
 		} while (yesOrNo("Check out more products?"));
 
+		// also check if updating the inventory
 		store.calculateCartTotalPrice(Request.instance());
 		store.printCheckOut(Request.instance());
+		if (Request.instance().getProductsToBeReordered().length() != 0) {
+			System.out.println("The product(s), ");
+			System.out.println(Request.instance().getProductsToBeReordered());
+			System.out.println("are to be reordered.");
+		}
 
 	}
 
@@ -293,7 +301,7 @@ public class UserInterface {
 	 * @return void
 	 */
 	public void retrieveProduct() {
-		Request.instance().setProductName(getToken("Enter product name"));
+		Request.instance().setProductName(getToken("Enter product name:"));
 		Result result = store.retrieveProductInfo(Request.instance());
 		switch (result.getResultCode()) {
 		case Result.PRODUCT_NOT_FOUND:
@@ -433,7 +441,7 @@ public class UserInterface {
 	 */
 	private void save() {
 		if (store.save()) {
-			System.out.println(" The library has been successfully saved in the file CooperativeData \n");
+			System.out.println(" The Grocery Store has been successfully saved in the file CooperativeData \n");
 		} else {
 			System.out.println(" There has been an error in saving \n");
 		}

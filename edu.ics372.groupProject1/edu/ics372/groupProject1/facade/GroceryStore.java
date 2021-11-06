@@ -182,7 +182,6 @@ public class GroceryStore {
 		if (product == null) {
 			result.setResultCode(Result.PRODUCT_NOT_FOUND);
 			return result;
-
 		} else {
 			int productCartQuantity = Integer.parseInt(request.getProductCartQuantity());
 			CartItem cartItem = new CartItem(product, productCartQuantity);
@@ -191,10 +190,24 @@ public class GroceryStore {
 			}
 			result.setResultCode(Result.OPERATION_COMPLETED);
 			product.decrementQuantity(productCartQuantity);
-			product.autoRestock();
+			if (product.autoRestock() && orders.search(productId) == null) {
+				member.getCart().addToReorderList(product);
+				Order newOrder = new Order(productId, product.getName(), Integer.parseInt(product.getReorderLevel()));
+				orders.insertOrder(newOrder);
+				buildReorderList(request);
+			}
 		}
-
 		return result;
+	}
+
+	private void buildReorderList(Request request) {
+		String memberId = request.getMemberId();
+		Member member = members.search(memberId);
+		StringBuilder productsToReorder = new StringBuilder("");
+		for (int index = 0; index < member.getCart().getReorderList().size(); index++) {
+			productsToReorder.append(member.getCart().getReorderList().get(index).getName() + "\n");
+		}
+		request.setProductsToBeReordered(productsToReorder);
 	}
 
 	/**
@@ -248,13 +261,21 @@ public class GroceryStore {
 	 * 
 	 */
 	public void printCheckOut(Request request) {
+		String productName = "Product Name";
+		String quantity = "Quantity";
+		String unitPrice = "Unit Price";
+		String total = "Total";
+		String header = String.format("%30s %8s %11s   %5s ", productName, quantity, unitPrice, total);
+
 		String itemDetails = "";
 		String memberId = request.getMemberId();
 		Member member = members.search(memberId);
+		System.out.println(header);
 		for (int index = 0; index < member.getCart().getCartItems().size(); index++) {
 			itemDetails = member.getCart().getCartItems().get(index).printItemDetails();
 			System.out.println(itemDetails);
 		}
+		member.getCart().printCartTotal();
 
 	}
 
