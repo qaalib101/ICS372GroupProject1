@@ -356,13 +356,13 @@ public class UserInterface {
 	 * Gets and prints all products.
 	 */
 	public void listProducts() {
-		Iterator<Result> iterator = store.listProducts();
+		Iterator<Result> iterator = store.getProducts();
 		System.out.println("List of Prodcuts (name, id, minimum reorder level)");
 		while (iterator.hasNext()) {
 			Result result = iterator.next();
-			System.out.println(result.getProductName() + " " + result.getProductId() + " "
+			System.out.println(result.getProductName() + " " + result.getProductId() + " " + result.getProductCurrentPrice()
 					+ result.getProductMinimumReorderLevel());
-
+					
 		}
 		System.out.println("End of listing");
 	}
