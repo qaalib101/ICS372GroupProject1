@@ -61,7 +61,7 @@ public class OrderList implements Iterable<Order>, Serializable {
 	}
 
 	/**
-	 * Method to insert order collection
+	 * Method to insert into order collection
 	 * 
 	 * @param order object to be inserted
 	 * @return true if order is inserted
