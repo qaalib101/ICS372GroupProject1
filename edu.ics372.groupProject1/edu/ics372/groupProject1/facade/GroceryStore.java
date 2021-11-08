@@ -14,6 +14,7 @@ import edu.ics372.groupProject1.entities.CartItem;
 import edu.ics372.groupProject1.entities.Member;
 import edu.ics372.groupProject1.entities.Order;
 import edu.ics372.groupProject1.entities.Product;
+import edu.ics372.groupProject1.entities.Transaction;
 import edu.ics372.groupProject1.iterators.SafeMemberIterator;
 import edu.ics372.groupProject1.iterators.SafeOrderIterator;
 import edu.ics372.groupProject1.iterators.SafeProductIterator;
@@ -95,6 +96,15 @@ public class GroceryStore {
 			result.setResultCode(Result.OPERATION_FAILED);
 		}
 		return result;
+	}
+
+	// PRELIMINARY
+	public Iterator<Result> getTransactions(Request request) {
+		Member member = members.search(request.getMemberId());
+		if (member == null) {
+
+		}
+		return null;
 	}
 
 	/**
@@ -188,7 +198,6 @@ public class GroceryStore {
 	 * 
 	 */
 
-	// TODO track down NPE
 	// TODO finish moving interface code to GroceryStore
 	// TODO remove reorderlist and utilize DataTransfer
 	public Result checkOutProduct(Request request) {
@@ -277,6 +286,22 @@ public class GroceryStore {
 			System.out.println(Request.instance().getProductsToBeReordered());
 			System.out.println("are to be reordered.");
 		}
+		recoredTransaction(request);
+	}
+
+	/**
+	 * Record the transaction to the transaction list
+	 * 
+	 * @param Request
+	 * 
+	 * @return void
+	 */
+	private void recoredTransaction(Request request) {
+		String memberId = request.getMemberId();
+		Member member = members.search(memberId);
+		Transaction transaction = new Transaction(Integer.parseInt(request.getMemberId()),
+				Double.parseDouble(request.getCartTotalPrice()));
+		member.getTransactions().add(transaction);
 	}
 
 	/**
@@ -331,4 +356,5 @@ public class GroceryStore {
 	public String toString() {
 		return inventory + "\n" + members;
 	}
+
 }

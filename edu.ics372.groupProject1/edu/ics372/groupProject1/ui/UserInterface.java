@@ -242,6 +242,8 @@ public class UserInterface {
 			}
 		} while (yesOrNo("Check out more products?"));
 
+//		store.recoredTransaction(Request.instance());
+		// decided to include recoredTransaction() inside "printCheckout()" method
 		store.printCheckOut(Request.instance());
 
 	}
@@ -364,8 +366,26 @@ public class UserInterface {
 		}
 	}
 
-	private void printTransactions() {
-		// TODO Auto-generated method stub
+	/*
+	 * Prints all transactions for a member within a date range
+	 */
+
+	// PRELIMINARY //Are we utilizing Calendar Objects for Dates or strings?
+	public void printTransactions() {
+		// String date1, date2;
+		Request.instance().setMemberId(getToken("Enter member id"));
+		Request.instance()
+				.setStartDate(getDate("Please enter the first date for which you want records from mm/dd/yy"));
+		Request.instance().setEndDate(getDate("Please enter the second date for which you want records to mm/dd/yy"));
+		Iterator<Result> result = store.getTransactions(Request.instance());
+		while (result.hasNext()) {
+			Result transaction = result.next();
+			System.out.println(transaction.getTransactionDate() + " " + transaction.getTransactionTotalPrice() + "\n");
+		}
+		System.out.println("\n End of transactions \n");
+		// Request.instance().setTransactionDate(getToken("Please enter the first date
+		// for which you want records as mm/dd/yy"));
+		//
 	}
 
 	/**

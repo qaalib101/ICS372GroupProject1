@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class Transaction implements Serializable {
 	/**
@@ -13,15 +15,19 @@ public class Transaction implements Serializable {
 	// Instance variables
 	private int memberID;
 	private String date1;
-	private String date2; // Possibly remove this second date?
+	private double transactionTotal;
+	// private String date2; // Possibly remove this second date?
+	GregorianCalendar todaysDate;
 	private String id;
 	private static int transactionID;
 
 	// Basic constructor method
-	public Transaction(int memberID, String date1, String date2) {
+	public Transaction(int memberID, double transactionTotal) {
 		this.memberID = memberID;
-		this.date1 = date1;
-		this.date2 = date2;
+		todaysDate.setTime(new Date());
+		transactionTotal = transactionTotal;
+//		this.date1 = date1;
+		// this.date2 = date2;
 		this.id = "T" + ++transactionID;
 	}
 
@@ -41,34 +47,34 @@ public class Transaction implements Serializable {
 		return false;
 	}
 
-	public boolean date1BeforeDate2() {
-		/*
-		 * mm/dd/yyyy check if date1 is not after(the month, day, or year is less then
-		 * date2) second date
-		 */
-		int day1 = Integer.parseInt(date1.substring(3, 5));
-		int month1 = Integer.parseInt(date1.substring(0, 2));
-		int year1 = Integer.parseInt(date1.substring(6, 10));
-		int day2 = Integer.parseInt(date2.substring(3, 5));
-		int month2 = Integer.parseInt(date2.substring(0, 2));
-		int year2 = Integer.parseInt(date2.substring(6, 10));
-
-		if (year1 <= year2) {
-			if (month1 <= month2) {
-				if (day1 <= day2) {
-					// System.out.println("The dates are in range:)");
-					return true;
-				} else {
-					// System.out.println("The day is no good:(");
-				}
-			} else {
-				// System.out.println("The month is no good:(");
-			}
-		} else {
-			// System.out.println("The year is no good:(");
-		}
-		return false;
-	}
+//	public boolean date1BeforeDate2() {
+//		/*
+//		 * mm/dd/yyyy check if date1 is not after(the month, day, or year is less then
+//		 * date2) second date
+//		 */
+//		int day1 = Integer.parseInt(date1.substring(3, 5));
+//		int month1 = Integer.parseInt(date1.substring(0, 2));
+//		int year1 = Integer.parseInt(date1.substring(6, 10));
+//		int day2 = Integer.parseInt(date2.substring(3, 5));
+//		int month2 = Integer.parseInt(date2.substring(0, 2));
+//		int year2 = Integer.parseInt(date2.substring(6, 10));
+//
+//		if (year1 <= year2) {
+//			if (month1 <= month2) {
+//				if (day1 <= day2) {
+//					// System.out.println("The dates are in range:)");
+//					return true;
+//				} else {
+//					// System.out.println("The day is no good:(");
+//				}
+//			} else {
+//				// System.out.println("The month is no good:(");
+//			}
+//		} else {
+//			// System.out.println("The year is no good:(");
+//		}
+//		return false;
+//	}
 
 	// Getter & Setter plus toString() methods
 	public int getMemberID() {
@@ -87,17 +93,25 @@ public class Transaction implements Serializable {
 		this.date1 = date1;
 	}
 
-	public String getDate2() {
-		return date2;
+	public GregorianCalendar getTodaysDate() {
+		return todaysDate;
 	}
 
-	public void setDate2(String date2) {
-		this.date2 = date2;
+	public double getTransactionTotal() {
+		return transactionTotal;
 	}
+//	public String getDate2() {
+//		return date2;
+//	}
 
+//	public void setDate2(String date2) {
+//		this.date2 = date2;
+//	}
+
+	// commented out date2 for toString
 	@Override
 	public String toString() {
-		return "Transaction [memberID=" + memberID + ", date1=" + date1 + ", date2=" + date2 + "]";
+		return "Transaction [memberID=" + memberID + ", date1=" + date1 + "]";
 	}
 
 	public static void save(ObjectOutputStream output) throws IOException {
