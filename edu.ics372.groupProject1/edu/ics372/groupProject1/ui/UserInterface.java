@@ -19,7 +19,7 @@ import edu.ics372.groupProject1.tests.TestBed;
 
 /**
  * 
- * This class implements the user interface for the Cooperative project. The
+ * This class implements the user interface for the GroceryStore project. The
  * commands are encoded as integers using a number of static final variables. A
  * number of utility methods exist to make it easier to parse the input.
  *
@@ -235,33 +235,6 @@ public class UserInterface {
 		System.out.println(HELP + " for help");
 	}
 
-	/* TODO complete refactoring UserInterface checkoutCart method for use */
-	/**
-	 * Method to be called for checkout a cart. Prompts the user for the appropriate
-	 * values and uses the appropriate Library method for checking out the cart.
-	 * 
-	 */
-	public void checkoutCart() {
-		Request.instance().setMemberId(getToken("Enter member id"));
-		Result result = store.searchMembership(Request.instance());
-		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
-			System.out.println("No member with id " + Request.instance().getMemberId());
-			return;
-		}
-		// accepting product and quantity area: to be implemented
-		do {
-			Request.instance().setProductId(getToken("Enter product id"));
-			result = store.checkOutProduct(Request.instance());
-			if (result.getResultCode() == Result.OPERATION_COMPLETED) {
-				System.out.println("Product " + result.getProductName() + " checked out" + " remaining inventory "
-						+ result.getProductQuantity()); // might need to adjuest to insure checkign inventory and not
-														// checkout out item total
-			} else {
-				System.out.println("Product could not be checked out");
-			}
-		} while (yesOrNo("Check out more products?"));
-	}
-
 	/**
 	 * Prompts the user for information that is used to create a member.
 	 */
@@ -323,13 +296,43 @@ public class UserInterface {
 
 	}
 
+	/* TODO complete refactoring UserInterface checkoutCart method for use */
+	/**
+	 * Method to be called for checkout a cart. Prompts the user for the appropriate
+	 * values and uses the appropriate grocery store method for checking out the
+	 * cart.
+	 * 
+	 */
+	public void checkoutCart() {
+		Request.instance().setMemberId(getToken("Enter member id"));
+		Result result = store.searchMembership(Request.instance());
+		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+			System.out.println("No member with id " + Request.instance().getMemberId());
+			return;
+		}
+		// accepting product and quantity area: to be implemented
+		do {
+			Request.instance().setProductId(getToken("Enter product id"));
+			result = store.checkOutProduct(Request.instance());
+			if (result.getResultCode() == Result.OPERATION_COMPLETED) {
+				System.out.println("Product " + result.getProductName() + " checked out" + " remaining inventory "
+						+ result.getProductQuantity()); // might need to adjuest to insure checkign inventory and not
+														// checkout out item total
+			} else {
+				System.out.println("Product could not be checked out");
+			}
+		} while (yesOrNo("Check out more products?"));
+	}
+
 	public void retrieveProduct() {
 		// TODO Auto-generated method stub
 
 	}
 
 	/**
-	 * Method to be called to process a shipment.
+	 * Method to be called to process a shipment. Prompts the user for the product
+	 * id of the shipment and uses the appropriate grocery store methods to process
+	 * the shipment.
 	 */
 	public void processShipment() {
 		do {
@@ -359,6 +362,12 @@ public class UserInterface {
 
 	}
 
+	/**
+	 * Method to be called to change a product's price. User is prompted to provide
+	 * the id and new price of the product and the appropriate grocery store methods
+	 * are called to change the product's price.
+	 * 
+	 */
 	public void changePrice() {
 		Request.instance().setProductId(getToken("Enter product Id: "));
 		Request.instance().setProductCurrentPrice(
@@ -481,7 +490,11 @@ public class UserInterface {
 		}
 	}
 
-	// add methods for business processes
+	/**
+	 * Orchestrates the whole process. Calls the appropriate method for the
+	 * different functionalities.
+	 * 
+	 */
 	public void process() {
 		int command;
 		help();
