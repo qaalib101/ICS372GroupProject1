@@ -2,6 +2,14 @@ package edu.ics372.groupProject1.facade;
 
 import java.util.Calendar;
 
+/**
+ * This class is used for requesting many of the results of the library system's
+ * business logic to user interface. It is a singleton
+ * 
+ * 
+ * @author
+ *
+ */
 public class Request extends DataTransfer {
 	private static Request request;
 	private Calendar date, startDate, endDate;
