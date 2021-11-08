@@ -14,9 +14,9 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
-import groupProject1.facade.GroceryStore;
-import groupProject1.facade.Request;
-import groupProject1.facade.Result;
+import edu.ics372.groupProject1.facade.GroceryStore;
+import edu.ics372.groupProject1.facade.Request;
+import edu.ics372.groupProject1.facade.Result;
 
 /**
  * 
@@ -207,7 +207,7 @@ public class UserInterface {
 					return value;
 				}
 			} catch (NumberFormatException nfe) {
-				System.out.println("Enter a number");
+				System.out.println("Please enter a number from 0-15");
 			}
 		} while (true);
 	}
@@ -236,7 +236,7 @@ public class UserInterface {
 		System.out.println(HELP + " for help");
 	}
 
-	//**
+	/**
 	 * Method to be called for adding a member
 	 */
 	public void addMember() {
@@ -304,24 +304,65 @@ public class UserInterface {
 	}
 
 	/**
-	 * Method to be called for checking out a member's cart
+	 * Checks out a members cart. Requests the member ID, Product ID, and quantity.
+	 * returns message whether the product was successfully checked out. If
+	 * successful checkout requests if more products to be checked out. When
+	 * completed prints a list of all products checked out with product name, price,
+	 * quantity and total.
+	 * 
+	 * @param N/A
+	 * @return void
 	 */
 	public void checkoutCart() {
+		Request.instance().setMemberId(getToken("Enter member id:"));
+		Result result = store.searchMembership(Request.instance());
+		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+			System.out.println("No member with id " + Request.instance().getMemberId());
+			return;
+		}
+
+		do {
+			Request.instance().setProductId(getToken("Enter product id:"));
+			Request.instance().setProductCartQuantity(getToken("Enter quantity of product:"));
+			result = store.checkOutProduct(Request.instance()); // null pointer exception is occuring
+			if (result.getResultCode() == Result.OPERATION_COMPLETED) {
+				System.out.println("product checked out");
+			} else if (result.getResultCode() == Result.PRODUCT_NOT_FOUND) {
+				System.out.println("Product not found");
+			} else {
+				System.out.println("Product could not be checked out");
+			}
+		} while (yesOrNo("Check out more products?"));
+
+		// also check if updating the inventory
+		store.calculateCartTotalPrice(Request.instance());
+		store.printCheckOut(Request.instance());
+		// member add transaction
+		if (Request.instance().getProductsToBeReordered().length() != 0) {
+			System.out.println("The product(s), ");
+			System.out.println(Request.instance().getProductsToBeReordered());
+			System.out.println("are to be reordered.");
+		}
 
 	}
 
 	/**
-	 * Method to be called for retrieving a product
+	 * Retrieves the requested product by given name.
+	 * 
+	 * @param N/A
+	 * @return void
 	 */
 	public void retrieveProduct() {
-		Request.instance().setProductName(getName("Enter the product's name: "));
-		Result result = store.retrieveProduct(Request.instance());
-		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
-			System.out.println("Could not retrieve product");
-		} else {
-			System.out.println("Product retrieved");
-			System.out.println("ID: " + result.getProductId() + "\nPrice: " + result.getProductPrice() + "\nQuantity: "
-					+ result.getProductQuantity());
+		Request.instance().setProductName(getToken("Enter product name:"));
+		Result result = store.retrieveProductInfo(Request.instance());
+		switch (result.getResultCode()) {
+		case Result.PRODUCT_NOT_FOUND:
+			System.out.println("No product found with name " + Request.instance().getProductName());
+			break;
+		case Result.OPERATION_COMPLETED:
+			System.out.println("ProductID: " + Request.instance().getProductId() + ", Product Unit Price: "
+					+ Request.instance().getProductPrice() + ", Product Inventory Level: "
+					+ Request.instance().getProductQuantity());
 		}
 	}
 
