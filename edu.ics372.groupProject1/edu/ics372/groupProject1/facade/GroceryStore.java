@@ -187,12 +187,17 @@ public class GroceryStore {
 	 * @return Result
 	 * 
 	 */
+
+	// TODO track down NPE
+	// TODO finish moving interface code to GroceryStore
+	// TODO remove reorderlist and utilize DataTransfer
 	public Result checkOutProduct(Request request) {
 		Result result = new Result();
 		String productId = request.getProductId();
 		String memberId = request.getMemberId();
 		Member member = members.search(memberId);
 		Product product = inventory.search(productId);
+
 		if (product == null) {
 			result.setResultCode(Result.PRODUCT_NOT_FOUND);
 			return result;
@@ -204,32 +209,18 @@ public class GroceryStore {
 			}
 			result.setResultCode(Result.OPERATION_COMPLETED);
 			product.decrementQuantity(productCartQuantity);
-			if (product.autoRestock() && orders.search(productId) == null) {
+			if (product.belowReorderLvL() && orders.search(productId) == null) {
 				member.getCart().addToReorderList(product);
 				Order newOrder = new Order(productId, product.getName(), Integer.parseInt(product.getReorderLevel()));
 				orders.insertOrder(newOrder);
-				buildReorderList(request);
+				StringBuilder productsToReorder = new StringBuilder("");
+				for (int index = 0; index < member.getCart().getReorderList().size(); index++) {
+					productsToReorder.append(member.getCart().getReorderList().get(index).getName() + "\n");
+				}
+				request.setProductsToBeReordered(productsToReorder);
 			}
 		}
 		return result;
-	}
-
-	/**
-	 * Builds StringBuilder list of products to be reordered during checkout
-	 * process.
-	 * 
-	 * @param Request
-	 * @return void
-	 * 
-	 */
-	private void buildReorderList(Request request) {
-		String memberId = request.getMemberId();
-		Member member = members.search(memberId);
-		StringBuilder productsToReorder = new StringBuilder("");
-		for (int index = 0; index < member.getCart().getReorderList().size(); index++) {
-			productsToReorder.append(member.getCart().getReorderList().get(index).getName() + "\n");
-		}
-		request.setProductsToBeReordered(productsToReorder);
 	}
 
 	/**
@@ -256,26 +247,8 @@ public class GroceryStore {
 	}
 
 	/*
-	 * Calculates carts total
-	 * 
-	 * @param Request
-	 * 
-	 * @return Result
-	 * 
-	 */
-	public Result calculateCartTotalPrice(Request request) {
-		Result result = new Result();
-		String memberId = request.getMemberId();
-		Member member = members.search(memberId);
-		member.getCart().calculateCartTotal(member.getCart().getCartItems());
-		request.setCartTotalPrice(String.valueOf(member.getCart().getTotalPrice()));
-		result.setResultCode(Result.OPERATION_COMPLETED);
-		return result;
-
-	}
-
-	/*
-	 * Prints cart checkout message
+	 * Prints cart checkout message, updates cart total, displays what has been
+	 * reordered.
 	 * 
 	 * @param Request
 	 * 
@@ -283,22 +256,27 @@ public class GroceryStore {
 	 * 
 	 */
 	public void printCheckOut(Request request) {
+		String memberId = request.getMemberId();
+		Member member = members.search(memberId);
+		member.getCart().calculateCartTotal(member.getCart().getCartItems());
+		request.setCartTotalPrice(String.valueOf(member.getCart().getTotalPrice()));
 		String productName = "Product Name";
 		String quantity = "Quantity";
 		String unitPrice = "Unit Price";
 		String total = "Total";
 		String header = String.format("%30s %8s %11s   %5s ", productName, quantity, unitPrice, total);
-
 		String itemDetails = "";
-		String memberId = request.getMemberId();
-		Member member = members.search(memberId);
 		System.out.println(header);
 		for (int index = 0; index < member.getCart().getCartItems().size(); index++) {
-			itemDetails = member.getCart().getCartItems().get(index).printItemDetails();
+			itemDetails = member.getCart().getCartItems().get(index).toString();
 			System.out.println(itemDetails);
 		}
 		member.getCart().printCartTotal();
-
+		if (request.getProductsToBeReordered().length() != 0) {
+			System.out.println("The product(s), ");
+			System.out.println(Request.instance().getProductsToBeReordered());
+			System.out.println("are to be reordered.");
+		}
 	}
 
 	/**

@@ -9,7 +9,9 @@ public class Order implements Serializable {
 	private int amountOrdered;
 
 	public Order(String productId, String productName, int amountOrdered) {
-
+		this.productId = productId;
+		this.productName = productName;
+		this.amountOrdered = amountOrdered;
 	}
 
 	public String getProductName() {

@@ -25,7 +25,8 @@ public class OrderList implements Iterable<Order>, Serializable {
 
 	public Order search(String productId) {
 		for (Iterator<Order> iterator = orders.iterator(); iterator.hasNext();) {
-			Order order = (Order) iterator.next();
+			Order order = iterator.next();
+			System.out.println("order detials" + order.getProductId() + " " + productId);
 			if (order.getProductId().equals(productId)) {
 				return order;
 			}

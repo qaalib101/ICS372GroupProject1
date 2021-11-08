@@ -5,8 +5,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.ics372.groupProject1.collections.Inventory;
-
 /**
  * @author jquin
  *
@@ -83,19 +81,9 @@ public class Cart implements Serializable {
 	}
 
 	/**
-	 * cartItemProductIDValid Method Checks whether the Product to be entered is
-	 * valid
-	 */
-	public boolean cartItemProductIDValid(CartItem cartItem) {
-		boolean isValid = Inventory.getInstance().getInventoryList().stream()
-				.anyMatch(cartItem1 -> cartItem1.getId().equals(cartItem.getProduct().getId()));
-		return isValid;
-	}
-
-	/**
 	 * getCartItems Method return a list of all the items in the cart.
 	 *
-	 */
+	 */ // convert to iterator
 	public List<CartItem> getCartItems() {
 		return this.cartItems;
 	}

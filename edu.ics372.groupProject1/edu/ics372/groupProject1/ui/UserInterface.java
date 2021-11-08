@@ -242,14 +242,7 @@ public class UserInterface {
 			}
 		} while (yesOrNo("Check out more products?"));
 
-		// also check if updating the inventory
-		store.calculateCartTotalPrice(Request.instance());
 		store.printCheckOut(Request.instance());
-		if (Request.instance().getProductsToBeReordered().length() != 0) {
-			System.out.println("The product(s), ");
-			System.out.println(Request.instance().getProductsToBeReordered());
-			System.out.println("are to be reordered.");
-		}
 
 	}
 
