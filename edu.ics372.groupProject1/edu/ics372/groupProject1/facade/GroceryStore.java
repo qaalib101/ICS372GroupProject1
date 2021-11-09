@@ -203,13 +203,12 @@ public class GroceryStore {
 	}
 
 	/*
-	 * To be implemented checkOutProduct Checks out product. Adds item to the cart,
-	 * collects the quantity from the cartItem updates the inventory level and if
-	 * necessary reorders the item.
+	 * Checks out product. Adds item to the cart, collects the quantity from the
+	 * cartItem updates the inventory level and if necessary reorders the item.
 	 * 
-	 * @param Request
+	 * @param productId of the product
 	 * 
-	 * @return Result
+	 * @return true if request is completed
 	 * 
 	 */
 
@@ -222,7 +221,7 @@ public class GroceryStore {
 		String memberId = request.getMemberId();
 		Member member = members.search(memberId);
 		Product product = inventory.search(productId);
-
+    
 		if (product == null) {
 			result.setResultCode(Result.PRODUCT_NOT_FOUND);
 			return result;
@@ -235,54 +234,18 @@ public class GroceryStore {
 			}
 			result.setResultCode(Result.OPERATION_COMPLETED);
 			product.decrementQuantity(productCartQuantity);
-			if (product.belowReorderLvL() && orders.search(productId) == null) {
-				member.getCart().addToReorderList(product);
-				Order newOrder = new Order(productId, product.getName(), Integer.parseInt(product.getReorderLevel()));
-				orders.insertOrder(newOrder);
-				StringBuilder productsToReorder = new StringBuilder("");
-				for (int index = 0; index < member.getCart().getReorderList().size(); index++) {
-					productsToReorder.append(member.getCart().getReorderList().get(index).getName() + "\n");
-				}
-				request.setProductsToBeReordered(productsToReorder);
-			}
+			product.autoRestock();
 		}
 		return result;
 	}
 
-	/*
-	 * Prints cart checkout message, updates cart total, displays what has been
-	 * reordered.
+	/**
+	 * Retrieves product info by name
 	 * 
-	 * @param Request
+	 * @param product name
 	 * 
-	 * @return void
-	 * 
+	 * @return result code
 	 */
-	public void printCheckOut(Request request) {
-		String memberId = request.getMemberId();
-		Member member = members.search(memberId);
-		member.getCart().calculateCartTotal(member.getCart().getCartItems());
-		request.setCartTotalPrice(String.valueOf(member.getCart().getTotalPrice()));
-		String productName = "Product Name";
-		String quantity = "Quantity";
-		String unitPrice = "Unit Price";
-		String total = "Total";
-		String header = String.format("%30s %8s %11s   %5s ", productName, quantity, unitPrice, total);
-		String itemDetails = "";
-		System.out.println(header);
-		for (int index = 0; index < member.getCart().getCartItems().size(); index++) {
-			itemDetails = member.getCart().getCartItems().get(index).toString();
-			System.out.println(itemDetails);
-		}
-		member.getCart().printCartTotal();
-		if (request.getProductsToBeReordered().length() != 0) {
-			System.out.println("The product(s), ");
-			System.out.println(Request.instance().getProductsToBeReordered());
-			System.out.println("are to be reordered.");
-		}
-		recoredTransaction(request);
-	}
-
 	public Result retrieveProductInfo(Request request) {
 		Result result = new Result();
 		String productName = request.getProductName();
@@ -299,19 +262,41 @@ public class GroceryStore {
 		return result;
 	}
 
-	/**
-	 * Record the transaction to the transaction list
+	/*
+	 * Calculates carts total
 	 * 
-	 * @param Request
+	 * @param memberId
 	 * 
-	 * @return void
+	 * @return true if request is completed
+	 * 
 	 */
-	private void recoredTransaction(Request request) {
+	public Result calculateCartTotalPrice(Request request) {
+		Result result = new Result();
 		String memberId = request.getMemberId();
 		Member member = members.search(memberId);
-		Transaction transaction = new Transaction(Integer.parseInt(request.getMemberId()),
-				Double.parseDouble(request.getCartTotalPrice()));
-		member.getTransactions().add(transaction);
+		member.getCart().calculateCartTotal(member.getCart().getCartItems());
+		request.setCartTotalPrice(String.valueOf(member.getCart().getTotalPrice()));
+		result.setResultCode(Result.OPERATION_COMPLETED);
+		return result;
+
+	}
+
+	/*
+	 * Prints cart checkout message
+	 * 
+	 * @param memberId
+	 * 
+	 * @return true if request is completed
+	 * 
+	 */
+	public void printCheckOut(Request request) {
+		String itemDetails = "";
+		String memberId = request.getMemberId();
+		Member member = members.search(memberId);
+		for (int index = 0; index < member.getCart().getCartItems().size(); index++) {
+			itemDetails = member.getCart().getCartItems().get(index).printItemDetails();
+			System.out.println(itemDetails);
+		}
 	}
 
 	/**

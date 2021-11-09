@@ -38,6 +38,31 @@ public class DataTransfer {
 	/*
 	 * This sets all fields to "none"
 	 */
+
+	public String getCheckoutLineItem() {
+		return checkoutLineItem;
+	}
+
+	public void setCheckoutLineItem(String checkoutLineItem) {
+		this.checkoutLineItem = checkoutLineItem;
+	}
+
+	public String getCartTotalPrice() {
+		return cartTotalPrice;
+	}
+
+	public void setCartTotalPrice(String cartTotalPrice) {
+		this.cartTotalPrice = cartTotalPrice;
+	}
+
+	public String getProductCartQuantity() {
+		return productCartQuantity;
+	}
+
+	public void setProductCartQuantity(String productCartQuantity) {
+		this.productCartQuantity = productCartQuantity;
+	}
+
 	public DataTransfer() {
 		reset();
 	}

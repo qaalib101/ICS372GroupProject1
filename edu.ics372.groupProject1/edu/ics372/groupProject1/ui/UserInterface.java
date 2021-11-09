@@ -35,7 +35,7 @@ public class UserInterface {
 	private static final int RETRIEVE_MEMBER = 3;
 	private static final int ADD_PRODUCT = 4;
 	private static final int CHECKOUT_CART = 5;
-	private static final int RETRIEVE_PRODUCT = 6;
+	private static final int RETRIEVE_PRODUCT_INFO = 6;
 	private static final int PROCESS_SHIPMENT = 7;
 	private static final int CHANGE_PRICE = 8;
 	private static final int PRINT_TRANSACTIONS = 9;
@@ -223,7 +223,7 @@ public class UserInterface {
 		System.out.println(RETRIEVE_MEMBER + " to retrieve a member");
 		System.out.println(ADD_PRODUCT + " to add a product");
 		System.out.println(CHECKOUT_CART + " to checkout a cart");
-		System.out.println(RETRIEVE_PRODUCT + " to retrieve a product");
+		System.out.println(RETRIEVE_PRODUCT_INFO + " to retrieve a product");
 		System.out.println(PROCESS_SHIPMENT + " to process a shipment");
 		System.out.println(CHANGE_PRICE + " to change the price of a product");
 		System.out.println(PRINT_TRANSACTIONS + " to print transactions");
@@ -236,72 +236,14 @@ public class UserInterface {
 	}
 
 	/**
-	 * Prompts the user for information that is used to create a member.
-	 */
-	public void enrollMember() {
-		Request.instance().setMemberName(getName("Please enter the member's name: "));
-		Request.instance().setMemberAddress(getToken("Please enter the member's address: "));
-		Request.instance().setMemberPhone(getToken("Please enter the member's phone number (no formatting): "));
-		Request.instance().setMemberFee(getDoubleNumber("Please enter the fee paid: "));
-		Request.instance().setDate(getDate("Please enter the current date (mm/dd/yyyy): "));
-		Result result = store.addMember(Request.instance());
-
-		switch (result.getResultCode()) {
-		case Result.OPERATION_FAILED:
-			System.out.println("Member enrollment failed");
-			break;
-		case Result.OPERATION_COMPLETED:
-			System.out.println("Member successfully created.");
-			break;
-		}
-	}
-
-	/**
-	 * Removes a member with the given member ID.
-	 */
-	public void removeMember() {
-		Request.instance().setMemberId(getToken("Please enter the member ID: "));
-		Result result = store.removeMember(Request.instance());
-
-		switch (result.getResultCode()) {
-		case Result.OPERATION_FAILED:
-			System.out.println("Member removal failed");
-			break;
-		case Result.OPERATION_COMPLETED:
-			System.out.println("Member successfully removed.");
-			break;
-		}
-	}
-
-	public void retrieveMember() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void addProduct() {
-		Request.instance().setProductName(getName("Please enter the product name: "));
-		Request.instance().setProductCurrentPrice(Double.toString(getDoubleNumber("Please enter the price: ")));
-		Request.instance().setProductMinimumReorderLevel(
-				Integer.toString(getNumber("Please enter the product's minimum reorder level: ")));
-		Result result = store.addProduct(Request.instance());
-
-		switch (result.getResultCode()) {
-		case Result.OPERATION_FAILED:
-			System.out.println("Product addition failed");
-			break;
-		case Result.OPERATION_COMPLETED:
-			System.out.println("Product successfully added.");
-			break;
-		}
-
-	}
-
-	/* TODO complete refactoring UserInterface checkoutCart method for use */
-	/**
-	 * Method to be called for checkout a cart. Prompts the user for the appropriate
-	 * values and uses the appropriate grocery store method for checking out the
-	 * cart.
+	 * Checks out a members cart. Requests the member ID, Product ID, and quantity.
+	 * returns message whether the product was successfully checked out. If
+	 * successful checkout requests if more products to be checked out. When
+	 * completed prints a list of all products checked out with product name, price,
+	 * quantity and total.
 	 * 
+	 * @param N/A
+	 * @return void
 	 */
 	public void checkoutCart() {
 		Request.instance().setMemberId(getToken("Enter member id"));
@@ -310,23 +252,82 @@ public class UserInterface {
 			System.out.println("No member with id " + Request.instance().getMemberId());
 			return;
 		}
-		// accepting product and quantity area: to be implemented
+
 		do {
-			Request.instance().setProductId(getToken("Enter product id"));
+			Request.instance().setProductId(getToken("Enter product id:"));
+			Request.instance().setProductCartQuantity(getToken("Enter quantity of product:"));
 			result = store.checkOutProduct(Request.instance());
 			if (result.getResultCode() == Result.OPERATION_COMPLETED) {
-				System.out.println("Product " + result.getProductName() + " checked out" + " remaining inventory "
-						+ result.getProductQuantity()); // might need to adjuest to insure checkign inventory and not
-														// checkout out item total
+				System.out.println("product checked out");
 			} else {
 				System.out.println("Product could not be checked out");
 			}
 		} while (yesOrNo("Check out more products?"));
+
+		store.calculateCartTotalPrice(Request.instance());
+		store.printCheckOut(Request.instance());
+
+	}
+  
+	/**
+	 * Prompts the user for information that is used to create a member.
+	 */
+	private void enrollMember() {
+		String name = getName("Please enter the member's name: ");
+		String address = getToken("Please enter the member's address: ");
+		String phone = getToken("Please enter the member's phone number (no formatting): ");
+		String date = getToken("Please enter the current date (mm/dd/yy): ");
+		double fee = getDoubleNumber("Please enter the fee paid: ");
+		if (store.addMember(name, address, phone, date, fee) == true) {
+			System.out.println("Member successfully created.");
+			// TODO print member info after creation
+		}
 	}
 
-	public void retrieveProduct() {
+	/**
+	 * Removes a member with the given member ID.
+	 */
+	private void removeMember() {
+		String id = getToken("Please enter the member ID: ");
+		if (store.removeMember(id) == true) {
+			System.out.println("Member successfully removed.");
+		} else {
+			System.out.println("Error: invalid member ID");
+		}
+	}
+
+	private void retrieveMember() {
 		// TODO Auto-generated method stub
 
+	}
+
+	private void addProduct() {
+		String name = getName("Please enter the product name: ");
+		double price = getDoubleNumber("Please enter the price: ");
+		int reorderLevel = getNumber("Please enter the product's minimum reorder level: ");
+		if (store.addProduct(name, price, reorderLevel) == true) {
+			System.out.println("Product successfully added.");
+		}
+	}
+
+	/**
+	 * Retrieves the requested product by given name.
+	 * 
+	 * @param N/A
+	 * @return void
+	 */
+	private void retrieveProduct() {
+		Request.instance().setProductName(getToken("Enter product name"));
+		Result result = store.retrieveProductInfo(Request.instance());
+		switch (result.getResultCode()) {
+		case Result.PRODUCT_NOT_FOUND:
+			System.out.println("No product found with name " + Request.instance().getProductName());
+			break;
+		case Result.OPERATION_COMPLETED:
+			System.out.println("ProductID: " + Request.instance().getProductId() + " Product Unit Price: "
+					+ Request.instance().getProductCurrentPrice() + " Product Inventory Level: "
+					+ Request.instance().getProductQuantity());
+		}
 	}
 
 	/**
@@ -515,7 +516,7 @@ public class UserInterface {
 			case CHECKOUT_CART:
 				checkoutCart();
 				break;
-			case RETRIEVE_PRODUCT:
+			case RETRIEVE_PRODUCT_INFO:
 				retrieveProduct();
 				break;
 			case PROCESS_SHIPMENT:
