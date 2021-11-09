@@ -6,11 +6,26 @@ import java.util.function.Predicate;
 
 import edu.ics372.groupProject1.entities.Transaction;
 
+/**
+ * This class implements the Iterator interface to iterate only on items that
+ * satisfy a certain predicate.
+ * 
+ * 
+ * @author qaali
+ *
+ */
 public class FilteredIterator implements Iterator<Transaction> {
 	private Transaction item;
 	private Predicate<Transaction> predicate;
 	private Iterator<Transaction> iterator;
 
+	/**
+	 * Sets the iterator and predicate fields and positions to the first item that
+	 * satisfies the predicate.
+	 * 
+	 * @param iterator  the iterator to the list
+	 * @param predicate specifies the test
+	 */
 	public FilteredIterator(Iterator<Transaction> iterator, Predicate<Transaction> predicate) {
 		this.predicate = predicate;
 		this.iterator = iterator;

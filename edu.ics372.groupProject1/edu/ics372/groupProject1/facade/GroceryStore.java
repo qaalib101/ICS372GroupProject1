@@ -45,6 +45,12 @@ public class GroceryStore {
 		}
 	}
 
+	/**
+	 * Method to process orders in the form of shipments.
+	 * 
+	 * @param request Request object with shipment information
+	 * @return Result object with product information and restocked quantity
+	 */
 	public Result processShipment(Request request) {
 		Result result = new Result();
 		String productId = request.getProductId();

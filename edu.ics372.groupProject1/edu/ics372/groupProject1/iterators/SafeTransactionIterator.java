@@ -6,12 +6,23 @@ import java.util.NoSuchElementException;
 import edu.ics372.groupProject1.entities.Transaction;
 import edu.ics372.groupProject1.facade.Result;
 
+/**
+ * This Iterator implementation is tailor-made to supply a "read-only" version
+ * of Transaction objects. The user should supply an iterator to Transaction as
+ * the parameter to the constructor.
+ * 
+ * @author qaali
+ *
+ */
 public class SafeTransactionIterator implements Iterator<Result> {
 	private Iterator<Transaction> iterator;
 	private Result result = new Result();
 
 	/**
-	 * The user of SafeIterator must supply an Iterator to Book.
+	 * This safe iterator class help support the iteration to Transaction. It does
+	 * so by setting the the Transaction fields into the class result and returns
+	 * the result.
+	 * 
 	 * 
 	 * @param iterator Iterator<Transaction>
 	 * @return
