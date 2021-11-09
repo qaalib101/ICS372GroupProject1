@@ -137,7 +137,6 @@ public class AutomatedTester {
 			assert expected.getAmountOrdered().equals(actual.getAmountOrdered());
 			i++;
 		}
-	}
    
 
 	public void testAll() {
