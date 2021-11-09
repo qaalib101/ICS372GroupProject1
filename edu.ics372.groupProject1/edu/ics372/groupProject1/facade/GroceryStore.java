@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import edu.ics372.groupProject1.collections.Inventory;
 import edu.ics372.groupProject1.collections.MemberList;
@@ -14,6 +15,7 @@ import edu.ics372.groupProject1.entities.CartItem;
 import edu.ics372.groupProject1.entities.Member;
 import edu.ics372.groupProject1.entities.Order;
 import edu.ics372.groupProject1.entities.Product;
+import edu.ics372.groupProject1.entities.Transaction;
 import edu.ics372.groupProject1.iterators.SafeMemberIterator;
 import edu.ics372.groupProject1.iterators.SafeOrderIterator;
 import edu.ics372.groupProject1.iterators.SafeProductIterator;
@@ -45,6 +47,12 @@ public class GroceryStore {
 		}
 	}
 
+	/**
+	 * Method to process orders in the form of shipments.
+	 * 
+	 * @param request Request object with shipment information
+	 * @return Result object with product information and restocked quantity
+	 */
 	public Result processShipment(Request request) {
 		Result result = new Result();
 		String productId = request.getProductId();
@@ -83,6 +91,14 @@ public class GroceryStore {
 		return result;
 	}
 
+	public Iterator<Result> getTransactions(Request request) {
+		Member member = members.search(request.getMemberId());
+		if (member == null) {
+			return new LinkedList<Result>().iterator();
+		}
+		return member.getTransactionsBetweenDates(request.getStartDate(), request.getEndDate());
+	}
+
 	/**
 	 * creates a member with the given parameters and adds it to members
 	 * 
@@ -93,9 +109,17 @@ public class GroceryStore {
 	 * @param fee     amount member pays as fee
 	 * @return true if the member was successfully created
 	 */
-	public boolean addMember(String name, String address, String phone, String date, double fee) {
-		Member newMember = new Member(name, address, phone, date, fee);
-		boolean result = members.insertMember(newMember);
+	public Result addMember(Request request) {
+		Result result = new Result();
+		Double fee = Double.valueOf(request.getMemberFee());
+		Member newMember = new Member(request.getMemberName(), request.getMemberAddress(), request.getMemberPhone(),
+				request.getDate(), fee);
+		if (members.insertMember(newMember)) {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			result.setMemberFields(newMember);
+			return result;
+		}
+		result.setResultCode(Result.OPERATION_FAILED);
 		return result;
 	}
 
@@ -105,8 +129,14 @@ public class GroceryStore {
 	 * @param id the member's id
 	 * @return true if the member was successfully removed
 	 */
-	public boolean removeMember(String id) {
-		return members.removeMember(id);
+	public Result removeMember(Request request) {
+		Result result = new Result();
+		if (members.removeMember(request.getMemberId())) {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			return result;
+		}
+		result.setResultCode(Result.OPERATION_FAILED);
+		return result;
 	}
 
 	/**
@@ -117,12 +147,20 @@ public class GroceryStore {
 	 * @param reorderLevel reorder level of the product
 	 * @return true if the product was successfully created
 	 */
-	public boolean addProduct(String name, double price, int reorderLevel) {
-		Product newProduct = new Product(name, price, reorderLevel);
-		boolean result = inventory.insertProduct(newProduct);
+	public Result addProduct(Request request) {
+		Result result = new Result();
+		Double price = Double.valueOf(request.getProductCurrentPrice());
+		int reorderLevel = Integer.parseInt(request.getProductMinimumReorderLevel());
+		Product newProduct = new Product(request.getProductName(), price, reorderLevel);
+		if (inventory.insertProduct(newProduct)) {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			result.setProductFields(newProduct);
+			return result;
+		}
+		result.setResultCode(Result.OPERATION_FAILED);
+		return result;
 		// I'm a little confused about how ordering will be implemented
 //		Order(name, price, reorderLevel * 2);
-		return result;
 	}
 
 	/**
@@ -173,12 +211,17 @@ public class GroceryStore {
 	 * @return true if request is completed
 	 * 
 	 */
+
+	// TODO finish moving interface code to GroceryStore
+	// TODO remove reorderlist and utilize DataTransfer
 	public Result checkOutProduct(Request request) {
 		Result result = new Result();
+		Product product = inventory.search(request.getProductId());
 		String productId = request.getProductId();
 		String memberId = request.getMemberId();
 		Member member = members.search(memberId);
 		Product product = inventory.search(productId);
+    
 		if (product == null) {
 			result.setResultCode(Result.PRODUCT_NOT_FOUND);
 			return result;
@@ -193,7 +236,6 @@ public class GroceryStore {
 			product.decrementQuantity(productCartQuantity);
 			product.autoRestock();
 		}
-
 		return result;
 	}
 
@@ -255,7 +297,6 @@ public class GroceryStore {
 			itemDetails = member.getCart().getCartItems().get(index).printItemDetails();
 			System.out.println(itemDetails);
 		}
-
 	}
 
 	/**

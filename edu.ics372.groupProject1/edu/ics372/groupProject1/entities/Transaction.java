@@ -1,111 +1,60 @@
 package edu.ics372.groupProject1.entities;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class Transaction implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	// Instance variables
-	private int memberID;
-	private String date1;
-	private String date2; // Possibly remove this second date?
-	private String id;
-	private static int transactionID;
+	private static final long serialVersionUID = 1L;
+	private Calendar date;
+	private double totalPrice;
 
-	// Basic constructor method
-	public Transaction(int memberID, String date1, String date2) {
-		this.memberID = memberID;
-		this.date1 = date1;
-		this.date2 = date2;
-		this.id = "T" + ++transactionID;
+	public Transaction(double totalPrice) {
+		this.totalPrice = totalPrice;
+		date = new GregorianCalendar();
 	}
 
-	public void printTransaction() {
-		// NOTE: A user may visit the store more then one times in a single day
-		// print date on which the user visit for each visit
-		// print the total price paid for each visit
-		System.out.println("\nTransaction\n");
-	}
-
-	// Instance methods
-	public boolean isValidMemberID() {
-		/*
-		 * iterate through memberList check if one of the member's id matches the
-		 * memberID given
-		 */
-		return false;
-	}
-
-	public boolean date1BeforeDate2() {
-		/*
-		 * mm/dd/yyyy check if date1 is not after(the month, day, or year is less then
-		 * date2) second date
-		 */
-		int day1 = Integer.parseInt(date1.substring(3, 5));
-		int month1 = Integer.parseInt(date1.substring(0, 2));
-		int year1 = Integer.parseInt(date1.substring(6, 10));
-		int day2 = Integer.parseInt(date2.substring(3, 5));
-		int month2 = Integer.parseInt(date2.substring(0, 2));
-		int year2 = Integer.parseInt(date2.substring(6, 10));
-
+	/**
+	 * Checks whether this transaction is on the given date
+	 * 
+	 * @param date The date for which transactions are being sought
+	 * @return true iff the dates match
+	 */
+	public boolean datesInRange(Calendar calDate1, Calendar calDate2) {
+		String date1 = setDateToString(calDate1);
+		String date2 = setDateToString(calDate1);
+		int month1 = Integer.parseInt(date1.substring(0, 1));
+		int day1 = Integer.parseInt(date1.substring(3, 4));
+		int year1 = Integer.parseInt(date1.substring(6, 7));
+		int month2 = Integer.parseInt(date2.substring(0, 1));
+		int day2 = Integer.parseInt(date2.substring(3, 4));
+		int year2 = Integer.parseInt(date2.substring(6, 7));
 		if (year1 <= year2) {
 			if (month1 <= month2) {
 				if (day1 <= day2) {
-					// System.out.println("The dates are in range:)");
 					return true;
-				} else {
-					// System.out.println("The day is no good:(");
 				}
-			} else {
-				// System.out.println("The month is no good:(");
 			}
-		} else {
-			// System.out.println("The year is no good:(");
 		}
 		return false;
 	}
 
+	private String setDateToString(Calendar date) {
+		return date.get(Calendar.MONTH) + "/" + date.get(Calendar.DATE) + "/" + date.get(Calendar.YEAR);
+	}
+
 	// Getter & Setter plus toString() methods
-	public int getMemberID() {
-		return memberID;
+	public String getTotalPrice() {
+		return "TotalPrice: " + totalPrice;
 	}
 
-	public void setMemberID(int memberID) {
-		this.memberID = memberID;
-	}
-
-	public String getDate1() {
-		return date1;
-	}
-
-	public void setDate1(String date1) {
-		this.date1 = date1;
-	}
-
-	public String getDate2() {
-		return date2;
-	}
-
-	public void setDate2(String date2) {
-		this.date2 = date2;
+	public String getDate() {
+		return date.get(Calendar.MONTH) + "/" + date.get(Calendar.DATE) + "/" + date.get(Calendar.YEAR);
 	}
 
 	@Override
 	public String toString() {
-		return "Transaction [memberID=" + memberID + ", date1=" + date1 + ", date2=" + date2 + "]";
+		return "Transaction [totalPrice: " + totalPrice + ", date=" + date + "]";
 	}
-
-	public static void save(ObjectOutputStream output) throws IOException {
-		output.writeObject(transactionID);
-	}
-
-	public static void retrieve(ObjectInputStream input) throws IOException, ClassNotFoundException {
-		transactionID = (int) input.readObject();
-	}
-
 }

@@ -11,15 +11,15 @@ import java.text.DecimalFormat;
  */
 public class CartItem {
 
-	private Product productName;
+	private Product product;
 	private int numberOfUnits;
 	private double totalItemPrice;
 	private double unitPrice;
 	DecimalFormat df = new DecimalFormat("0.00");
 
-	public CartItem(Product productName, int numberOfUnits) {
+	public CartItem(Product product, int numberOfUnits) {
 		super();
-		this.productName = productName;
+		this.product = product;
 		this.numberOfUnits = numberOfUnits;
 	}
 
@@ -29,22 +29,28 @@ public class CartItem {
 	}
 
 	public double getUnitPrice() {
-		return Double.parseDouble(productName.getPrice());
+		return Double.parseDouble(product.getPrice());
 	}
 
 	public Product getProduct() {
-		return productName;
+		return product;
 	}
 
 	public int getNumberOfUnits() {
 		return this.numberOfUnits;
 	}
 
-	public String printItemDetails() {
-		return String.format("%8s %-3d $%-5f $%-5f \n", getProduct(), getNumberOfUnits(), df.format(getUnitPrice()),
-				df.format(getTotalItemPrice()));
+	/**
+	 * toString prints CartItem details in specified format.
+	 * 
+	 * @param N/A
+	 * @return String
+	 * 
+	 */
+	public String toString() {
+		return String.format("%30s %8d     $%6s $%6s ", getProduct().getName(), getNumberOfUnits(),
+				df.format(getUnitPrice()), df.format(getTotalItemPrice()));
 	}
-
 	// add possible cartItemIsProduct() for checking?
 
 }

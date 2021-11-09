@@ -3,9 +3,8 @@ package edu.ics372.groupProject1.entities;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-
-import edu.ics372.groupProject1.collections.Inventory;
 
 /**
  * @author jquin
@@ -16,12 +15,14 @@ import edu.ics372.groupProject1.collections.Inventory;
 public class Cart implements Serializable {
 	private double totalPrice;
 	private List<CartItem> cartItems;
+	private List<Product> reorderList;
 	DecimalFormat df = new DecimalFormat("0.00");
 
 	public Cart() {
 		super();
 		this.totalPrice = 0;
 		this.cartItems = new ArrayList<CartItem>();
+		this.reorderList = new ArrayList<Product>();
 	}
 
 	/**
@@ -41,8 +42,10 @@ public class Cart implements Serializable {
 	}
 
 	/**
-	 * addCartItem Method Adds CartItem to the Cart ArrayList returns True if
-	 * successful, False if failed or exception
+	 * addCartItem method adds CartItem to the Cart ArrayList
+	 *
+	 * @param CartItem
+	 * @return boolean
 	 *
 	 */
 	public boolean addCartItem(CartItem cartItem) {
@@ -54,26 +57,48 @@ public class Cart implements Serializable {
 		}
 	}
 
+	public List<Product> getReorderList() {
+		return reorderList;
+	}
+
 	/**
-	 * cartItemProductIDValid Method Checks whether the Product to be entered is
-	 * valid
+	 * addToReorderList Method Adds Products that have been checked out that have
+	 * broken the reorder threshold.
+	 * 
+	 * @param Product
+	 * @return boolean
+	 *
 	 */
-	public boolean cartItemProductIDValid(CartItem cartItem) {
-		boolean isValid = Inventory.getInstance().getInventoryList().stream()
-				.anyMatch(cartItem1 -> cartItem1.getId().equals(cartItem.getProduct().getId()));
-		return isValid;
+	public boolean addToReorderList(Product product) {
+		try {
+			reorderList.add(product);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+
 	}
 
 	/**
 	 * getCartItems Method return a list of all the items in the cart.
 	 *
 	 */
-	public List<CartItem> getCartItems() {
-		return this.cartItems;
+	public Iterator<CartItem> getCartItems() {
+		return cartItems.iterator();
 	}
 
+	/**
+	 * printCartTotal prints the total of all cart items per specified requirements.
+	 * 
+	 * @param N/A
+	 * @return void
+	 * 
+	 */
 	public void printCartTotal() {
-		System.out.println("Total                    $" + df.format(getTotalPrice()));
+		String total = "Grand Total";
+		String totalString = String.format("%30s                      $%6s", total, df.format(getTotalPrice()));
+		System.out.println("___________________________________________________________");
+		System.out.println(totalString);
 	}
 
 }
