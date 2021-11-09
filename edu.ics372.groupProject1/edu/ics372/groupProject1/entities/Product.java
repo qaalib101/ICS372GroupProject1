@@ -3,6 +3,12 @@ package edu.ics372.groupProject1.entities;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 
+/**
+ * Class to represent product sold in the grocery store
+ * 
+ * @author jquin
+ *
+ */
 public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
@@ -21,10 +27,20 @@ public class Product implements Serializable {
 		id = PRODUCT_STRING + ++idCounter;
 	}
 
+	/**
+	 * Retrieve product name
+	 * 
+	 * @return name of product
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Retrieve product price
+	 * 
+	 * @return price of product
+	 */
 	public String getPrice() {
 		DecimalFormat df = new DecimalFormat("#.00");
 		return df.format(price);
@@ -42,6 +58,12 @@ public class Product implements Serializable {
 		return id;
 	}
 
+	/**
+	 * Method to update the quantity of the product with more units
+	 * 
+	 * @param newQuantity quantity to be added to product
+	 * @return true if quantity was successfully update
+	 */
 	public boolean restock(int newQuantity) {
 		quantity += newQuantity;
 		return true;
@@ -68,7 +90,7 @@ public class Product implements Serializable {
 	}
 
 	public String productInfo() {
-		return "Product [name:" + name + ", ID: " + id + ", Price: " + currentPrice + ", Stock: " + quantity;
+		return "Product [name:" + name + ", ID: " + id + ", Price: " + price + ", Stock: " + quantity;
 
 	}
 }

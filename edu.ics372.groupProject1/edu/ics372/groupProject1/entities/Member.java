@@ -4,20 +4,28 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import edu.ics372.groupProject1.facade.Result;
+import edu.ics372.groupProject1.iterators.FilteredIterator;
+import edu.ics372.groupProject1.iterators.SafeTransactionIterator;
 
 public class Member implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String address;
 	private String phone;
-	private String date;
+	private Calendar date;
 	private double fee;
 	private String id;
 	private static final String MEMBER_STRING = "M";
 	private static int idCounter;
 	private Cart cart;
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("mm/dd/yyyy");
 	private List<Transaction> transactions = new LinkedList<Transaction>(); // make "List" Class for generics
 
 	/**
@@ -29,7 +37,7 @@ public class Member implements Serializable {
 	 * @param date    date the member joins
 	 * @param fee     amount member pays as fee
 	 */
-	public Member(String name, String address, String phone, String date, double fee) {
+	public Member(String name, String address, String phone, Calendar date, double fee) {
 		this.name = name;
 		this.address = address;
 		this.phone = phone;
@@ -41,6 +49,26 @@ public class Member implements Serializable {
 
 	public Cart getCart() {
 		return cart;
+	}
+
+	/**
+	 * Gets an iterator to a collection of selected transactions
+	 * 
+	 * @param date the date for which the transactions have to be retrieved
+	 * @return the iterator to the collection
+	 */
+	public Iterator<Result> getTransactionsBetweenDates(Calendar date1, Calendar date2) {
+		return new SafeTransactionIterator(
+				new FilteredIterator(transactions.iterator(), transaction -> transaction.datesInRange(date1, date2)));
+	}
+
+	/**
+	 * Returns the list of all transactions for this member.
+	 * 
+	 * @return the iterator to the list of Transaction objects
+	 */
+	public Iterator<Transaction> getTransactions() {
+		return transactions.iterator();
 	}
 
 	/**
@@ -76,7 +104,7 @@ public class Member implements Serializable {
 	 * @return date joined
 	 */
 	public String getDate() {
-		return date;
+		return dateFormat.format(date);
 	}
 
 	/**
@@ -84,8 +112,8 @@ public class Member implements Serializable {
 	 * 
 	 * @return fee
 	 */
-	public double getFee() {
-		return fee;
+	public String getFee() {
+		return Double.toString(fee);
 	}
 
 	/**
