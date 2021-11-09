@@ -9,6 +9,8 @@ import edu.ics372.groupProject1.entities.Transaction;
  * The DataTransfer class is used to transfer data between the UserInterface and the GroceryStore class.
  * It also supports iteration for Member, Product and Order class by copying their fields 
  * and sending that information in either direction.
+ * 
+ * @author Leng Vang
  */
 
 public class DataTransfer {

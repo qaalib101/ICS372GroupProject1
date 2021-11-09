@@ -1,7 +1,7 @@
 package edu.ics372.groupProject1.facade;
 
 /**
- * This class is used for returning many of the results of the library system's
+ * This class is used for returning many results of the GroceryStore system's
  * business logic to user interface.
  * 
  * @author qaali

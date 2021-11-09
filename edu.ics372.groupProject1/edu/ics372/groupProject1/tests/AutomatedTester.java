@@ -7,16 +7,17 @@ import edu.ics372.groupProject1.collections.MemberList;
 import edu.ics372.groupProject1.collections.Inventory;
 import edu.ics372.groupProject1.entities.Cart;
 import edu.ics372.groupProject1.entities.Member;
+import edu.ics372.groupProject1.entities.Order;
 import edu.ics372.groupProject1.entities.Product;
 import edu.ics372.groupProject1.facade.GroceryStore;
 import edu.ics372.groupProject1.facade.Request;
-import edu.ics372.groupProject1.facade.Result;
+
 
 /**
- * This class generates sample automated tests for the library system using
+ * This class generates automated tests for the library system using
  * asserts.
  * 
- * @author Brahma Dathan
+ * @author 
  *
  */
 public class AutomatedTester {
@@ -29,10 +30,8 @@ public class AutomatedTester {
 	private String[] price = { "1.50", "3.25", "6.00" };
 	private String[] reorderLevel = { "11", "12", "13" };
 	private Product[] products = new Product[3];
-	private String[] authors = { "a1", "a2", "a3", "a4", "a5", "a6" };
 	private String[] ids = { "i1", "i2", "i3", "i4", "i5", "i6" };
 	private Cart[] cart = new Cart[6];
-	private int i = 0;
 
 	/**
 	 * Tests Member creation.
@@ -74,9 +73,13 @@ public class AutomatedTester {
 		Request.instance().setMemberId("M4");
 		// assert Library.instance().searchMembership(Request.instance()) == null;
 	}
+	
+	/**
+	 * Tests a list of Members
+	 */
 
 	public void testListMembers() {
-		Iterator<Result> testMembers = store.getMembers();
+		Iterator<Result> testMembers = store.listMembers();
 
 		while (testMembers.hasNext()) {
 			int i = 0;
@@ -89,11 +92,16 @@ public class AutomatedTester {
 
 		}
 	}
+	
+	/**
+	 * Tests a list of Products
+	 */
 
 	public void testListProducts() {
-		Iterator<Result> testProducts = store.getProducts();
+		Iterator<Result> testProducts = store.listProducts();
 
 		while (testProducts.hasNext()) {
+			int i = 0;
 			Result actual = testProducts.next();
 			Inventory expected = Inventory.getInstance();
 			assert actual.getProductId().equals(i);
@@ -105,9 +113,13 @@ public class AutomatedTester {
 		}
 
 	}
+	
+	/**
+	 *Test a list of outstanding orders 
+	 */
 
 	public void testListOrders() {
-		Iterator<Result> testOrders = store.getOrders();
+		Iterator<Result> testOrders = store.listOrders();
 		Order order1 = new Order("P1", "Apple", 22);
 		Order order2 = new Order("P2", "Steak", 24);
 		Order order3 = new Order("P3", "Eggs", 26);
@@ -117,18 +129,15 @@ public class AutomatedTester {
 		orderList.add(order3);
 
 		while (testOrders.hasNext()) {
+			int i = 0;
 			Result actual = testOrders.next();
 			Order expected = orderList.get(i);
 			assert expected.getProductId().equals(actual.getOrderProductId());
 			assert expected.getProductName().equals(actual.getOrderProductName());
-			assert expected.getAmount().equals(actual.getAmountOrdered());
+			assert expected.getAmountOrdered().equals(actual.getAmountOrdered());
 			i++;
 		}
-    
-	// implement
-	private void testListMembers() {
-
-	}
+   
 
 	public void testAll() {
 		testAddMember();
