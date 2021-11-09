@@ -26,7 +26,7 @@ public class CartItem {
 	}
 
 	public double getUnitPrice() {
-		return Double.parseDouble(productName.getCurrentPrice());
+		return Double.parseDouble(productName.getPrice());
 	}
 
 	public Product getProduct() {

@@ -3,21 +3,20 @@ package edu.ics372.groupProject1.iterators;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import edu.ics372.groupProject1.entities.Order;
+import edu.ics372.groupProject1.entities.Transaction;
 import edu.ics372.groupProject1.facade.Result;
 
-public class SafeOrderIterator implements Iterator<Result> {
-	private Iterator<Order> iterator;
+public class SafeTransactionIterator implements Iterator<Result> {
+	private Iterator<Transaction> iterator;
 	private Result result = new Result();
 
 	/**
-	 * This safe iterator class help support the iteration to Order.
-	 * It does so by setting the the Order fields into the class result
-	 * and returns the result.
+	 * The user of SafeIterator must supply an Iterator to Book.
 	 * 
-	 * @param iterator Iterator<Order>
+	 * @param iterator Iterator<Transaction>
+	 * @return
 	 */
-	public SafeOrderIterator(Iterator<Order> iterator) {
+	public SafeTransactionIterator(Iterator<Transaction> iterator) {
 		this.iterator = iterator;
 	}
 
@@ -29,7 +28,7 @@ public class SafeOrderIterator implements Iterator<Result> {
 	@Override
 	public Result next() {
 		if (iterator.hasNext()) {
-			result.setOrderField(iterator.next());
+			result.setTransactionFields(iterator.next());
 		} else {
 			throw new NoSuchElementException("No such element");
 		}

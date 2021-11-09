@@ -65,7 +65,7 @@ public class Product implements Serializable {
 	 *         print string of Product name, ID, price per unit and current stock.
 	 */
 	public String productInfo() {
-		return "Product [name:" + name + ", ID: " + id + ", Price: " + currentPrice + ", Stock: " + quantity;
+		return "Product [name:" + name + ", ID: " + id + ", Price: " + price + ", Stock: " + quantity;
 
 	}
 }
