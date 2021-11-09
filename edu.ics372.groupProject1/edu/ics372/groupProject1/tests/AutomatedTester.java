@@ -124,6 +124,9 @@ public class AutomatedTester {
 			assert expected.getAmount().equals(actual.getAmountOrdered());
 			i++;
 		}
+    
+	// implement
+	private void testListMembers() {
 
 	}
 

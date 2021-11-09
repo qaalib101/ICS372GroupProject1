@@ -4,7 +4,11 @@ package edu.ics372.groupProject1.ui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
@@ -15,7 +19,7 @@ import edu.ics372.groupProject1.tests.TestBed;
 
 /**
  * 
- * This class implements the user interface for the Cooperative project. The
+ * This class implements the user interface for the GroceryStore project. The
  * commands are encoded as integers using a number of static final variables. A
  * number of utility methods exist to make it easier to parse the input.
  *
@@ -169,6 +173,26 @@ public class UserInterface {
 	}
 
 	/**
+	 * Prompts for a date and gets a date object
+	 * 
+	 * @param prompt the prompt
+	 * @return the data as a Calendar object
+	 */
+	public Calendar getDate(String prompt) {
+		do {
+			try {
+				Calendar date = new GregorianCalendar();
+				String item = getToken(prompt);
+				DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+				date.setTime(dateFormat.parse(item));
+				return date;
+			} catch (Exception fe) {
+				System.out.println("Please input a date as dd/MM/yyyy");
+			}
+		} while (true);
+	}
+
+	/**
 	 * Prompts for a command from the keyboard
 	 * 
 	 * @return a valid command
@@ -211,10 +235,72 @@ public class UserInterface {
 		System.out.println(HELP + " for help");
 	}
 
+	/**
+	 * Prompts the user for information that is used to create a member.
+	 */
+	public void enrollMember() {
+		Request.instance().setMemberName(getName("Please enter the member's name: "));
+		Request.instance().setMemberAddress(getToken("Please enter the member's address: "));
+		Request.instance().setMemberPhone(getToken("Please enter the member's phone number (no formatting): "));
+		Request.instance().setMemberFee(getDoubleNumber("Please enter the fee paid: "));
+		Request.instance().setDate(getDate("Please enter the current date (mm/dd/yyyy): "));
+		Result result = store.addMember(Request.instance());
+
+		switch (result.getResultCode()) {
+		case Result.OPERATION_FAILED:
+			System.out.println("Member enrollment failed");
+			break;
+		case Result.OPERATION_COMPLETED:
+			System.out.println("Member successfully created.");
+			break;
+		}
+	}
+
+	/**
+	 * Removes a member with the given member ID.
+	 */
+	public void removeMember() {
+		Request.instance().setMemberId(getToken("Please enter the member ID: "));
+		Result result = store.removeMember(Request.instance());
+
+		switch (result.getResultCode()) {
+		case Result.OPERATION_FAILED:
+			System.out.println("Member removal failed");
+			break;
+		case Result.OPERATION_COMPLETED:
+			System.out.println("Member successfully removed.");
+			break;
+		}
+	}
+
+	public void retrieveMember() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void addProduct() {
+		Request.instance().setProductName(getName("Please enter the product name: "));
+		Request.instance().setProductCurrentPrice(Double.toString(getDoubleNumber("Please enter the price: ")));
+		Request.instance().setProductMinimumReorderLevel(
+				Integer.toString(getNumber("Please enter the product's minimum reorder level: ")));
+		Result result = store.addProduct(Request.instance());
+
+		switch (result.getResultCode()) {
+		case Result.OPERATION_FAILED:
+			System.out.println("Product addition failed");
+			break;
+		case Result.OPERATION_COMPLETED:
+			System.out.println("Product successfully added.");
+			break;
+		}
+
+	}
+
 	/* TODO complete refactoring UserInterface checkoutCart method for use */
 	/**
 	 * Method to be called for checkout a cart. Prompts the user for the appropriate
-	 * values and uses the appropriate Library method for checking out the cart.
+	 * values and uses the appropriate grocery store method for checking out the
+	 * cart.
 	 * 
 	 */
 	public void checkoutCart() {
@@ -238,56 +324,17 @@ public class UserInterface {
 		} while (yesOrNo("Check out more products?"));
 	}
 
-	/**
-	 * Prompts the user for information that is used to create a member.
-	 */
-	private void enrollMember() {
-		String name = getName("Please enter the member's name: ");
-		String address = getToken("Please enter the member's address: ");
-		String phone = getToken("Please enter the member's phone number (no formatting): ");
-		String date = getToken("Please enter the current date (mm/dd/yy): ");
-		double fee = getDoubleNumber("Please enter the fee paid: ");
-		if (store.addMember(name, address, phone, date, fee) == true) {
-			System.out.println("Member successfully created.");
-			// TODO print member info after creation
-		}
-	}
-
-	/**
-	 * Removes a member with the given member ID.
-	 */
-	private void removeMember() {
-		String id = getToken("Please enter the member ID: ");
-		if (store.removeMember(id) == true) {
-			System.out.println("Member successfully removed.");
-		} else {
-			System.out.println("Error: invalid member ID");
-		}
-	}
-
-	private void retrieveMember() {
-		// TODO Auto-generated method stub
-
-	}
-
-	private void addProduct() {
-		String name = getName("Please enter the product name: ");
-		double price = getDoubleNumber("Please enter the price: ");
-		int reorderLevel = getNumber("Please enter the product's minimum reorder level: ");
-		if (store.addProduct(name, price, reorderLevel) == true) {
-			System.out.println("Product successfully added.");
-		}
-	}
-
-	private void retrieveProduct() {
+	public void retrieveProduct() {
 		// TODO Auto-generated method stub
 
 	}
 
 	/**
-	 * Method to be called to process a shipment.
+	 * Method to be called to process a shipment. Prompts the user for the product
+	 * id of the shipment and uses the appropriate grocery store methods to process
+	 * the shipment.
 	 */
-	private void processShipment() {
+	public void processShipment() {
 		do {
 			Request.instance().setProductId(getToken("Enter product Id: "));
 			Result result = store.processShipment(Request.instance());
@@ -315,6 +362,12 @@ public class UserInterface {
 
 	}
 
+	/**
+	 * Method to be called to change a product's price. User is prompted to provide
+	 * the id and new price of the product and the appropriate grocery store methods
+	 * are called to change the product's price.
+	 * 
+	 */
 	public void changePrice() {
 		Request.instance().setProductId(getToken("Enter product Id: "));
 		Request.instance().setProductCurrentPrice(
@@ -366,7 +419,7 @@ public class UserInterface {
 		}
 		System.out.println("End of listing");
 	}
-	
+
 	/**
 	 * Display all outstanding orders that has not been fulfilled
 	 */
@@ -378,9 +431,29 @@ public class UserInterface {
 			Result result = iterator.next();
 			System.out.println(
 					result.getOrderProductName() + " " + result.getOrderProductId() + " " + result.getAmountOrdered());
-
 		}
 		System.out.println("End of listing");
+	}
+
+	/*
+	 * Prints all transactions for a member within a date range
+	 */
+
+	public void getTransactions() {
+		// String date1, date2;
+		Request.instance().setMemberId(getToken("Enter member id"));
+		Request.instance()
+				.setStartDate(getDate("Please enter the first date for which you want records from mm/dd/yy"));
+		Request.instance().setEndDate(getDate("Please enter the second date for which you want records to mm/dd/yy"));
+		Iterator<Result> result = store.getTransactions(Request.instance());
+		while (result.hasNext()) {
+			Result transaction = result.next();
+			System.out.println(transaction.getTransactionDate() + " " + transaction.getTransactionTotalPrice() + "\n");
+		}
+		System.out.println("\n End of transactions \n");
+		// Request.instance().setTransactionDate(getToken("Please enter the first date
+		// for which you want records as mm/dd/yy"));
+		//
 	}
 
 	/**
@@ -417,7 +490,11 @@ public class UserInterface {
 		}
 	}
 
-	// add methods for business processes
+	/**
+	 * Orchestrates the whole process. Calls the appropriate method for the
+	 * different functionalities.
+	 * 
+	 */
 	public void process() {
 		int command;
 		help();

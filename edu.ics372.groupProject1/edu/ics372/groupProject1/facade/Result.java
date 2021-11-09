@@ -1,5 +1,12 @@
 package edu.ics372.groupProject1.facade;
 
+/**
+ * This class is used for returning many of the results of the library system's
+ * business logic to user interface.
+ * 
+ * @author qaali
+ *
+ */
 public class Result extends DataTransfer {
 	public static final int PRODUCT_NOT_FOUND = 1;
 	public static final int NO_SUCH_MEMBER = 2;
