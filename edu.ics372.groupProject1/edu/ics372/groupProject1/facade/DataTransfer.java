@@ -29,6 +29,11 @@ public class DataTransfer {
 	private String amountOrdered;
 	private String transactionDate;
 	private String transactionTotalPrice;
+	private String productCartQuantity;
+	private String cartTotalPrice;
+	private String checkoutLineItem;
+	private String isProductReordered;
+	private StringBuilder productsToBeReordered;
 
 	/*
 	 * This sets all fields to "none"
@@ -208,6 +213,46 @@ public class DataTransfer {
 	public void setTransactionFields(Transaction transaction) {
 		setTransactionDate(transaction.getDate());
 		setTransactionTotalPrice(transaction.getTotalPrice());
+	}
+
+	public StringBuilder getProductsToBeReordered() {
+		return productsToBeReordered;
+	}
+
+	public void setProductsToBeReordered(StringBuilder productsToBeReordered) {
+		this.productsToBeReordered = productsToBeReordered;
+	}
+
+	public String getIsProductReordered() {
+		return isProductReordered;
+	}
+
+	public void setIsProductReordered(String isProductReordered) {
+		this.isProductReordered = isProductReordered;
+	}
+
+	public String getCheckoutLineItem() {
+		return checkoutLineItem;
+	}
+
+	public void setCheckoutLineItem(String checkoutLineItem) {
+		this.checkoutLineItem = checkoutLineItem;
+	}
+
+	public String getCartTotalPrice() {
+		return cartTotalPrice;
+	}
+
+	public void setCartTotalPrice(String cartTotalPrice) {
+		this.cartTotalPrice = cartTotalPrice;
+	}
+
+	public String getProductCartQuantity() {
+		return productCartQuantity;
+	}
+
+	public void setProductCartQuantity(String productCartQuantity) {
+		this.productCartQuantity = productCartQuantity;
 	}
 
 	/**
