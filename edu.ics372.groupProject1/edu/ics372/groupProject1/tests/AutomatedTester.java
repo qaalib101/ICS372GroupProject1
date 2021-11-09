@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import edu.ics372.groupProject1.facade.Result;
 import edu.ics372.groupProject1.collections.MemberList;
+import edu.ics372.groupProject1.collections.OrderList;
 import edu.ics372.groupProject1.collections.Inventory;
 import edu.ics372.groupProject1.entities.Cart;
 import edu.ics372.groupProject1.entities.Member;
@@ -29,6 +30,7 @@ public class AutomatedTester {
 	private String[] storeItems = { "Apple", "Steak", "Eggs" };
 	private String[] price = { "1.50", "3.25", "6.00" };
 	private String[] reorderLevel = { "11", "12", "13" };
+	private String[] orderAmount = {"22", "24", "26"};
 	private Product[] products = new Product[3];
 	private String[] ids = { "i1", "i2", "i3", "i4", "i5", "i6" };
 	private Cart[] cart = new Cart[6];
@@ -79,16 +81,16 @@ public class AutomatedTester {
 	 */
 
 	public void testListMembers() {
-		Iterator<Result> testMembers = store.listMembers();
+		Iterator<Result> iterator = store.listMembers();
 
-		while (testMembers.hasNext()) {
-			int i = 0;
-			Result actual = testMembers.next();
+		while (iterator.hasNext()) {
+			int id = 0;
+			Result actual = iterator.next();
 			MemberList expected = MemberList.getInstance();
-			assert actual.getMemberId().equals(i);
-			assert actual.getMemberName().equals(names[i]);
-			assert actual.getMemberAddress().equals(addresses[i]);
-			i++;
+			assert actual.getMemberId().equals("M" + id);
+			assert actual.getMemberName().equals(names[id]);
+			assert actual.getMemberAddress().equals(addresses[id]);
+			++id;
 
 		}
 	}
@@ -101,14 +103,14 @@ public class AutomatedTester {
 		Iterator<Result> testProducts = store.listProducts();
 
 		while (testProducts.hasNext()) {
-			int i = 0;
+			int id = 0;
 			Result actual = testProducts.next();
 			Inventory expected = Inventory.getInstance();
-			assert actual.getProductId().equals(i);
-			assert actual.getProductName().equals(names[i]);
-			assert actual.getProductCurrentPrice().equals(price[i]);
-			assert actual.getProductMinimumReorderLevel().equals(reorderLevel[i]);
-			i++;
+			assert actual.getProductId().equals("P" + id);
+			assert actual.getProductName().equals(storeItems[id]);
+			assert actual.getProductCurrentPrice().equals(price[id]);
+			assert actual.getProductMinimumReorderLevel().equals(reorderLevel[id]);
+			++id;
 
 		}
 
@@ -120,24 +122,17 @@ public class AutomatedTester {
 
 	public void testListOrders() {
 		Iterator<Result> testOrders = store.listOrders();
-		Order order1 = new Order("P1", "Apple", 22);
-		Order order2 = new Order("P2", "Steak", 24);
-		Order order3 = new Order("P3", "Eggs", 26);
-		LinkedList<Order> orderList = new LinkedList<Order>();
-		orderList.add(order1);
-		orderList.add(order2);
-		orderList.add(order3);
 
 		while (testOrders.hasNext()) {
-			int i = 0;
+			int id = 0;
 			Result actual = testOrders.next();
-			Order expected = orderList.get(i);
-			assert expected.getProductId().equals(actual.getOrderProductId());
-			assert expected.getProductName().equals(actual.getOrderProductName());
-			assert expected.getAmountOrdered().equals(actual.getAmountOrdered());
-			i++;
+			OrderList expected = OrderList.getInstance();
+			assert actual.getProductId().equals("P" + id);
+			assert actual.getProductName().equals(storeItems[id]);
+			assert actual.getAmountOrdered().equals(orderAmount[id]);
+			++id;
 		}
-   
+	}
 
 	public void testAll() {
 		testAddMember();
