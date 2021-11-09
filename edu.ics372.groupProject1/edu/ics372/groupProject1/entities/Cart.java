@@ -87,8 +87,18 @@ public class Cart implements Serializable {
 		return cartItems.iterator();
 	}
 
+	/**
+	 * printCartTotal prints the total of all cart items per specified requirements.
+	 * 
+	 * @param N/A
+	 * @return void
+	 * 
+	 */
 	public void printCartTotal() {
-		System.out.println("Total                    $" + df.format(getTotalPrice()));
+		String total = "Grand Total";
+		String totalString = String.format("%30s                      $%6s", total, df.format(getTotalPrice()));
+		System.out.println("___________________________________________________________");
+		System.out.println(totalString);
 	}
 
 }
