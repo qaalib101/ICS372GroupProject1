@@ -9,10 +9,18 @@ public class Transaction implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Calendar date;
 	private double totalPrice;
+	private double transactionTotal;
+	// private String date2; // Possibly remove this second date?
+	GregorianCalendar todaysDate;
 
-	public Transaction(double totalPrice) {
+	public Transaction(int memberID, double transactionTotal) {
 		this.totalPrice = totalPrice;
 		date = new GregorianCalendar();
+		todaysDate.setTime(new Date());
+		transactionTotal = transactionTotal;
+//		this.date1 = date1;
+		// this.date2 = date2;
+		this.id = "T" + ++transactionID;
 	}
 
 	/**

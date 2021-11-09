@@ -35,7 +35,7 @@ public class UserInterface {
 	private static final int RETRIEVE_MEMBER = 3;
 	private static final int ADD_PRODUCT = 4;
 	private static final int CHECKOUT_CART = 5;
-	private static final int RETRIEVE_PRODUCT_INFO = 6;
+	private static final int RETRIEVE_PRODUCT = 6;
 	private static final int PROCESS_SHIPMENT = 7;
 	private static final int CHANGE_PRICE = 8;
 	private static final int PRINT_TRANSACTIONS = 9;
@@ -223,7 +223,7 @@ public class UserInterface {
 		System.out.println(RETRIEVE_MEMBER + " to retrieve a member");
 		System.out.println(ADD_PRODUCT + " to add a product");
 		System.out.println(CHECKOUT_CART + " to checkout a cart");
-		System.out.println(RETRIEVE_PRODUCT_INFO + " to retrieve a product");
+		System.out.println(RETRIEVE_PRODUCT + " to retrieve a product");
 		System.out.println(PROCESS_SHIPMENT + " to process a shipment");
 		System.out.println(CHANGE_PRICE + " to change the price of a product");
 		System.out.println(PRINT_TRANSACTIONS + " to print transactions");
@@ -259,16 +259,19 @@ public class UserInterface {
 			result = store.checkOutProduct(Request.instance());
 			if (result.getResultCode() == Result.OPERATION_COMPLETED) {
 				System.out.println("product checked out");
+			} else if (result.getResultCode() == Result.PRODUCT_NOT_FOUND) {
+				System.out.println("Product not found");
 			} else {
 				System.out.println("Product could not be checked out");
 			}
 		} while (yesOrNo("Check out more products?"));
 
-		store.calculateCartTotalPrice(Request.instance());
+//		store.recoredTransaction(Request.instance());
+		// decided to include recoredTransaction() inside "printCheckout()" method
 		store.printCheckOut(Request.instance());
 
 	}
-  
+
 	/**
 	 * Prompts the user for information that is used to create a member.
 	 */
@@ -388,8 +391,26 @@ public class UserInterface {
 		}
 	}
 
-	private void printTransactions() {
-		// TODO Auto-generated method stub
+	/*
+	 * Prints all transactions for a member within a date range
+	 */
+
+	// PRELIMINARY //Are we utilizing Calendar Objects for Dates or strings?
+	public void printTransactions() {
+//		// String date1, date2;
+//		Request.instance().setMemberId(getToken("Enter member id"));
+//		Request.instance()
+//				.setStartDate(getDate("Please enter the first date for which you want records from mm/dd/yy"));
+//		Request.instance().setEndDate(getDate("Please enter the second date for which you want records to mm/dd/yy"));
+//		Iterator<Result> result = store.getTransactions(Request.instance());
+//		while (result.hasNext()) {
+//			Result transaction = result.next();
+//			System.out.println(transaction.getTransactionDate() + " " + transaction.getTransactionTotalPrice() + "\n");
+//		}
+//		System.out.println("\n End of transactions \n");
+//		// Request.instance().setTransactionDate(getToken("Please enter the first date
+//		// for which you want records as mm/dd/yy"));
+//		//
 	}
 
 	/**
@@ -414,9 +435,9 @@ public class UserInterface {
 		System.out.println("List of Prodcuts (name, id, minimum reorder level)");
 		while (iterator.hasNext()) {
 			Result result = iterator.next();
-			System.out.println(result.getProductName() + " " + result.getProductId() + " " + result.getProductCurrentPrice()
-					+ result.getProductMinimumReorderLevel());
-					
+			System.out.println(result.getProductName() + " " + result.getProductId() + " "
+					+ result.getProductCurrentPrice() + result.getProductMinimumReorderLevel());
+
 		}
 		System.out.println("End of listing");
 	}
@@ -485,7 +506,7 @@ public class UserInterface {
 	 */
 	private void save() {
 		if (store.save()) {
-			System.out.println(" The library has been successfully saved in the file CooperativeData \n");
+			System.out.println(" The Grocery Store has been successfully saved in the file CooperativeData \n");
 		} else {
 			System.out.println(" There has been an error in saving \n");
 		}
@@ -516,7 +537,7 @@ public class UserInterface {
 			case CHECKOUT_CART:
 				checkoutCart();
 				break;
-			case RETRIEVE_PRODUCT_INFO:
+			case RETRIEVE_PRODUCT:
 				retrieveProduct();
 				break;
 			case PROCESS_SHIPMENT:
