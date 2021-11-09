@@ -11,9 +11,11 @@ import java.util.LinkedList;
 import edu.ics372.groupProject1.collections.Inventory;
 import edu.ics372.groupProject1.collections.MemberList;
 import edu.ics372.groupProject1.collections.OrderList;
+import edu.ics372.groupProject1.entities.CartItem;
 import edu.ics372.groupProject1.entities.Member;
 import edu.ics372.groupProject1.entities.Order;
 import edu.ics372.groupProject1.entities.Product;
+import edu.ics372.groupProject1.entities.Transaction;
 import edu.ics372.groupProject1.iterators.SafeMemberIterator;
 import edu.ics372.groupProject1.iterators.SafeOrderIterator;
 import edu.ics372.groupProject1.iterators.SafeProductIterator;
@@ -201,37 +203,115 @@ public class GroceryStore {
 	}
 
 	/*
-	 * To be implemented checkOutProduct
+	 * To be implemented checkOutProduct Checks out product. Adds item to the cart,
+	 * collects the quantity from the cartItem updates the inventory level and if
+	 * necessary reorders the item.
+	 * 
+	 * @param Request
+	 * 
+	 * @return Result
 	 * 
 	 */
+
+	// TODO finish moving interface code to GroceryStore
+	// TODO remove reorderlist and utilize DataTransfer
 	public Result checkOutProduct(Request request) {
 		Result result = new Result();
 		Product product = inventory.search(request.getProductId());
+		String productId = request.getProductId();
+		String memberId = request.getMemberId();
+		Member member = members.search(memberId);
+		Product product = inventory.search(productId);
+
 		if (product == null) {
 			result.setResultCode(Result.PRODUCT_NOT_FOUND);
 			return result;
 
 		} else {
+			int productCartQuantity = Integer.parseInt(request.getProductCartQuantity());
+			CartItem cartItem = new CartItem(product, productCartQuantity);
+			if (!member.getCart().addCartItem(cartItem)) {
+				result.setResultCode(Result.OPERATION_FAILED);
+			}
 			result.setResultCode(Result.OPERATION_COMPLETED);
+			product.decrementQuantity(productCartQuantity);
+			if (product.belowReorderLvL() && orders.search(productId) == null) {
+				member.getCart().addToReorderList(product);
+				Order newOrder = new Order(productId, product.getName(), Integer.parseInt(product.getReorderLevel()));
+				orders.insertOrder(newOrder);
+				StringBuilder productsToReorder = new StringBuilder("");
+				for (int index = 0; index < member.getCart().getReorderList().size(); index++) {
+					productsToReorder.append(member.getCart().getReorderList().get(index).getName() + "\n");
+				}
+				request.setProductsToBeReordered(productsToReorder);
+			}
 		}
-//		result.setBookFields(product);
-//		if (product.getBorrower() != null) {
-//			result.setResultCode(Result.PRODUCT_CHECKED_OUT); //THIS NEED TO BE FOLLOWED UP
-//			return result;
-//		}
-//		Member member = members.search(request.getMemberId());
-//		if (member == null) {
-//			result.setResultCode(Result.NO_SUCH_MEMBER);
-//			return result;
-//		}
-//		result.setMemberFields(member);
-//		if (!(product.issue(member) && member.issue(product))) {
-//			result.setResultCode(Result.OPERATION_FAILED);
-//		} else {
-//			result.setResultCode(Result.OPERATION_COMPLETED);
-//			result.setBookFields(product);
-//		}
 		return result;
+	}
+
+	/*
+	 * Prints cart checkout message, updates cart total, displays what has been
+	 * reordered.
+	 * 
+	 * @param Request
+	 * 
+	 * @return void
+	 * 
+	 */
+	public void printCheckOut(Request request) {
+		String memberId = request.getMemberId();
+		Member member = members.search(memberId);
+		member.getCart().calculateCartTotal(member.getCart().getCartItems());
+		request.setCartTotalPrice(String.valueOf(member.getCart().getTotalPrice()));
+		String productName = "Product Name";
+		String quantity = "Quantity";
+		String unitPrice = "Unit Price";
+		String total = "Total";
+		String header = String.format("%30s %8s %11s   %5s ", productName, quantity, unitPrice, total);
+		String itemDetails = "";
+		System.out.println(header);
+		for (int index = 0; index < member.getCart().getCartItems().size(); index++) {
+			itemDetails = member.getCart().getCartItems().get(index).toString();
+			System.out.println(itemDetails);
+		}
+		member.getCart().printCartTotal();
+		if (request.getProductsToBeReordered().length() != 0) {
+			System.out.println("The product(s), ");
+			System.out.println(Request.instance().getProductsToBeReordered());
+			System.out.println("are to be reordered.");
+		}
+		recoredTransaction(request);
+	}
+
+	public Result retrieveProductInfo(Request request) {
+		Result result = new Result();
+		String productName = request.getProductName();
+		Product product = inventory.searchByName(productName);
+
+		if (product != null) {
+			request.setProductId(product.getId());
+			request.setProductCurrentPrice(product.getPrice());
+			request.setProductQuantity(product.getQuantity());
+			result.setResultCode(Result.OPERATION_COMPLETED);
+		} else {
+			result.setResultCode(Result.PRODUCT_NOT_FOUND);
+		}
+		return result;
+	}
+
+	/**
+	 * Record the transaction to the transaction list
+	 * 
+	 * @param Request
+	 * 
+	 * @return void
+	 */
+	private void recoredTransaction(Request request) {
+		String memberId = request.getMemberId();
+		Member member = members.search(memberId);
+		Transaction transaction = new Transaction(Integer.parseInt(request.getMemberId()),
+				Double.parseDouble(request.getCartTotalPrice()));
+		member.getTransactions().add(transaction);
 	}
 
 	/**
