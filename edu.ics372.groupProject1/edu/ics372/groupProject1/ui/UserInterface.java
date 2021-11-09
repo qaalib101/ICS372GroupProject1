@@ -316,7 +316,7 @@ public class UserInterface {
 	 * @param N/A
 	 * @return void
 	 */
-	private void retrieveProduct() {
+	public void retrieveProduct() {
 		Request.instance().setProductName(getToken("Enter product name"));
 		Result result = store.retrieveProductInfo(Request.instance());
 		switch (result.getResultCode()) {
