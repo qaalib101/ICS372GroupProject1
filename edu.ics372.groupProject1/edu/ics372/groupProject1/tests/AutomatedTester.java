@@ -13,12 +13,10 @@ import edu.ics372.groupProject1.facade.GroceryStore;
 import edu.ics372.groupProject1.ui.UserInterface;
 import edu.ics372.groupProject1.facade.Request;
 
-
 /**
- * This class generates automated tests for the library system using
- * asserts.
+ * This class generates automated tests for the library system using asserts.
  * 
- * @author 
+ * @author
  *
  */
 public class AutomatedTester {
@@ -112,6 +110,9 @@ public class AutomatedTester {
 	 * Tests a list of Members
 	 */
 
+	/**
+	 * Tests a list of Members
+	 */
 	public void testListMembers() {
 		Iterator<Result> testMembers = store.listMembers();
 
@@ -126,7 +127,7 @@ public class AutomatedTester {
 
 		}
 	}
-	
+
 	/**
 	 * Tests a list of Products
 	 */
@@ -147,7 +148,7 @@ public class AutomatedTester {
 		}
 
 	}
-	
+
 	/**
 	 *Test a list of outstanding orders 
 	 */
@@ -171,7 +172,7 @@ public class AutomatedTester {
 			assert expected.getAmountOrdered().equals(actual.getAmountOrdered());
 			i++;
 		}
-   
+
 
 	public void testAll() {
 		testProcessShipment();

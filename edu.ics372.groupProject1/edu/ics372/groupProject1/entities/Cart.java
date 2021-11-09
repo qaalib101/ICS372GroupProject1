@@ -9,7 +9,8 @@ import java.util.List;
 /**
  * @author jquin
  *
- *         Cart Class Holds a list of products to be checked out by the customer
+ *         Cart Class Holds a list of products to be checked out by the
+ *         customer.
  *
  */
 public class Cart implements Serializable {
@@ -26,11 +27,12 @@ public class Cart implements Serializable {
 	}
 
 	/**
-	 * calculateCartTotal Method Calculates and returns the running cart total as
-	 * double.
-	 *
+	 * calculateCartTotal calculates cart total for current cart instance.
+	 * 
+	 * @param List<CartItem>
+	 * @return double
+	 * 
 	 */
-
 	public double calculateCartTotal(List<CartItem> cartItems) {
 
 		this.totalPrice = cartItems.stream().mapToDouble(i -> i.getTotalItemPrice()).sum();

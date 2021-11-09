@@ -39,6 +39,22 @@ public class DataTransfer {
 	 * This sets all fields to "none"
 	 */
 
+	public StringBuilder getProductsToBeReordered() {
+		return productsToBeReordered;
+	}
+
+	public void setProductsToBeReordered(StringBuilder productsToBeReordered) {
+		this.productsToBeReordered = productsToBeReordered;
+	}
+
+	public String getIsProductReordered() {
+		return isProductReordered;
+	}
+
+	public void setIsProductReordered(String isProductReordered) {
+		this.isProductReordered = isProductReordered;
+	}
+
 	public String getCheckoutLineItem() {
 		return checkoutLineItem;
 	}

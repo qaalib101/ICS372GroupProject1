@@ -152,6 +152,10 @@ public class Member implements Serializable {
 		phone = newPhone;
 	}
 
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
+
 	/**
 	 * String form of the member
 	 * 

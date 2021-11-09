@@ -1,14 +1,33 @@
 package edu.ics372.groupProject1.entities;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class Transaction implements Serializable {
 	// Instance variables
 	private static final long serialVersionUID = 1L;
-	private Calendar date;
-	private double totalPrice;
+	private int memberID;
+	private String date1;
+	private double transactionTotal;
+	GregorianCalendar todaysDate;
+	private String id;
+	private static int transactionID;
+
+	// Basic constructor method
+	public Transaction(int memberID, double transactionTotal) {
+		this.memberID = memberID;
+		todaysDate.setTime(new Date());
+		transactionTotal = transactionTotal;
+		this.id = "T" + ++transactionID;
+	}
+
+	public void printTransaction() {
+		// NOTE: A user may visit the store more then one times in a single day
+		// print date on which the user visit for each visit
+		// print the total price paid for each visit
+		System.out.println("\nTransaction\n");
+	}
 
 	public Transaction(double totalPrice) {
 		this.totalPrice = totalPrice;
@@ -44,17 +63,28 @@ public class Transaction implements Serializable {
 		return date.get(Calendar.MONTH) + "/" + date.get(Calendar.DATE) + "/" + date.get(Calendar.YEAR);
 	}
 
-	// Getter & Setter plus toString() methods
-	public String getTotalPrice() {
-		return "TotalPrice: " + totalPrice;
+	public GregorianCalendar getTodaysDate() {
+		return todaysDate;
 	}
 
-	public String getDate() {
-		return date.get(Calendar.MONTH) + "/" + date.get(Calendar.DATE) + "/" + date.get(Calendar.YEAR);
+	public double getTransactionTotal() {
+		return transactionTotal;
 	}
+//	public String getDate2() {
+//		return date2;
+//	}
 
+//	public void setDate2(String date2) {
+//		this.date2 = date2;
+//	}
+
+	// commented out date2 for toString
 	@Override
 	public String toString() {
-		return "Transaction [totalPrice: " + totalPrice + ", date=" + date + "]";
+		return "Transaction [memberID=" + memberID + ", date1=" + date1 + "]";
+	}
+
+	public static void save(ObjectOutputStream output) throws IOException {
+		output.writeObject(transactionID);
 	}
 }
