@@ -241,7 +241,7 @@ public class UserInterface {
 		Request.instance().setMemberAddress(getToken("Please enter the member's address: "));
 		Request.instance().setMemberPhone(getToken("Please enter the member's phone number (no formatting): "));
 		Request.instance().setDate(getDate("Please enter the current date (mm/dd/yyyy): "));
-		Request.instance().setMemberFee(getDoubleNumber("Please enter the fee paid: "));
+		Request.instance().setMemberFee(Double.toString(getDoubleNumber("Please enter the fee paid: ")));
 		Result result = store.enrollMember(Request.instance());
 		if (result.getResultCode() == Result.OPERATION_COMPLETED) {
 			System.out.println("Member successfully created.");
@@ -280,7 +280,7 @@ public class UserInterface {
 
 	private void addProduct() {
 		Request.instance().setProductName(getName("Please enter the product name: "));
-		Request.instance().setProductCurrentPrice(Double.toString(getDoubleNumber("Please enter the price: ")));
+		Request.instance().setProductPrice(Double.toString(getDoubleNumber("Please enter the price: ")));
 		Request.instance().setProductMinimumReorderLevel(
 				Integer.toString(getNumber("Please enter the product's minimum reorder level: ")));
 		Result result = store.addProduct(Request.instance());
@@ -339,7 +339,7 @@ public class UserInterface {
 			break;
 		case Result.OPERATION_COMPLETED:
 			System.out.println("ProductID: " + Request.instance().getProductId() + " Product Unit Price: "
-					+ Request.instance().getProductCurrentPrice() + " Product Inventory Level: "
+					+ Request.instance().getProductPrice() + " Product Inventory Level: "
 					+ Request.instance().getProductQuantity());
 		}
 	}
@@ -385,7 +385,7 @@ public class UserInterface {
 	 */
 	public void changePrice() {
 		Request.instance().setProductId(getToken("Enter product Id: "));
-		Request.instance().setProductCurrentPrice(
+		Request.instance().setProductPrice(
 				decimalFormat.format(getDoubleNumber("Enter new product price (with two ending decimal places): ")));
 		Result result = store.changePrice(Request.instance());
 		switch (result.getResultCode()) {
@@ -396,8 +396,7 @@ public class UserInterface {
 			System.out.println("Changing price failed for product with id " + Request.instance().getProductId());
 			break;
 		case Result.OPERATION_COMPLETED:
-			System.out
-					.println("Changed price of " + result.getProductName() + " to $" + result.getProductCurrentPrice());
+			System.out.println("Changed price of " + result.getProductName() + " to $" + result.getProductPrice());
 			break;
 		}
 	}
@@ -424,8 +423,8 @@ public class UserInterface {
 		System.out.println("List of Prodcuts (name, id, minimum reorder level)");
 		while (iterator.hasNext()) {
 			Result result = iterator.next();
-			System.out.println(result.getProductName() + " " + result.getProductId() + " "
-					+ result.getProductCurrentPrice() + result.getProductMinimumReorderLevel());
+			System.out.println(result.getProductName() + " " + result.getProductId() + " " + result.getProductPrice()
+					+ result.getProductMinimumReorderLevel());
 
 		}
 		System.out.println("End of listing");
@@ -455,7 +454,7 @@ public class UserInterface {
 		Request.instance()
 				.setStartDate(getDate("Please enter the first date for which you want records from mm/dd/yy"));
 		Request.instance().setEndDate(getDate("Please enter the second date for which you want records to mm/dd/yy"));
-		Iterator<Result> result = store.getTransactions(Request.instance());
+		Iterator<Result> result = store.printTransactions(Request.instance());
 		System.out.println("List of transactions:");
 		while (result.hasNext()) {
 			Result transaction = result.next();

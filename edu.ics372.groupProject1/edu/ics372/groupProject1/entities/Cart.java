@@ -7,8 +7,7 @@ import java.util.List;
 
 /**
  *
- *         Cart Class Holds a list of products to be checked out by the
- *         customer.
+ * Cart Class Holds a list of products to be checked out by the customer.
  *
  * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
  * 
@@ -39,10 +38,6 @@ public class Cart implements Serializable {
 		return totalPrice;
 	}
 
-	public double getTotalPrice() {
-		return totalPrice;
-	}
-
 	/**
 	 * @author jquin
 	 * 
@@ -70,28 +65,6 @@ public class Cart implements Serializable {
 		} catch (Exception e) {
 			return false;
 		}
-	}
-
-	public List<Product> getReorderList() {
-		return reorderList;
-	}
-
-	/**
-	 * addToReorderList Method Adds Products that have been checked out that have
-	 * broken the reorder threshold.
-	 * 
-	 * @param Product
-	 * @return boolean
-	 *
-	 */
-	public boolean addToReorderList(Product product) {
-		try {
-			reorderList.add(product);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
-
 	}
 
 	/**

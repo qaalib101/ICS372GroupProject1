@@ -1,5 +1,9 @@
 package edu.ics372.groupProject1.facade;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import edu.ics372.groupProject1.entities.Cart;
 import edu.ics372.groupProject1.entities.Member;
 import edu.ics372.groupProject1.entities.Order;
@@ -30,7 +34,7 @@ public class DataTransfer {
 	private String orderProductName;
 	private String orderProductId;
 	private String amountOrdered;
-	private String transactionDate;
+	private Calendar transactionDate;
 	private String transactionTotalPrice;
 	private String productCartQuantity;
 	private String cartTotalPrice;
@@ -198,9 +202,8 @@ public class DataTransfer {
 	public void setOrderFields(Order order) {
 		orderProductId = order.getProductId();
 		orderProductName = order.getProductName();
-		amountOrdered = order.getAmount();
+		amountOrdered = order.getAmountOrdered();
 	}
-
 
 	public String getTransactionTotalPrice() {
 		return transactionTotalPrice;
@@ -211,10 +214,11 @@ public class DataTransfer {
 	}
 
 	public String getTransactionDate() {
-		return transactionDate;
+		DateFormat dateFormat = new SimpleDateFormat("mm/dd/yyyy");
+		return dateFormat.format(transactionDate);
 	}
 
-	public void setTransactionDate(String calendar) {
+	public void setTransactionDate(Calendar calendar) {
 		this.transactionDate = calendar;
 	}
 
@@ -226,48 +230,8 @@ public class DataTransfer {
 	 */
 
 	public void setTransactionFields(Transaction transaction) {
-		setTransactionDate(transaction.getTodaysDate());
-		setTransactionTotalPrice(Double.toString(transaction.getTransactionTotal()));
-	}
-
-	public StringBuilder getProductsToBeReordered() {
-		return productsToBeReordered;
-	}
-
-	public void setProductsToBeReordered(StringBuilder productsToBeReordered) {
-		this.productsToBeReordered = productsToBeReordered;
-	}
-
-	public String getIsProductReordered() {
-		return isProductReordered;
-	}
-
-	public void setIsProductReordered(String isProductReordered) {
-		this.isProductReordered = isProductReordered;
-	}
-
-	public String getCheckoutLineItem() {
-		return checkoutLineItem;
-	}
-
-	public void setCheckoutLineItem(String checkoutLineItem) {
-		this.checkoutLineItem = checkoutLineItem;
-	}
-
-	public String getCartTotalPrice() {
-		return cartTotalPrice;
-	}
-
-	public void setCartTotalPrice(String cartTotalPrice) {
-		this.cartTotalPrice = cartTotalPrice;
-	}
-
-	public String getProductCartQuantity() {
-		return productCartQuantity;
-	}
-
-	public void setProductCartQuantity(String productCartQuantity) {
-		this.productCartQuantity = productCartQuantity;
+		setTransactionDate(transaction.returnDate());
+		setTransactionTotalPrice(transaction.getTotalPrice());
 	}
 
 	/*
@@ -337,4 +301,3 @@ public class DataTransfer {
 	}
 
 }
-

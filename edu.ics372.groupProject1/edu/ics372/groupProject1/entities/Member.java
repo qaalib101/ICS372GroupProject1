@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -60,11 +61,9 @@ public class Member implements Serializable {
 		return cart;
 	}
 
-
 	public List<Transaction> transactionList() {
 		return this.transactions;
 	}
-
 
 	/**
 	 * Gets an iterator to a collection of selected transactions
@@ -109,7 +108,7 @@ public class Member implements Serializable {
 
 	public void addTransaction(Transaction transaction) {
 		transactions.add(transaction);
-
+	}
 
 	public List<Transaction> getTransactions() {
 		return transactions;
@@ -197,13 +196,13 @@ public class Member implements Serializable {
 	public void setPhone(String newPhone) {
 		phone = newPhone;
 	}
-	
+
 	/**
 	 * Setter for date
 	 * 
 	 * @param newName member's new address
 	 */
-	public void setDate(String newDate) {
+	public void setDate(Calendar newDate) {
 		date = newDate;
 	}
 

@@ -105,8 +105,8 @@ public class GroceryStore {
 	 */
 	public Result addProduct(Request request) {
 		Result result = new Result();
-		Double price = Double.valueOf(request.getProductCurrentPrice());
-		int reorderLevel = Integer.parseInt(request.getProductMinimumReorderLevel());
+		Double price = Double.valueOf(request.getProductPrice());
+		int reorderLevel = request.getProductMinimumReorderLevel();
 		Product newProduct = new Product(request.getProductName(), price, reorderLevel);
 		if (inventory.insertProduct(newProduct)) {
 			result.setResultCode(Result.OPERATION_COMPLETED);
@@ -119,7 +119,7 @@ public class GroceryStore {
 		return result;
 	}
 
-  public Result retrieveMember(Request request) {
+	public Result retrieveMember(Request request) {
 		Result result = new Result();
 		Member member = members.searchByName(request.getMemberName());
 		if (member != null) {
@@ -130,8 +130,8 @@ public class GroceryStore {
 		}
 		return result;
 	}
-	
-  /*
+
+	/*
 	 * Checks out product. Adds item to the cart, collects the quantity from the
 	 * cartItem updates the inventory level and if necessary reorders the item.
 	 * 
@@ -145,6 +145,8 @@ public class GroceryStore {
 		String productId = request.getProductId();
 		String memberId = request.getMemberId();
 		Member member = members.search(memberId);
+		String productName = request.getProductName();
+		Product product = inventory.searchByName(productName);
 		if (product == null) {
 			result.setResultCode(Result.PRODUCT_NOT_FOUND);
 			return result;
@@ -214,8 +216,7 @@ public class GroceryStore {
 	private void recoredTransaction(Request request) {
 		String memberId = request.getMemberId();
 		Member member = members.search(memberId);
-		Transaction transaction = new Transaction(Integer.parseInt(request.getMemberId()),
-				Double.parseDouble(request.getCartTotalPrice()));
+		Transaction transaction = new Transaction(Double.parseDouble(request.getCartTotalPrice()));
 		member.transactionList().add(transaction);
 	}
 
@@ -233,7 +234,7 @@ public class GroceryStore {
 
 		if (product != null) {
 			request.setProductId(product.getId());
-			request.setProductCurrentPrice(product.getPrice());
+			request.setProductPrice(product.getPrice());
 			request.setProductQuantity(product.getQuantity());
 			result.setResultCode(Result.OPERATION_COMPLETED);
 		} else {
@@ -283,7 +284,7 @@ public class GroceryStore {
 			result.setResultCode(Result.PRODUCT_NOT_FOUND);
 			return result;
 		}
-		if (product.changePrice(request.getProductCurrentPrice())) {
+		if (product.changePrice(Double.toString(request.getProductPrice()))) {
 			result.setResultCode(Result.OPERATION_COMPLETED);
 			result.setProductFields(product);
 		} else {
@@ -346,7 +347,7 @@ public class GroceryStore {
 			FileInputStream file = new FileInputStream("GroceryStoreData");
 			ObjectInputStream input = new ObjectInputStream(file);
 			store = (GroceryStore) input.readObject();
-//			Member.retrieve(input);
+			Member.retrieve(input);
 			return store;
 		} catch (IOException ioe) {
 			ioe.printStackTrace();

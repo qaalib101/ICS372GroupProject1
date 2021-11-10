@@ -36,7 +36,7 @@ public class SafeOrderIterator implements Iterator<Result> {
 	@Override
 	public Result next() {
 		if (iterator.hasNext()) {
-			result.setOrderField(iterator.next());
+			result.setOrderFields(iterator.next());
 		} else {
 			throw new NoSuchElementException("No such element");
 		}
