@@ -96,7 +96,7 @@ public class TestBed {
 		for (int count = 0; count < products.length; count++) {
 			Request.instance().setProductPrice(Double.toString(price[count]));
 			Request.instance().setProductName(storeItems[count]);
-			Request.instance().setProductMinimumReorderLevel(ids[count]);
+			Request.instance().setProductMinimumReorderLevel(Integer.toString(reorderLevel[count]));
 			Result result = GroceryStore.instance().addProduct(Request.instance());
 			assert result.getResultCode() == Result.OPERATION_COMPLETED;
 			assert result.getProductName().equals(storeItems[count]);
@@ -112,7 +112,14 @@ public class TestBed {
 
 	private void TestProcessShipment() {
 		// TODO Auto-generated method stub
-
+		for (int count = 0; count < products.length; count++) {
+			Request.instance().setProductId("P" + ++count);
+			Result result = GroceryStore.instance().processShipment(Request.instance());
+			assert result.getResultCode() == Result.OPERATION_COMPLETED;
+			assert result.getProductName().equals(storeItems[count]);
+			assert result.getProductPrice().equals(price[count]);
+			assert result.getProductQuantity().equals(Double.toString(2 * result.getProductMinimumReorderLevel()));
+		}
 	}
 
 	private void TestPrintTransactions() {
