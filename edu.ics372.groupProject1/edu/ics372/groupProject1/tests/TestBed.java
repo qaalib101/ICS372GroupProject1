@@ -5,6 +5,7 @@ import edu.ics372.groupProject1.entities.Product;
 import edu.ics372.groupProject1.facade.GroceryStore;
 import edu.ics372.groupProject1.facade.Request;
 import edu.ics372.groupProject1.facade.Result;
+import edu.ics372.groupProject1.ui.UserInterface;
 
 /**
  * This class generates automated tests for the library system using asserts.
@@ -15,10 +16,10 @@ import edu.ics372.groupProject1.facade.Result;
 public class TestBed {
 	private GroceryStore store;
 	private UserInterface UI;
-	private int[] months = { 2, 1, 2, 1, 9 };
-	private int[] days = { 1, 22, 22, 1, 21 };
-	private int[] years = { 1955, 2005, 1926, 2001, 1311 };
-	private Calendar[] dates = new GregorianCalendar[5];
+//	private int[] months = { 2, 1, 2, 1, 9 };
+//	private int[] days = { 1, 22, 22, 1, 21 };
+//	private int[] years = { 1955, 2005, 1926, 2001, 1311 };
+//	private Calendar[] dates = new GregorianCalendar[5];
 	private String[] names = { "name1", "name2", "name3", "name4", "name5" };
 	private String[] addresses = { "address1", "address2", "address3", "address4", "address5" };
 	private String[] phones = { "phone1", "phone2", "phone3", "phone4", "phone5" };
@@ -31,20 +32,21 @@ public class TestBed {
 	private int[] reorderLevel = { 20, 20, 20, 20, 20, 30, 15, 15, 15, 10, 10, 15, 20, 20, 15, 16, 25, 14, 30, 15 };
 	private Product[] products = new Product[20];
 	private String[] ids = { "id1", "id2", "id3", "id4", "id5", "id6" };
+//	private Cart[] cart = new Cart[6];
 
 	public void GeneratateTestData() {
 		// create dates
-		for (int index = 0; index < years.length; index++) {
-			Calendar date = new GregorianCalendar(years[index], months[index], days[index]);
-			dates[index] = date;
-		}
+//		for (int index = 0; index < years.length; index++) {
+//			Calendar date = new GregorianCalendar(years[index], months[index], days[index]);
+//			dates[index] = date;
+//		}
 
 		// create members
-		store.addMember("Solaire", "1271 Walton St. Saint Paul, MN,55668", "1234567788", dates[0], 0);
-		store.addMember("Gwyndolin", "123 Easy St. NewYork, NY, 11225", "1234568855", dates[1], 0);
-		store.addMember("Andre", "123 Walketon Ave. Stockton, NJ, 44589", "5564498756", dates[2], 0);
-		store.addMember("Yuria", "456 Shelly Ave., CastleVania, KS, 11122", "5556668888", dates[3], 0);
-		store.addMember("Eldritch", "000 Irithyll lane, Irithyll, AK, 00000", "0000001111", dates[4], 0);
+//		store.addMember("Solaire", "1271 Walton St. Saint Paul, MN,55668", "1234567788", dates[0], 0);
+//		store.addMember("Gwyndolin", "123 Easy St. NewYork, NY, 11225", "1234568855", dates[1], 0);
+//		store.addMember("Andre", "123 Walketon Ave. Stockton, NJ, 44589", "5564498756", dates[2], 0);
+//		store.addMember("Yuria", "456 Shelly Ave., CastleVania, KS, 11122", "5556668888", dates[3], 0);
+//		store.addMember("Eldritch", "000 Irithyll lane, Irithyll, AK, 00000", "0000001111", dates[4], 0);
 
 		// create Products
 		store.addProduct("Milk", 3.75, 20);
@@ -85,9 +87,6 @@ public class TestBed {
 		}
 	}
 
-	/**
-	* Tests Product creation.
-	*/
 	public void TestAddProduct() {
 		for (int count = 0; count < products.length; count++) {
 			Request.instance().setProductCurrentPrice(price[count]);
@@ -104,6 +103,7 @@ public class TestBed {
 	private void TestCheckOutCart() {
 		GeneratateTestData();
 		UI.retrieveProduct();
+		UI.checkoutCart();
 	}
 
 	private void TestProcessShipment() {
@@ -123,8 +123,9 @@ public class TestBed {
 		TestPrintTransactions();
 	}
 
-	public static void main(String[] args) {
+	public static void generateTestBed() {
+		// TODO Auto-generated method stub
 
-		new TestBed().TestAll();
+		TestAll();
 	}
 }
