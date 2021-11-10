@@ -445,7 +445,7 @@ public class UserInterface {
 	 * Prints all transactions for a member within a date range
 	 */
 
-	public void getTransactions() {
+	public void printTransactions() {
 		// String date1, date2;
 		Request.instance().setMemberId(getToken("Enter member id"));
 		Request.instance()
