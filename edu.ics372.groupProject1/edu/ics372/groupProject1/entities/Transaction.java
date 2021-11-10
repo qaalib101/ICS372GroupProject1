@@ -14,36 +14,22 @@ import java.util.GregorianCalendar;
  *
  */
 public class Transaction implements Serializable {
-	/*
-	 * Instance variables
-	 */
-
+	// Instance variables
 	private static final long serialVersionUID = 1L;
 	private Calendar date;
 	private double totalPrice;
-
-	/*
-	 * Constructor class
-	 *
-	 * @param totalPrice is the totalPrice of the Transaction The variable
-	 * totalPrice is assigned by the @param, and date is assigned to the date that
-	 * Transaction was constructed
-	 */
 
 	public Transaction(double totalPrice) {
 		this.totalPrice = totalPrice;
 		date = new GregorianCalendar();
 	}
 
-	/*
-	 * Checks whether this transaction is within an acceptable date range
+	/**
+	 * Checks whether a transaction is within an acceptable date range
 	 * 
-	 * @param startDate which is the start date of the date range
-	 * 
-	 * @param endDate which is the end date of the date range
-	 * 
-	 * @return true if startDate is before endDate and endDate is after startDate
-	 * and startDate is equal to endDate
+	 * @param startDate the start date of the date range
+	 * @param endDate   the end date of the date range
+	 * @return true if startDate is before endDate
 	 */
 	public boolean datesInRange(Calendar startDate, Calendar endDate) {
 		int year1 = startDate.get(Calendar.YEAR);
@@ -61,36 +47,25 @@ public class Transaction implements Serializable {
 		}
 		return false;
 	}
-	/*
+
+	/**
 	 * Returns the total price of the Transaction as a string
 	 * 
 	 * @return totalPrice
 	 */
-
 	public String getTotalPrice() {
 		return "Total Price: " + totalPrice;
 	}
 
-	/*
+	/**
 	 * Returns the date of the Transaction as a Calendar type
 	 * 
 	 * @return date as a calendar
 	 */
-
 	public Calendar returnDate() {
 		return date;
 	}
 
-	public void printTransaction() {
-		// NOTE: A user may visit the store more then one times in a single day
-		// print date on which the user visit for each visit
-		// print the total price paid for each visit
-		System.out.println("\nTransaction\n");
-	}
-
-	/*
-	 * Returns a string description about the Transaction
-	 */
 	@Override
 	public String toString() {
 		return "Transaction [totalPrice:=" + totalPrice + ", date=" + date + "]";

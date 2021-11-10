@@ -278,6 +278,10 @@ public class UserInterface {
 		}
 	}
 
+	/**
+	 * Adds a product to the store. When a product is added, an order is made for
+	 * twice the product's reorder level.
+	 */
 	private void addProduct() {
 		Request.instance().setProductName(getName("Please enter the product name: "));
 		Request.instance().setProductPrice(Double.toString(getDoubleNumber("Please enter the price: ")));
@@ -297,9 +301,6 @@ public class UserInterface {
 	 * successful checkout requests if more products to be checked out. When
 	 * completed prints a list of all products checked out with product name, price,
 	 * quantity and total.
-	 * 
-	 * @param N/A
-	 * @return void
 	 */
 	public void checkoutCart() {
 		Request.instance().setMemberId(getToken("Enter member id:"));
@@ -326,9 +327,6 @@ public class UserInterface {
 
 	/**
 	 * Retrieves the requested product by given name.
-	 * 
-	 * @param N/A
-	 * @return void
 	 */
 	public void retrieveProduct() {
 		Request.instance().setProductName(getToken("Enter product name:"));
@@ -416,7 +414,7 @@ public class UserInterface {
 	}
 
 	/**
-	 * Gets and prints all products.
+	 * Gets and prints all products
 	 */
 	public void listProducts() {
 		Iterator<Result> iterator = store.listProducts();
@@ -445,10 +443,9 @@ public class UserInterface {
 		System.out.println("End of listing");
 	}
 
-	/*
+	/**
 	 * Prints all transactions for a member within a date range
 	 */
-
 	public void printTransactions() {
 		Request.instance().setMemberId(getToken("Enter member id"));
 		Request.instance()
@@ -461,15 +458,11 @@ public class UserInterface {
 			System.out.println(transaction.getTransactionDate() + " " + transaction.getTransactionTotalPrice() + "\n");
 		}
 		System.out.println("\n End of transactions \n");
-		// Request.instance().setTransactionDate(getToken("Please enter the first date
-		// for which you want records as mm/dd/yy"));
-		//
 	}
 
 	/**
 	 * Method to be called for retrieving saved data. Uses the appropriate
 	 * Cooperative method for retrieval.
-	 * 
 	 */
 	private void retrieve() {
 		try {
@@ -490,7 +483,6 @@ public class UserInterface {
 	/**
 	 * Method to be called for saving the coop object. Uses the appropriate
 	 * Cooperative method for saving.
-	 * 
 	 */
 	private void save() {
 		if (store.save()) {
@@ -503,7 +495,6 @@ public class UserInterface {
 	/**
 	 * Orchestrates the whole process. Calls the appropriate method for the
 	 * different functionalities.
-	 * 
 	 */
 	public void process() {
 		int command;

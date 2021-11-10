@@ -26,11 +26,10 @@ public class Cart implements Serializable {
 	}
 
 	/**
-	 * calculateCartTotal calculates cart total for current cart instance.
+	 * calculateCartTotal calculates cart total for current cart instance
 	 * 
 	 * @param List<CartItem>
-	 * @return double
-	 * 
+	 * @return the total price of all items in the cart
 	 */
 	public double calculateCartTotal(List<CartItem> cartItems) {
 
@@ -39,23 +38,19 @@ public class Cart implements Serializable {
 	}
 
 	/**
-	 * @author jquin
+	 * Returns the totalPrice field
 	 * 
-	 *         getTotalPrice. Returns the totalPrice field.
-	 * 
-	 * @param N/A
-	 * @return double
-	 * 
+	 * @return totalPrice
 	 */
 	public double getTotalPrice() {
 		return totalPrice;
 	}
 
 	/**
-	 * addCartItem method adds CartItem to the Cart ArrayList
+	 * adds CartItem to the Cart ArrayList
 	 *
-	 * @param CartItem
-	 * @return boolean
+	 * @param CartItem the item to be added to the cart
+	 * @return true if the item was added to the cart
 	 *
 	 */
 	public boolean addCartItem(CartItem cartItem) {
@@ -68,25 +63,20 @@ public class Cart implements Serializable {
 	}
 
 	/**
-	 * @author jquin
+	 * Returns the list of products to be reordered after the checkout is complete.
 	 * 
-	 *         getReorderList. Returns the list of products to be reordered after
-	 *         checkout complete.
-	 * 
-	 * @param N/A
-	 * @return List<Product>
-	 * 
+	 * @return reorderList
 	 */
 	public List<Product> getReorderList() {
 		return reorderList;
 	}
 
 	/**
-	 * addToReorderList Method Adds Products that have been checked out that have
-	 * broken the reorder threshold.
+	 * Adds a product to reorderList when its amount is less than its minimum
+	 * reorder level.
 	 * 
-	 * @param Product
-	 * @return boolean
+	 * @param product the product being added to reorderList
+	 * @return true if the product has been added to the list
 	 *
 	 */
 	public boolean addToReorderList(Product product) {
@@ -101,6 +91,8 @@ public class Cart implements Serializable {
 
 	/**
 	 * getCartItems Method return a list of all the items in the cart.
+	 * 
+	 * @return cartItems
 	 *
 	 */
 	public List<CartItem> getCartItems() {
@@ -108,11 +100,7 @@ public class Cart implements Serializable {
 	}
 
 	/**
-	 * printCartTotal prints the total of all cart items per specified requirements.
-	 * 
-	 * @param N/A
-	 * @return void
-	 * 
+	 * Prints the total of all cart items per specified requirements.
 	 */
 	public void printCartTotal() {
 		String total = "Grand Total";

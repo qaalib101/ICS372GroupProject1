@@ -22,7 +22,6 @@ import edu.ics372.groupProject1.iterators.SafeTransactionIterator;
  * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
  *
  */
-
 public class Member implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
@@ -36,7 +35,7 @@ public class Member implements Serializable {
 	private Cart cart;
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("mm/dd/yyyy");
 
-	private List<Transaction> transactions = new LinkedList<Transaction>(); // make "List" Class for generics
+	private List<Transaction> transactions = new LinkedList<Transaction>();
 
 	/**
 	 * Creates a single member
@@ -57,39 +56,48 @@ public class Member implements Serializable {
 		id = MEMBER_STRING + ++idCounter;
 	}
 
+	/**
+	 * returns a member's cart
+	 * 
+	 * @return cart
+	 */
 	public Cart getCart() {
 		return cart;
 	}
 
+	/**
+	 * Returns a list of all the member's transactions
+	 * 
+	 * @return transactions
+	 */
 	public List<Transaction> transactionList() {
 		return this.transactions;
 	}
 
 	/**
-	 * Gets an iterator to a collection of selected transactions
+	 * Returns an iterator for transactions between a start date and end date
 	 * 
-	 * @param date the date for which the transactions have to be retrieved
-	 * @return the iterator to the collection
+	 * @param startDate
+	 * @param endDate
+	 * @return a safe transaction iterator
 	 */
 	public Iterator<Result> getTransactionsBetweenDates(Calendar startDate, Calendar endDate) {
 		return new SafeTransactionIterator(new FilteredIterator(getTransactionsInRange(startDate, endDate),
 				transaction -> transaction.datesInRange(startDate, endDate)));
 	}
 
-	/*
+	/**
 	 * Returns a list of transactions within the start and end date range
 	 * 
 	 * @param startDate
-	 * 
 	 * @param endDate
-	 * 
 	 * @return Iterator<Transaction>
 	 */
 	public Iterator<Transaction> getTransactionsInRange(Calendar startDate, Calendar endDate) {
 		List<Transaction> subTransactionsList = new LinkedList<Transaction>();
 		for (int index = 0; index < transactions.size(); index++) {
 			Transaction transaction = transactions.get(index);
-			// if transaction date is in range of given startDate and endDate, then add to
+			// if transaction date is in range of given startDate and endDate, then add
 			if (transaction.datesInRange(startDate, transaction.returnDate())
 					&& transaction.datesInRange(transaction.returnDate(), endDate)) {
 				subTransactionsList.add(transaction);
@@ -98,18 +106,20 @@ public class Member implements Serializable {
 		return subTransactionsList.iterator();
 	}
 
-	/*
+	/**
 	 * Adds a given transaction to the transactions list
 	 * 
 	 * @param transaction that is added to transaction list
-	 * 
-	 * @return void
 	 */
-
 	public void addTransaction(Transaction transaction) {
 		transactions.add(transaction);
 	}
 
+	/**
+	 * returns a list of transactions
+	 * 
+	 * @return transactions
+	 */
 	public List<Transaction> getTransactions() {
 		return transactions;
 
@@ -148,7 +158,7 @@ public class Member implements Serializable {
 	 * @return date joined
 	 */
 	public String getDate() {
-		return date.get(Calendar.MONTH) + "/" + date.get(Calendar.DATE) + "/" + date.get(Calendar.YEAR);
+		return dateFormat.format(date);
 	}
 
 	/**
@@ -215,10 +225,6 @@ public class Member implements Serializable {
 		fee = newFee;
 	}
 
-	/**
-	 * String form of the member
-	 * 
-	 */
 	@Override
 	public String toString() {
 		String string = "Member name: " + name + "\naddress: " + address + "\nphone number: " + phone
@@ -233,13 +239,6 @@ public class Member implements Serializable {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-
-	/**
-	 * Checks whether the member is equal to the one supplied
-	 * 
-	 * @param object the member who should be compared
-	 * @return true iff the member ids match
-	 */
 
 	@Override
 	public boolean equals(Object object) {
