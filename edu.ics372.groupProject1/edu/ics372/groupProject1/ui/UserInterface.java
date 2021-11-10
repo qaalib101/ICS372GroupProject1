@@ -276,7 +276,7 @@ public class UserInterface {
 			System.out.println("Address: " + result.getMemberAddress() + "\nFee: " + result.getMemberFee() + "\nId: "
 					+ result.getMemberId());
 		}
-	}  
+	}
 
 	private void addProduct() {
 		Request.instance().setProductName(getName("Please enter the product name: "));
@@ -400,15 +400,6 @@ public class UserInterface {
 					.println("Changed price of " + result.getProductName() + " to $" + result.getProductCurrentPrice());
 			break;
 		}
-	}
-
-	/*
-	 * Prints all transactions for a member within a date range
-	 */
-
-	// PRELIMINARY //Are we utilizing Calendar Objects for Dates or strings?
-	public void printTransactions() {
-
 	}
 
 	/**
