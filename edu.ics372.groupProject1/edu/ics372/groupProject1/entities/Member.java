@@ -6,7 +6,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
-
 public class Member implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
@@ -17,7 +16,8 @@ public class Member implements Serializable {
 	private String id;
 	private static final String MEMBER_STRING = "M";
 	private static int idCounter;
-	private List<Transaction> transactions = new LinkedList<Transaction>();
+	private Cart cart;
+	private List<Transaction> transactions = new LinkedList<Transaction>(); // make "List" Class for generics
 
 	/**
 	 * Creates a single member
@@ -34,9 +34,14 @@ public class Member implements Serializable {
 		this.phone = phone;
 		this.date = date;
 		this.fee = fee;
+		this.cart = new Cart();
 		id = MEMBER_STRING + ++idCounter;
 	}
-	
+
+	public Cart getCart() {
+		return cart;
+	}
+
 	/**
 	 * Gets an iterator to a collection of selected transactions
 	 * 
@@ -47,12 +52,14 @@ public class Member implements Serializable {
 		return new SafeTransactionIterator(new FilteredIterator(getTransactionsInRange(startDate, endDate),
 				transaction -> transaction.datesInRange(startDate, endDate)));
 	}
-	
+
 	/*
 	 * Returns a list of transactions within the start and end date range
 	 * 
 	 * @param startDate
+	 * 
 	 * @param endDate
+	 * 
 	 * @return Iterator<Transaction>
 	 */
 	public Iterator<Transaction> getTransactionsInRange(Calendar startDate, Calendar endDate) {
@@ -72,6 +79,7 @@ public class Member implements Serializable {
 	 * Adds a given transaction to the transactions list
 	 * 
 	 * @param transaction that is added to transaction list
+	 * 
 	 * @return void
 	 */
 	public void addTransaction(Transaction transaction) {
@@ -119,8 +127,9 @@ public class Member implements Serializable {
 	 * 
 	 * @return fee
 	 */
-	public double getFee() {
-		return fee;
+	public String getFee() {
+		DecimalFormat df = new DecimalFormat("#.00");
+		return df.format(fee);
 	}
 
 	/**
@@ -157,6 +166,24 @@ public class Member implements Serializable {
 	 */
 	public void setPhone(String newPhone) {
 		phone = newPhone;
+	}
+	
+	/**
+	 * Setter for date
+	 * 
+	 * @param newName member's new address
+	 */
+	public void setDate(String newDate) {
+		date = newDate;
+	}
+
+	/**
+	 * Setter for phone
+	 * 
+	 * @param newName member's new phone
+	 */
+	public void setFee(Double newFee) {
+		fee = newFee;
 	}
 
 	/**
