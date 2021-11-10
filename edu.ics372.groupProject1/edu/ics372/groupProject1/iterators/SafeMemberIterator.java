@@ -12,7 +12,7 @@ import edu.ics372.groupProject1.facade.Result;
  * of Member objects. The user should supply an iterator to Member as the
  * parameter to the constructor.
  * 
- * @author qaali
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
  *
  */
 public class SafeMemberIterator implements Iterator<Result> {

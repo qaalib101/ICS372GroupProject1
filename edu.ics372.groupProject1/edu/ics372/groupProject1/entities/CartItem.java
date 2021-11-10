@@ -3,11 +3,11 @@ package edu.ics372.groupProject1.entities;
 import java.text.DecimalFormat;
 
 /**
- * @author jquin
  * 
- *         CartItem class holds data regarding the current checkout instance.
+ * CartItem class holds data regarding the current checkout instance.
  * 
- * 
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
+ *
  */
 public class CartItem {
 

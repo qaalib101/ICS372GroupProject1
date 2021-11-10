@@ -11,7 +11,7 @@ import edu.ics372.groupProject1.facade.Result;
  * of Product objects. The user should supply an iterator to Product as the
  * parameter to the constructor.
  * 
- * @author Qaalib Farah
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
  *
  */
 public class SafeProductIterator implements Iterator<Result> {

@@ -11,7 +11,7 @@ import edu.ics372.groupProject1.entities.Transaction;
  * satisfy a certain predicate.
  * 
  * 
- * @author qaali
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
  *
  */
 public class FilteredIterator implements Iterator<Transaction> {

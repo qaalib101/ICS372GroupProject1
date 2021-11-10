@@ -1,11 +1,12 @@
 package edu.ics372.groupProject1.entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Order represents an order placed for a product
  * 
- * @author Qaalib Farah
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
  *
  */
 public class Order implements Serializable {
@@ -45,6 +46,30 @@ public class Order implements Serializable {
 	 */
 	public String getAmountOrdered() {
 		return Integer.toString(this.amountOrdered);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(amountOrdered, productId, productName);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Order other = (Order) obj;
+		return amountOrdered == other.amountOrdered && Objects.equals(productId, other.productId)
+				&& Objects.equals(productName, other.productName);
+	}
+
+	@Override
+	public String toString() {
+		return "Product Name: " + this.productName + " Product Id: " + this.productId + " Amount Ordered: "
+				+ this.amountOrdered + "\n";
 	}
 
 }

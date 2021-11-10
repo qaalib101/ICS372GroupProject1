@@ -14,6 +14,13 @@ import edu.ics372.groupProject1.facade.Result;
 import edu.ics372.groupProject1.iterators.FilteredIterator;
 import edu.ics372.groupProject1.iterators.SafeTransactionIterator;
 
+/**
+ * Class that represents a member in a grocery store
+ * 
+ * 
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
+ *
+ */
 public class Member implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
@@ -49,6 +56,10 @@ public class Member implements Serializable {
 
 	public Cart getCart() {
 		return cart;
+	}
+
+	public List<Transaction> transactionList() {
+		return this.transactions;
 	}
 
 	/**

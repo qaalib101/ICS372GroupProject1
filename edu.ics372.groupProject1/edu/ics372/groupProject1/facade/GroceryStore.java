@@ -20,6 +20,14 @@ import edu.ics372.groupProject1.iterators.SafeMemberIterator;
 import edu.ics372.groupProject1.iterators.SafeOrderIterator;
 import edu.ics372.groupProject1.iterators.SafeProductIterator;
 
+/**
+ * Class that represents the main system of the grocery store
+ * 
+ * 
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
+ *
+ */
+
 public class GroceryStore {
 	private static final long serialVersionUID = 1L;
 	private Inventory inventory = Inventory.getInstance();
@@ -48,65 +56,6 @@ public class GroceryStore {
 	}
 
 	/**
-	 * Method to process orders in the form of shipments.
-	 * 
-	 * @param request Request object with shipment information
-	 * @return Result object with product information and restocked quantity
-	 */
-	public Result processShipment(Request request) {
-		Result result = new Result();
-		String productId = request.getProductId();
-		Product product = inventory.search(productId);
-		if (product == null) {
-			result.setResultCode(Result.PRODUCT_NOT_FOUND);
-			return result;
-		}
-		Order order = orders.search(productId);
-		if (order == null) {
-			result.setResultCode(Result.NO_OUTSTANDING_ORDER);
-			return result;
-		}
-		if (product.restock(Integer.parseInt(order.getAmountOrdered())) && orders.removeOrder(productId)) {
-			result.setResultCode(Result.OPERATION_COMPLETED);
-			result.setProductFields(product);
-		} else {
-			result.setResultCode(Result.OPERATION_FAILED);
-		}
-		return result;
-	}
-
-	/**
-	 * -----------
-	 * 
-	 * @param ----------
-	 * @return ---------
-	 * 
-	 */
-	public Result changePrice(Request request) {
-		Result result = new Result();
-		Product product = inventory.search(request.getProductId());
-		if (product == null) {
-			result.setResultCode(Result.PRODUCT_NOT_FOUND);
-			return result;
-		}
-		if (product.changePrice(request.getProductCurrentPrice())) {
-			result.setResultCode(Result.OPERATION_COMPLETED);
-			result.setProductFields(product);
-		} else {
-			result.setResultCode(Result.OPERATION_FAILED);
-		}
-		return result;
-	}
-
-	public Iterator<Result> getTransactions(Request request) {
-		Member member = members.search(request.getMemberId());
-		if (member == null) {
-			return new LinkedList<Result>().iterator();
-		}
-		return member.getTransactionsBetweenDates(request.getStartDate(), request.getEndDate());
-	}
-
-	/**
 	 * creates a member with the given parameters and adds it to members
 	 * 
 	 * @param name    name of the member
@@ -116,7 +65,7 @@ public class GroceryStore {
 	 * @param fee     amount member pays as fee
 	 * @return true if the member was successfully created
 	 */
-	public Result addMember(Request request) {
+	public Result enrollMember(Request request) {
 		Result result = new Result();
 		Double fee = Double.valueOf(request.getMemberFee());
 		Member newMember = new Member(request.getMemberName(), request.getMemberAddress(), request.getMemberPhone(),
@@ -162,50 +111,11 @@ public class GroceryStore {
 		if (inventory.insertProduct(newProduct)) {
 			result.setResultCode(Result.OPERATION_COMPLETED);
 			result.setProductFields(newProduct);
+			Order newOrder = new Order(newProduct.getId(), newProduct.getName(), reorderLevel * 2);
+			orders.insertOrder(newOrder);
 			return result;
 		}
 		result.setResultCode(Result.OPERATION_FAILED);
-		return result;
-		// I'm a little confused about how ordering will be implemented
-//		Order(name, price, reorderLevel * 2);
-	}
-
-	/**
-	 * Retrieves a deserialized version of the library from disk
-	 * 
-	 * @return a GroceryStore object
-	 */
-	public static GroceryStore retrieve() {
-		try {
-			FileInputStream file = new FileInputStream("GroceryStoreData");
-			ObjectInputStream input = new ObjectInputStream(file);
-			store = (GroceryStore) input.readObject();
-//			Member.retrieve(input);
-			return store;
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			return null;
-		} catch (ClassNotFoundException cnfe) {
-			cnfe.printStackTrace();
-			return null;
-		}
-	}
-
-	/**
-	 * Searches for a given member
-	 * 
-	 * @param memberId id of the member
-	 * @return true iff the member is in the member list collection
-	 */
-	public Result searchMembership(Request request) {
-		Result result = new Result();
-		Member member = members.search(request.getMemberId());
-		if (member == null) {
-			result.setResultCode(Result.NO_SUCH_MEMBER);
-		} else {
-			result.setResultCode(Result.OPERATION_COMPLETED);
-			result.setMemberFields(member);
-		}
 		return result;
 	}
 
@@ -220,7 +130,6 @@ public class GroceryStore {
 	 */
 	public Result checkOutProduct(Request request) {
 		Result result = new Result();
-		Product product = inventory.search(request.getProductId());
 		String productId = request.getProductId();
 		String memberId = request.getMemberId();
 		Member member = members.search(memberId);
@@ -245,29 +154,6 @@ public class GroceryStore {
 				}
 				request.setProductsToBeReordered(productsToReorder);
 			}
-		}
-		return result;
-	}
-
-	/**
-	 * Retrieves product info by name
-	 * 
-	 * @param Request
-	 * 
-	 * @return Result
-	 */
-	public Result retrieveProductInfo(Request request) {
-		Result result = new Result();
-		String productName = request.getProductName();
-		Product product = inventory.searchByName(productName);
-
-		if (product != null) {
-			request.setProductId(product.getId());
-			request.setProductCurrentPrice(product.getPrice());
-			request.setProductQuantity(product.getQuantity());
-			result.setResultCode(Result.OPERATION_COMPLETED);
-		} else {
-			result.setResultCode(Result.PRODUCT_NOT_FOUND);
 		}
 		return result;
 	}
@@ -318,25 +204,94 @@ public class GroceryStore {
 		Member member = members.search(memberId);
 		Transaction transaction = new Transaction(Integer.parseInt(request.getMemberId()),
 				Double.parseDouble(request.getCartTotalPrice()));
-		member.getTransactions().add(transaction);
+		member.transactionList().add(transaction);
 	}
 
 	/**
-	 * Serializes the Library object
+	 * Retrieves product info by name
 	 * 
-	 * @return true iff the data could be saved
+	 * @param Request
+	 * 
+	 * @return Result
 	 */
-	public static boolean save() {
-		try {
-			FileOutputStream file = new FileOutputStream("CooperativeData");
-			ObjectOutputStream output = new ObjectOutputStream(file);
-			output.writeObject(store);
-			file.close();
-			return true;
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			return false;
+	public Result retrieveProduct(Request request) {
+		Result result = new Result();
+		String productName = request.getProductName();
+		Product product = inventory.searchByName(productName);
+
+		if (product != null) {
+			request.setProductId(product.getId());
+			request.setProductCurrentPrice(product.getPrice());
+			request.setProductQuantity(product.getQuantity());
+			result.setResultCode(Result.OPERATION_COMPLETED);
+		} else {
+			result.setResultCode(Result.PRODUCT_NOT_FOUND);
 		}
+		return result;
+	}
+
+	/**
+	 * Method to process orders in the form of shipments.
+	 * 
+	 * @param request Request object with shipment information
+	 * @return Result object with product information and restocked quantity
+	 */
+	public Result processShipment(Request request) {
+		Result result = new Result();
+		String productId = request.getProductId();
+		Product product = inventory.search(productId);
+		if (product == null) {
+			result.setResultCode(Result.PRODUCT_NOT_FOUND);
+			return result;
+		}
+		Order order = orders.search(productId);
+		if (order == null) {
+			result.setResultCode(Result.NO_OUTSTANDING_ORDER);
+			return result;
+		}
+		if (product.restock(Integer.parseInt(order.getAmountOrdered())) && orders.removeOrder(productId)) {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			result.setProductFields(product);
+		} else {
+			result.setResultCode(Result.OPERATION_FAILED);
+		}
+		return result;
+	}
+
+	/**
+	 * Method to process a product price change.
+	 * 
+	 * @param request Request object with product information
+	 * @return Result object with product information and restocked quantity
+	 */
+	public Result changePrice(Request request) {
+		Result result = new Result();
+		Product product = inventory.search(request.getProductId());
+		if (product == null) {
+			result.setResultCode(Result.PRODUCT_NOT_FOUND);
+			return result;
+		}
+		if (product.changePrice(request.getProductCurrentPrice())) {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			result.setProductFields(product);
+		} else {
+			result.setResultCode(Result.OPERATION_FAILED);
+		}
+		return result;
+	}
+
+	/**
+	 * Method to get transactions for a specific member
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public Iterator<Result> getTransactions(Request request) {
+		Member member = members.search(request.getMemberId());
+		if (member == null) {
+			return new LinkedList<Result>().iterator();
+		}
+		return member.getTransactionsBetweenDates(request.getStartDate(), request.getEndDate());
 	}
 
 	/**
@@ -367,6 +322,63 @@ public class GroceryStore {
 	 */
 	public Iterator<Result> listOrders() {
 		return new SafeOrderIterator(orders.iterator());
+	}
+
+	/**
+	 * Retrieves a deserialized version of the library from disk
+	 * 
+	 * @return a GroceryStore object
+	 */
+	public static GroceryStore retrieve() {
+		try {
+			FileInputStream file = new FileInputStream("GroceryStoreData");
+			ObjectInputStream input = new ObjectInputStream(file);
+			store = (GroceryStore) input.readObject();
+//			Member.retrieve(input);
+			return store;
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			return null;
+		} catch (ClassNotFoundException cnfe) {
+			cnfe.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Searches for a given member
+	 * 
+	 * @param memberId id of the member
+	 * @return true iff the member is in the member list collection
+	 */
+	public Result searchMembership(Request request) {
+		Result result = new Result();
+		Member member = members.search(request.getMemberId());
+		if (member == null) {
+			result.setResultCode(Result.NO_SUCH_MEMBER);
+		} else {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			result.setMemberFields(member);
+		}
+		return result;
+	}
+
+	/**
+	 * Serializes the Library object
+	 * 
+	 * @return true iff the data could be saved
+	 */
+	public static boolean save() {
+		try {
+			FileOutputStream file = new FileOutputStream("CooperativeData");
+			ObjectOutputStream output = new ObjectOutputStream(file);
+			output.writeObject(store);
+			file.close();
+			return true;
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			return false;
+		}
 	}
 
 	@Override

@@ -10,7 +10,7 @@ import edu.ics372.groupProject1.entities.Product;
 /**
  * The collection class for products
  * 
- * @author
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
  *
  */
 public class Inventory implements Iterable<Product>, Serializable {

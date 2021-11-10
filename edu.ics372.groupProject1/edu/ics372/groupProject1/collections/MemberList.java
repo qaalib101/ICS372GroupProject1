@@ -10,7 +10,7 @@ import edu.ics372.groupProject1.entities.Member;
 /**
  * The collection class for members
  * 
- * @author
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
  *
  */
 public class MemberList implements Iterable<Member>, Serializable {

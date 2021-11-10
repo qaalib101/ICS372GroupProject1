@@ -15,7 +15,6 @@ import java.util.StringTokenizer;
 import edu.ics372.groupProject1.facade.GroceryStore;
 import edu.ics372.groupProject1.facade.Request;
 import edu.ics372.groupProject1.facade.Result;
-import edu.ics372.groupProject1.tests.TestBed;
 
 /**
  * 
@@ -23,6 +22,7 @@ import edu.ics372.groupProject1.tests.TestBed;
  * commands are encoded as integers using a number of static final variables. A
  * number of utility methods exist to make it easier to parse the input.
  *
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
  */
 public class UserInterface {
 	private static UserInterface userInterface;
@@ -35,7 +35,7 @@ public class UserInterface {
 	private static final int RETRIEVE_MEMBER = 3;
 	private static final int ADD_PRODUCT = 4;
 	private static final int CHECKOUT_CART = 5;
-	private static final int RETRIEVE_PRODUCT_INFO = 6;
+	private static final int RETRIEVE_PRODUCT = 6;
 	private static final int PROCESS_SHIPMENT = 7;
 	private static final int CHANGE_PRICE = 8;
 	private static final int PRINT_TRANSACTIONS = 9;
@@ -55,7 +55,6 @@ public class UserInterface {
 			retrieve();
 		} else {
 			if (yesOrNo("Do you want to generate a test bed and invoke the functionality using asserts?")) {
-				TestBed.generateTestBed();
 				store = GroceryStore.instance();
 			} else {
 				store = GroceryStore.instance();
@@ -183,11 +182,11 @@ public class UserInterface {
 			try {
 				Calendar date = new GregorianCalendar();
 				String item = getToken(prompt);
-				DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+				DateFormat dateFormat = new SimpleDateFormat("mm/dd/yyyy");
 				date.setTime(dateFormat.parse(item));
 				return date;
 			} catch (Exception fe) {
-				System.out.println("Please input a date as dd/MM/yyyy");
+				System.out.println("Please input a date as mm/dd/yyyy");
 			}
 		} while (true);
 	}
@@ -223,7 +222,7 @@ public class UserInterface {
 		System.out.println(RETRIEVE_MEMBER + " to retrieve a member");
 		System.out.println(ADD_PRODUCT + " to add a product");
 		System.out.println(CHECKOUT_CART + " to checkout a cart");
-		System.out.println(RETRIEVE_PRODUCT_INFO + " to retrieve a product");
+		System.out.println(RETRIEVE_PRODUCT + " to retrieve a product");
 		System.out.println(PROCESS_SHIPMENT + " to process a shipment");
 		System.out.println(CHANGE_PRICE + " to change the price of a product");
 		System.out.println(PRINT_TRANSACTIONS + " to print transactions");
@@ -233,6 +232,54 @@ public class UserInterface {
 		System.out.println(SAVE + " to save data");
 		System.out.println(RETRIEVE + " to retrieve data");
 		System.out.println(HELP + " for help");
+	}
+
+	/**
+	 * Prompts the user for information that is used to create a member.
+	 */
+	public void enrollMember() {
+		Request.instance().setMemberName(getName("Please enter the member's name: "));
+		Request.instance().setMemberAddress(getToken("Please enter the member's address: "));
+		Request.instance().setMemberPhone(getToken("Please enter the member's phone number (no formatting): "));
+		Request.instance().setDate(getDate("Please enter the current date (mm/dd/yyyy): "));
+		Request.instance().setMemberFee(getDoubleNumber("Please enter the fee paid: "));
+		Result result = store.enrollMember(Request.instance());
+		if (result.getResultCode() == Result.OPERATION_COMPLETED) {
+			System.out.println("Member successfully created.");
+		} else {
+			System.out.println("Member creation failed.");
+		}
+	}
+
+	/**
+	 * Removes a member with the given member ID.
+	 */
+	public void removeMember() {
+		Request.instance().setMemberId(getToken("Please enter the member ID: "));
+		Result result = store.removeMember(Request.instance());
+		if (result.getResultCode() == Result.OPERATION_COMPLETED) {
+			System.out.println("Member successfully removed.");
+		} else {
+			System.out.println("Error: invalid member ID");
+		}
+	}
+
+	public void retrieveMember() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void addProduct() {
+		Request.instance().setProductName(getName("Please enter the product name: "));
+		Request.instance().setProductCurrentPrice(Double.toString(getDoubleNumber("Please enter the price: ")));
+		Request.instance().setProductMinimumReorderLevel(
+				Integer.toString(getNumber("Please enter the product's minimum reorder level: ")));
+		Result result = store.addProduct(Request.instance());
+		if (result.getResultCode() == Result.OPERATION_COMPLETED) {
+			System.out.println("Product successfully added.");
+		} else {
+			System.out.println("Product addition failed.");
+		}
 	}
 
 	/**
@@ -269,47 +316,6 @@ public class UserInterface {
 	}
 
 	/**
-	 * Prompts the user for information that is used to create a member.
-	 */
-	private void enrollMember() {
-		String name = getName("Please enter the member's name: ");
-		String address = getToken("Please enter the member's address: ");
-		String phone = getToken("Please enter the member's phone number (no formatting): ");
-		String date = getToken("Please enter the current date (mm/dd/yy): ");
-		double fee = getDoubleNumber("Please enter the fee paid: ");
-		if (store.addMember(name, address, phone, date, fee) == true) {
-			System.out.println("Member successfully created.");
-			// TODO print member info after creation
-		}
-	}
-
-	/**
-	 * Removes a member with the given member ID.
-	 */
-	private void removeMember() {
-		String id = getToken("Please enter the member ID: ");
-		if (store.removeMember(id) == true) {
-			System.out.println("Member successfully removed.");
-		} else {
-			System.out.println("Error: invalid member ID");
-		}
-	}
-
-	private void retrieveMember() {
-		// TODO Auto-generated method stub
-
-	}
-
-	private void addProduct() {
-		String name = getName("Please enter the product name: ");
-		double price = getDoubleNumber("Please enter the price: ");
-		int reorderLevel = getNumber("Please enter the product's minimum reorder level: ");
-		if (store.addProduct(name, price, reorderLevel) == true) {
-			System.out.println("Product successfully added.");
-		}
-	}
-
-	/**
 	 * Retrieves the requested product by given name.
 	 * 
 	 * @param N/A
@@ -317,7 +323,7 @@ public class UserInterface {
 	 */
 	public void retrieveProduct() {
 		Request.instance().setProductName(getToken("Enter product name:"));
-		Result result = store.retrieveProductInfo(Request.instance());
+		Result result = store.retrieveProduct(Request.instance());
 		switch (result.getResultCode()) {
 		case Result.PRODUCT_NOT_FOUND:
 			System.out.println("No product found with name " + Request.instance().getProductName());
@@ -444,7 +450,7 @@ public class UserInterface {
 	 * Prints all transactions for a member within a date range
 	 */
 
-	public void getTransactions() {
+	public void printTransactions() {
 		// String date1, date2;
 		Request.instance().setMemberId(getToken("Enter member id"));
 		Request.instance()
@@ -520,7 +526,7 @@ public class UserInterface {
 			case CHECKOUT_CART:
 				checkoutCart();
 				break;
-			case RETRIEVE_PRODUCT_INFO:
+			case RETRIEVE_PRODUCT:
 				retrieveProduct();
 				break;
 			case PROCESS_SHIPMENT:

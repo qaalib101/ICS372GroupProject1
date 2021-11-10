@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author jquin
  *
- *         Cart Class Holds a list of products to be checked out by the
- *         customer.
+ * Cart Class Holds a list of products to be checked out by the customer.
  *
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
+ * 
  */
 public class Cart implements Serializable {
 	private double totalPrice;

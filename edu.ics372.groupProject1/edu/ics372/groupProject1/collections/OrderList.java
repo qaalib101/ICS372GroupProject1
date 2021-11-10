@@ -10,7 +10,7 @@ import edu.ics372.groupProject1.entities.Order;
 /**
  * The collection class for unfulfilled Order objects
  * 
- * @author
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
  *
  */
 public class OrderList implements Iterable<Order>, Serializable {

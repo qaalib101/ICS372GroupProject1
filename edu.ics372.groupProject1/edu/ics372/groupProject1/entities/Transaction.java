@@ -3,19 +3,28 @@ package edu.ics372.groupProject1.entities;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+/**
+ * 
+ * Class that represents a member's transaction in the system
+ * 
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
+ *
+ */
 public class Transaction implements Serializable {
 	// Instance variables
 	private static final long serialVersionUID = 1L;
 	private int memberID;
-	private String date1;
 	private double transactionTotal;
 	GregorianCalendar todaysDate;
 	private String id;
 	private static int transactionID;
+	private DateFormat dateFormat = new SimpleDateFormat("mm/dd/yyyy");
 
 	// Basic constructor method
 	public Transaction(int memberID, double transactionTotal) {
@@ -23,9 +32,7 @@ public class Transaction implements Serializable {
 		todaysDate.setTime(new Date());
 		this.transactionTotal = transactionTotal;
 		this.id = "T" + ++transactionID;
-
 	}
-
 	/**
 	 * Checks whether this transaction is on the given date
 	 * 
@@ -55,14 +62,14 @@ public class Transaction implements Serializable {
 		return date.get(Calendar.MONTH) + "/" + date.get(Calendar.DATE) + "/" + date.get(Calendar.YEAR);
 	}
 
-	public GregorianCalendar getTodaysDate() {
-		return todaysDate;
+	public String getTodaysDate() {
+		return dateFormat.format(todaysDate);
 	}
 
 	public double getTransactionTotal() {
 		return transactionTotal;
 	}
-
+  
 	public void printTransaction() {
 		// NOTE: A user may visit the store more then one times in a single day
 		// print date on which the user visit for each visit
@@ -77,10 +84,9 @@ public class Transaction implements Serializable {
 //		this.date2 = date2;
 //	}
 
-	// commented out date2 for toString
 	@Override
 	public String toString() {
-		return "Transaction [memberID=" + memberID + ", date1=" + date1 + "]";
+		return "Transaction [memberID=" + memberID + ", date1=" + this.getTodaysDate() + "]";
 	}
 
 	public static void save(ObjectOutputStream output) throws IOException {
