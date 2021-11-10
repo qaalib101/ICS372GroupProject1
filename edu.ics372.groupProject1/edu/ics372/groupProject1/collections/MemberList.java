@@ -56,6 +56,16 @@ public class MemberList implements Iterable<Member>, Serializable {
 		}
 		return null;
 	}
+	
+	public Member searchByName(String memberName) {
+		for (Iterator<Member> iterator = members.iterator(); iterator.hasNext();) {
+			Member member = (Member) iterator.next();
+			if (member.getName().equals(memberName)) {
+				return member;
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * Removes a member from the catalog
