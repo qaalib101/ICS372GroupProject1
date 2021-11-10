@@ -6,7 +6,7 @@ import java.text.DecimalFormat;
 /**
  * Class to represent product sold in the grocery store
  * 
- * @author jquin
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
  *
  */
 public class Product implements Serializable {
@@ -90,6 +90,7 @@ public class Product implements Serializable {
 			return false;
 		}
 	}
+
 	public String productInfo() {
 		return "Product [name:" + name + ", ID: " + id + ", Price: " + price + ", Stock: " + quantity;
 

@@ -3,11 +3,11 @@ package edu.ics372.groupProject1.facade;
 import java.util.Calendar;
 
 /**
- * This class is a singleton.  It is used for requesting many of the results of the GroceryStore system's
- * business logic to user interface.
+ * This class is a singleton. It is used for requesting many of the results of
+ * the GroceryStore system's business logic to user interface.
  * 
  * 
- * @author
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
  *
  */
 public class Request extends DataTransfer {

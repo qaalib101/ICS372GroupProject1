@@ -16,7 +16,7 @@ import edu.ics372.groupProject1.facade.Request;
 /**
  * This class generates automated tests for the library system using asserts.
  * 
- * @author
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
  *
  */
 public class AutomatedTester {
@@ -105,7 +105,7 @@ public class AutomatedTester {
 		Request.instance().setMemberId("M4");
 		// assert Library.instance().searchMembership(Request.instance()) == null;
 	}
-	
+
 	/**
 	 * Tests a list of Members
 	 */
@@ -173,9 +173,7 @@ public class AutomatedTester {
 			i++;
 		}
 
-
 	public void testAll() {
-		testProcessShipment();
 		testCheckOutCart();
 		testAddMember();
 		testAddProduct();

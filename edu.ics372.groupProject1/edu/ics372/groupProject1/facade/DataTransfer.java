@@ -10,7 +10,7 @@ import edu.ics372.groupProject1.entities.Transaction;
  * It also supports iteration for Member, Product and Order class by copying their fields 
  * and sending that information in either direction.
  * 
- * @author Leng Vang
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
  */
 
 public class DataTransfer {
@@ -34,50 +34,6 @@ public class DataTransfer {
 	private String checkoutLineItem;
 	private String isProductReordered;
 	private StringBuilder productsToBeReordered;
-
-	/*
-	 * This sets all fields to "none"
-	 */
-
-	public StringBuilder getProductsToBeReordered() {
-		return productsToBeReordered;
-	}
-
-	public void setProductsToBeReordered(StringBuilder productsToBeReordered) {
-		this.productsToBeReordered = productsToBeReordered;
-	}
-
-	public String getIsProductReordered() {
-		return isProductReordered;
-	}
-
-	public void setIsProductReordered(String isProductReordered) {
-		this.isProductReordered = isProductReordered;
-	}
-
-	public String getCheckoutLineItem() {
-		return checkoutLineItem;
-	}
-
-	public void setCheckoutLineItem(String checkoutLineItem) {
-		this.checkoutLineItem = checkoutLineItem;
-	}
-
-	public String getCartTotalPrice() {
-		return cartTotalPrice;
-	}
-
-	public void setCartTotalPrice(String cartTotalPrice) {
-		this.cartTotalPrice = cartTotalPrice;
-	}
-
-	public String getProductCartQuantity() {
-		return productCartQuantity;
-	}
-
-	public void setProductCartQuantity(String productCartQuantity) {
-		this.productCartQuantity = productCartQuantity;
-	}
 
 	public DataTransfer() {
 		reset();
@@ -252,8 +208,8 @@ public class DataTransfer {
 	 */
 
 	public void setTransactionFields(Transaction transaction) {
-		setTransactionDate(transaction.getDate());
-		setTransactionTotalPrice(transaction.getTotalPrice());
+		setTransactionDate(transaction.getTodaysDate());
+		setTransactionTotalPrice(Double.toString(transaction.getTransactionTotal()));
 	}
 
 	public StringBuilder getProductsToBeReordered() {

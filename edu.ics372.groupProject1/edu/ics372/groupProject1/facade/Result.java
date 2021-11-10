@@ -4,7 +4,7 @@ package edu.ics372.groupProject1.facade;
  * This class is used for returning many results of the GroceryStore system's
  * business logic to user interface.
  * 
- * @author qaali
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
  *
  */
 public class Result extends DataTransfer {

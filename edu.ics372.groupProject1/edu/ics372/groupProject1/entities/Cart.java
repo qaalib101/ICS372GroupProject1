@@ -3,15 +3,14 @@ package edu.ics372.groupProject1.entities;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
- * @author jquin
  *
- *         Cart Class Holds a list of products to be checked out by the
- *         customer.
+ * Cart Class Holds a list of products to be checked out by the customer.
  *
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
+ * 
  */
 public class Cart implements Serializable {
 	private double totalPrice;
@@ -85,8 +84,8 @@ public class Cart implements Serializable {
 	 * getCartItems Method return a list of all the items in the cart.
 	 *
 	 */
-	public Iterator<CartItem> getCartItems() {
-		return cartItems.iterator();
+	public List<CartItem> getCartItems() {
+		return this.cartItems;
 	}
 
 	/**
