@@ -1,6 +1,3 @@
-//testing
-//second comment
-
 package edu.ics372.groupProject1.ui;
 
 import java.io.BufferedReader;
@@ -343,7 +340,6 @@ public class UserInterface {
 			System.out.println(Request.instance().getProductsToBeReordered());
 			System.out.println("are to be reordered.");
 		}
-
 	}
 
 	/**
@@ -418,22 +414,18 @@ public class UserInterface {
 	/*
 	 * Prints all transactions for a member within a date range
 	 */
-
 	public void printTransactions() {
-		// String date1, date2;
 		Request.instance().setMemberId(getToken("Enter member id"));
 		Request.instance()
 				.setStartDate(getDate("Please enter the first date for which you want records from mm/dd/yy"));
 		Request.instance().setEndDate(getDate("Please enter the second date for which you want records to mm/dd/yy"));
-		Iterator<Result> iterator = store.getTransactions(Request.instance());
-		while (iterator.hasNext()) {
-			Result transaction = iterator.next();
+		Iterator<Result> result = store.getTransactions(Request.instance());
+		System.out.println("List of transactions:");
+		while (result.hasNext()) {
+			Result transaction = result.next();
 			System.out.println(transaction.getTransactionDate() + " " + transaction.getTransactionTotalPrice() + "\n");
 		}
 		System.out.println("\n End of transactions \n");
-		// Request.instance().setTransactionDate(getToken("Please enter the first date
-		// for which you want records as mm/dd/yy"));
-		//
 	}
 
 	/**
@@ -574,4 +566,3 @@ public class UserInterface {
 	public static void main(String[] args) {
 		UserInterface.instance().process();
 	}
-}
