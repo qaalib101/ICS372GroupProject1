@@ -13,6 +13,7 @@ import java.util.Calendar;
 public class Request extends DataTransfer {
 	private static Request request;
 	private Calendar date, startDate, endDate;
+
 	private Request() {
 
 	}
@@ -29,34 +30,57 @@ public class Request extends DataTransfer {
 		return request;
 	}
 
-	/*
+	/**
 	 * Store more helper methods for printing out transactions
 	 * 
 	 * Such as boolean checks to verify the date range, and setting date1 & date2.
 	 */
-
 	public Calendar getDate() {
 		return date;
 	}
 
+	/**
+	 * setter for date
+	 * 
+	 * @param date
+	 */
 	public void setDate(Calendar date) {
 		this.date = date;
 	}
 
+	/**
+	 * getter for startDate
+	 * 
+	 * @return startDate
+	 */
 	public Calendar getStartDate() {
 		return startDate;
 	}
 
+	/**
+	 * setter for startDate
+	 * 
+	 * @param startDate
+	 */
 	public void setStartDate(Calendar startDate) {
 		this.startDate = startDate;
 	}
 
+	/**
+	 * getter for endDate
+	 * 
+	 * @return endDate
+	 */
 	public Calendar getEndDate() {
 		return endDate;
 	}
 
+	/**
+	 * setter for endDate
+	 * 
+	 * @param endDate
+	 */
 	public void setEndDate(Calendar endDate) {
 		this.endDate = endDate;
 	}
 }
-
