@@ -1,18 +1,11 @@
-package edu.ics372.groupProject1.facade;
+package groupProject1.facade;
 
 import java.util.Calendar;
 
-/**
- * This class is a singleton. It is used for requesting many of the results of
- * the GroceryStore system's business logic to user interface.
- * 
- * 
- * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
- *
- */
 public class Request extends DataTransfer {
 	private static Request request;
 	private Calendar date, startDate, endDate;
+
 	private Request() {
 
 	}
@@ -39,10 +32,6 @@ public class Request extends DataTransfer {
 		return date;
 	}
 
-	public void setDate(Calendar date) {
-		this.date = date;
-	}
-
 	public Calendar getStartDate() {
 		return startDate;
 	}
@@ -59,4 +48,3 @@ public class Request extends DataTransfer {
 		this.endDate = endDate;
 	}
 }
-

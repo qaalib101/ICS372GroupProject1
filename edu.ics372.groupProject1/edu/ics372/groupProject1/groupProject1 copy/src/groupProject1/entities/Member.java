@@ -1,40 +1,30 @@
-package edu.ics372.groupProject1.entities;
+package groupProject1.entities;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.ics372.groupProject1.facade.Result;
-import edu.ics372.groupProject1.iterators.FilteredIterator;
-import edu.ics372.groupProject1.iterators.SafeTransactionIterator;
-
-/**
- * Class that represents a member in a grocery store
- * 
- * 
- * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
- *
- */
+import groupProject1.facade.Result;
+import groupProject1.iterators.FilteredIterator;
+import groupProject1.iterators.SafeTransactionIterator;
 
 public class Member implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String address;
 	private String phone;
-	private Calendar date;
+	private String date;
 	private double fee;
 	private String id;
 	private static final String MEMBER_STRING = "M";
 	private static int idCounter;
 	private Cart cart;
-	private SimpleDateFormat dateFormat = new SimpleDateFormat("mm/dd/yyyy");
-
 	private List<Transaction> transactions = new LinkedList<Transaction>(); // make "List" Class for generics
 
 	/**
@@ -46,7 +36,7 @@ public class Member implements Serializable {
 	 * @param date    date the member joins
 	 * @param fee     amount member pays as fee
 	 */
-	public Member(String name, String address, String phone, Calendar date, double fee) {
+	public Member(String name, String address, String phone, String date, double fee) {
 		this.name = name;
 		this.address = address;
 		this.phone = phone;
@@ -59,12 +49,6 @@ public class Member implements Serializable {
 	public Cart getCart() {
 		return cart;
 	}
-
-
-	public List<Transaction> transactionList() {
-		return this.transactions;
-	}
-
 
 	/**
 	 * Gets an iterator to a collection of selected transactions
@@ -106,14 +90,8 @@ public class Member implements Serializable {
 	 * 
 	 * @return void
 	 */
-
 	public void addTransaction(Transaction transaction) {
 		transactions.add(transaction);
-
-
-	public List<Transaction> getTransactions() {
-		return transactions;
-
 	}
 
 	/**
@@ -149,7 +127,7 @@ public class Member implements Serializable {
 	 * @return date joined
 	 */
 	public String getDate() {
-		return dateFormat.format(date);
+		return date;
 	}
 
 	/**
@@ -157,7 +135,7 @@ public class Member implements Serializable {
 	 * 
 	 * @return fee
 	 */
-	public String getFee() {
+	public String getFee() {// PLEASE CHECK ON THIS FOR RETURN TYPE OF DOUBLE OVER STRING
 		DecimalFormat df = new DecimalFormat("#.00");
 		return df.format(fee);
 	}
@@ -197,7 +175,7 @@ public class Member implements Serializable {
 	public void setPhone(String newPhone) {
 		phone = newPhone;
 	}
-	
+
 	/**
 	 * Setter for date
 	 * 

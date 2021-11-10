@@ -119,7 +119,19 @@ public class GroceryStore {
 		return result;
 	}
 
-	/*
+  public Result retrieveMember(Request request) {
+		Result result = new Result();
+		Member member = members.searchByName(request.getMemberName());
+		if (member != null) {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			result.setMemberFields(member);
+		} else {
+			result.setResultCode(Result.OPERATION_FAILED);
+		}
+		return result;
+	}
+	
+  /*
 	 * Checks out product. Adds item to the cart, collects the quantity from the
 	 * cartItem updates the inventory level and if necessary reorders the item.
 	 * 
@@ -280,13 +292,13 @@ public class GroceryStore {
 		return result;
 	}
 
-	/**
-	 * Method to get transactions for a specific member
+	/*
+	 * Returns an iterator to Member. The iterator returned is a safe iterator, and
+	 * gets all the transactions of that member between a start and end date range.
 	 * 
-	 * @param request
-	 * @return
+	 * @return void
 	 */
-	public Iterator<Result> getTransactions(Request request) {
+	public Iterator<Result> printTransactions(Request request) {
 		Member member = members.search(request.getMemberId());
 		if (member == null) {
 			return new LinkedList<Result>().iterator();
