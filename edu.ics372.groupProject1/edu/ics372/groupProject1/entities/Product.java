@@ -46,14 +46,29 @@ public class Product implements Serializable {
 		return df.format(price);
 	}
 
+	/**
+	 * Retrieve product reorder level
+	 * 
+	 * @return reorderLevel
+	 */
 	public String getReorderLevel() {
 		return Integer.toString(reorderLevel);
 	}
 
+	/**
+	 * Retrieve product quantity
+	 * 
+	 * @return quantity
+	 */
 	public String getQuantity() {
 		return Integer.toString(quantity);
 	}
 
+	/**
+	 * Retrieve product ID
+	 * 
+	 * @return id
+	 */
 	public String getId() {
 		return id;
 	}
@@ -69,6 +84,11 @@ public class Product implements Serializable {
 		return true;
 	}
 
+	/**
+	 * Checks whether a product's quantity is below its reorder level
+	 * 
+	 * @return true if the product should be reordered
+	 */
 	public boolean belowReorderLvL() {
 		if (this.quantity <= this.reorderLevel) {
 			return true;
@@ -77,11 +97,21 @@ public class Product implements Serializable {
 
 	}
 
+	/**
+	 * Decrements a product's quantity by the number of units sold
+	 * 
+	 * @param unitsSold
+	 */
 	public void decrementQuantity(int unitsSold) {
-
 		this.quantity -= unitsSold;
 	}
 
+	/**
+	 * Changes a product's price
+	 * 
+	 * @param newPrice the product's new price
+	 * @return true if the price has been changed
+	 */
 	public boolean changePrice(String newPrice) {
 		try {
 			price = Double.parseDouble(newPrice);
@@ -91,6 +121,11 @@ public class Product implements Serializable {
 		}
 	}
 
+	/**
+	 * creates and returns a string with a product's info
+	 * 
+	 * @return the product info
+	 */
 	public String productInfo() {
 		return "Product [name:" + name + ", ID: " + id + ", Price: " + price + ", Stock: " + quantity;
 
