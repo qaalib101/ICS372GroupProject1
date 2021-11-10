@@ -58,11 +58,7 @@ public class GroceryStore {
 	/**
 	 * creates a member with the given parameters and adds it to members
 	 * 
-	 * @param name    name of the member
-	 * @param address address of the member
-	 * @param phone   phone number of the member
-	 * @param date    date the member joins
-	 * @param fee     amount member pays as fee
+	 * @param request
 	 * @return true if the member was successfully created
 	 */
 	public Result enrollMember(Request request) {
@@ -82,7 +78,7 @@ public class GroceryStore {
 	/**
 	 * removes a member with the given id from members
 	 * 
-	 * @param id the member's id
+	 * @param request
 	 * @return true if the member was successfully removed
 	 */
 	public Result removeMember(Request request) {
@@ -98,9 +94,7 @@ public class GroceryStore {
 	/**
 	 * creates a product with the given parameters and adds it to inventory
 	 * 
-	 * @param name         name of the product
-	 * @param price        price of the product
-	 * @param reorderLevel reorder level of the product
+	 * @param request
 	 * @return true if the product was successfully created
 	 */
 	public Result addProduct(Request request) {
@@ -119,6 +113,12 @@ public class GroceryStore {
 		return result;
 	}
 
+	/**
+	 * retrieves member info by name
+	 * 
+	 * @param request
+	 * @return whether the operation was completed
+	 */
 	public Result retrieveMember(Request request) {
 		Result result = new Result();
 		Member member = members.searchByName(request.getMemberName());
@@ -131,7 +131,7 @@ public class GroceryStore {
 		return result;
 	}
 
-	/*
+	/**
 	 * Checks out product. Adds item to the cart, collects the quantity from the
 	 * cartItem updates the inventory level and if necessary reorders the item.
 	 * 
@@ -172,14 +172,11 @@ public class GroceryStore {
 		return result;
 	}
 
-	/*
+	/**
 	 * Prints cart checkout message, updates cart total, displays what has been
-	 * reordered.
+	 * reordered
 	 * 
 	 * @param Request
-	 * 
-	 * @return void
-	 * 
 	 */
 	public void printCheckOut(Request request) {
 		String memberId = request.getMemberId();
@@ -198,7 +195,7 @@ public class GroceryStore {
 			System.out.println(itemDetails);
 		}
 		member.getCart().printCartTotal();
-		if (request.getProductsToBeReordered() != null) {
+		if (request.getProductsToBeReordered().length() != 0) {
 			System.out.println("The product(s), ");
 			System.out.println(Request.instance().getProductsToBeReordered());
 			System.out.println("are to be reordered.");
@@ -210,8 +207,6 @@ public class GroceryStore {
 	 * Record the transaction to the transaction list
 	 * 
 	 * @param Request
-	 * 
-	 * @return void
 	 */
 	private void recoredTransaction(Request request) {
 		String memberId = request.getMemberId();
@@ -224,7 +219,6 @@ public class GroceryStore {
 	 * Retrieves product info by name
 	 * 
 	 * @param Request
-	 * 
 	 * @return Result
 	 */
 	public Result retrieveProduct(Request request) {
@@ -293,11 +287,11 @@ public class GroceryStore {
 		return result;
 	}
 
-	/*
+	/**
 	 * Returns an iterator to Member. The iterator returned is a safe iterator, and
 	 * gets all the transactions of that member between a start and end date range.
 	 * 
-	 * @return void
+	 * @param request
 	 */
 	public Iterator<Result> printTransactions(Request request) {
 		Member member = members.search(request.getMemberId());
