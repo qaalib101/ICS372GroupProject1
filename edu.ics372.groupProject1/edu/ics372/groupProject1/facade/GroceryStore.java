@@ -111,12 +111,12 @@ public class GroceryStore {
 		if (inventory.insertProduct(newProduct)) {
 			result.setResultCode(Result.OPERATION_COMPLETED);
 			result.setProductFields(newProduct);
+			Order newOrder = new Order(newProduct.getId(), newProduct.getName(), reorderLevel * 2);
+			orders.insertOrder(newOrder);
 			return result;
 		}
 		result.setResultCode(Result.OPERATION_FAILED);
 		return result;
-		// I'm a little confused about how ordering will be implemented
-//		Order(name, price, reorderLevel * 2);
 	}
 
 	/*
