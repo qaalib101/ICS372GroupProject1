@@ -79,13 +79,23 @@ public class TestBed {
 	 * Tests Member creation.
 	 */
 	public void TestAddMember() {
+		// create dates
+		for (int index = 0; index < years.length; index++) {
+			Calendar date = new GregorianCalendar(years[index], months[index], days[index]);
+			dates[index] = date;
+		}
+		
 		for (int count = 0; count < members.length; count++) {
 			Request.instance().setMemberAddress(addresses[count]);
 			Request.instance().setMemberName(names[count]);
+			Request.instance().setMemberDate(dates[count]);
+			Request.instance().setMemberFee(10);
 			Result result = GroceryStore.instance().enrollMember(Request.instance());
 			assert result.getResultCode() == Result.OPERATION_COMPLETED;
 			assert result.getMemberName().equals(names[count]);
 			assert result.getMemberPhone().equals(phones[count]);
+			assert result.getMemberDate().equals(dates[count]);
+			assert result.getMemberFee() == 10;
 		}
 	}
 
