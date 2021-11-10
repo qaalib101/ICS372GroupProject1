@@ -30,10 +30,10 @@ public class OrderList implements Iterable<Order>, Serializable {
 	}
 
 	/**
-	 * Method to search for Orders for a particular product
+	 * Searches for an order with the given product ID
 	 * 
 	 * @param productId the id of the product ordered
-	 * @return order object found. null if not found
+	 * @return order if the object is found, null if not found
 	 */
 	public Order search(String productId) {
 		for (Iterator<Order> iterator = orders.iterator(); iterator.hasNext();) {
@@ -49,7 +49,7 @@ public class OrderList implements Iterable<Order>, Serializable {
 	 * Method to remove an Order object from the system
 	 * 
 	 * @param productId id of product that was ordered
-	 * @return true if order is found and removed. false otherwise
+	 * @return true if order is found and removed
 	 */
 	public boolean removeOrder(String productId) {
 		Order order = search(productId);
@@ -64,7 +64,7 @@ public class OrderList implements Iterable<Order>, Serializable {
 	 * Method to insert into order collection
 	 * 
 	 * @param order object to be inserted
-	 * @return true if order is inserted
+	 * @return true if order is inserted. Currently always true
 	 */
 	public boolean insertOrder(Order order) {
 		orders.add(order);
@@ -80,10 +80,6 @@ public class OrderList implements Iterable<Order>, Serializable {
 		return orders.iterator();
 	}
 
-	/**
-	 * String form of the collection
-	 * 
-	 */
 	@Override
 	public String toString() {
 		return orders.toString();
