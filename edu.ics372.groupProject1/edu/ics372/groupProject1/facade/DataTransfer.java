@@ -1,8 +1,10 @@
 package edu.ics372.groupProject1.facade;
 
+import edu.ics372.groupProject1.entities.Cart;
 import edu.ics372.groupProject1.entities.Member;
-import edu.ics372.groupProject1.entities.Product;
 import edu.ics372.groupProject1.entities.Order;
+import edu.ics372.groupProject1.entities.Product;
+import edu.ics372.groupProject1.entities.Transaction;
 
 /*
  * The DataTransfer class is used to transfer data between the UserInterface and the GroceryStore class.
@@ -14,16 +16,25 @@ public class DataTransfer {
 	private String memberId;
 	private String memberName;
 	private String memberAddress;
+	private String memberPhone;
+	private String memberDate;
+	private String memberFee;
 	private String productId;
 	private String productName;
-	private String productCurrentPrice;
+	private String productPrice;
 	private String productMinimumReorderLevel;
 	private String productQuantity;
 	private String orderProductName;
 	private String orderProductId;
 	private String amountOrdered;
 	private String transactionDate;
-	private String transactionTotal;
+	private String transactionTotalPrice;
+	private String productCartQuantity;
+	private String cartTotalPrice;
+	private String checkoutLineItem;
+	private String isProductReordered;
+	private StringBuilder productsToBeReordered;
+
 	/*
 	 * This sets all fields to "none"
 	 */
@@ -56,15 +67,42 @@ public class DataTransfer {
 		this.memberAddress = memberAddress;
 	}
 
+	public String getMemberPhone() {
+		return memberPhone;
+	}
+
+	public void setMemberPhone(String memberPhone) {
+		this.memberPhone = memberPhone;
+	}
+
+	public String getMemberDate() {
+		return memberDate;
+	}
+
+	public void setMemberDate(String memberDate) {
+		this.memberDate = memberDate;
+	}
+
+	public double getMemberFee() {
+		return Double.valueOf(memberFee);
+	}
+
+	public void setMemberFee(String memberFee) {
+		this.memberFee = memberFee;
+	}
+
 	/*
 	 * Sets all member field using the member parameter
 	 * 
 	 * @param member whose field should be copied
 	 */
 	public void setMemberFields(Member member) {
-		memberId = member.getId();
-		memberName = member.getName();
-		memberAddress = member.getAddress();
+		setMemberId(member.getId());
+		setMemberName(member.getName());
+		setMemberAddress(member.getAddress());
+		setMemberPhone(member.getPhone());
+		setMemberDate(member.getDate());
+		setMemberFee(member.getFee());
 	}
 
 	public String getProductId() {
@@ -83,16 +121,16 @@ public class DataTransfer {
 		this.productName = productName;
 	}
 
-	public String getProductCurrentPrice() {
-		return productCurrentPrice;
+	public Double getProductPrice() {
+		return Double.valueOf(productPrice);
 	}
 
-	public void setProductCurrentPrice(String productCurrentPrice) {
-		this.productCurrentPrice = productCurrentPrice;
+	public void setProductPrice(String productCurrentPrice) {
+		this.productPrice = productCurrentPrice;
 	}
 
-	public String getProductMinimumReorderLevel() {
-		return productMinimumReorderLevel;
+	public int getProductMinimumReorderLevel() {
+		return Integer.parseInt(productMinimumReorderLevel);
 	}
 
 	public void setProductMinimumReorderLevel(String productMinimumReorderLevel) {
@@ -111,11 +149,11 @@ public class DataTransfer {
 	 */
 
 	public void setProductFields(Product product) {
-		productId = product.getId();
-		productName = product.getName();
-		productQuantity = product.getQuantity();
-		productCurrentPrice = product.getPrice();
-		productMinimumReorderLevel = product.getReorderLevel();
+		setProductId(product.getId());
+		setProductName(product.getName());
+		setProductQuantity(product.getQuantity());
+		setProductPrice(product.getPrice());
+		setProductMinimumReorderLevel(product.getReorderLevel());
 	}
 
 	public String getOrderProductName() {
@@ -153,12 +191,12 @@ public class DataTransfer {
 	 * 
 	 */
 
-	public void setOrderField(Order order) {
+	public void setOrderFields(Order order) {
 		orderProductId = order.getProductId();
 		orderProductName = order.getProductName();
-		amountOrdered = order.getAmountOrdered();
+		amountOrdered = order.getAmount();
 	}
-	
+
 	/*
 	 * sets all transaction fields using the transaction parameter
 	 * 
@@ -181,7 +219,7 @@ public class DataTransfer {
 	public void setTransactionDate(String calendar) {
 		this.transactionDate = calendar;
 	}
-	
+
 	/*
 	 * sets all transaction fields using the transaction parameter
 	 * 
@@ -194,15 +232,71 @@ public class DataTransfer {
 		setTransactionTotalPrice(transaction.getTotalPrice());
 	}
 
+	/*
+	 * This sets all fields to "Product fields"
+	 */
+
+	public StringBuilder getProductsToBeReordered() {
+		return productsToBeReordered;
+	}
+
+	public void setProductsToBeReordered(StringBuilder productsToBeReordered) {
+		this.productsToBeReordered = productsToBeReordered;
+	}
+
+	public String getIsProductReordered() {
+		return isProductReordered;
+	}
+
+	public void setIsProductReordered(String isProductReordered) {
+		this.isProductReordered = isProductReordered;
+	}
+
+	public String getCheckoutLineItem() {
+		return checkoutLineItem;
+	}
+
+	public void setCheckoutLineItem(String checkoutLineItem) {
+		this.checkoutLineItem = checkoutLineItem;
+	}
+
+	public String getCartTotalPrice() {
+		return cartTotalPrice;
+	}
+
+	public void setCartTotalPrice(String cartTotalPrice) {
+		this.cartTotalPrice = cartTotalPrice;
+	}
+
+	public String getProductCartQuantity() {
+		return productCartQuantity;
+	}
+
+	public void setProductCartQuantity(String productCartQuantity) {
+		this.productCartQuantity = productCartQuantity;
+	}
+
+	/*
+	 * sets all productCart fields using the productCart parameter
+	 * 
+	 * @param productCart whose field should be copied
+	 * 
+	 */
+
+	public void setProductFieldsFields(Cart cart) {
+		//
+	}
+
 	/**
 	 * Sets all String fields to "none"
 	 */
 	public void reset() {
 		productId = "Invalid product id";
 		productName = "No such product";
-		productCurrentPrice = "No such product";
+		productPrice = "No such product";
 		productMinimumReorderLevel = "No such product";
 		productQuantity = "No such product";
 	}
 
 }
+
