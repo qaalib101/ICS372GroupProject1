@@ -89,11 +89,9 @@ public class GroceryStore {
 				request.getProductMinimumReorderLevel());
 		boolean addProduct = inventory.insertProduct(newProduct);
 		if (addProduct) {
-			result.setResultCode(result.OPERATION_COMPLETED);
+			result.setResultCode(Result.OPERATION_COMPLETED);
 			result.setProductFields(newProduct);
 		}
-		// result.setProductQuantity(String.valueOf(2 *
-		// result.getProductMinimumReorderLevel()));
 		return result;
 	}
 
@@ -285,17 +283,23 @@ public class GroceryStore {
 		}
 		return result;
 	}
-	
+
 	/*
-	 * Adds a new transaction to a given member
+	 * This method calls on addTransaction from the Member class to add a
+	 * transaction to a given Member
+	 * 
+	 * @return void
 	 */
 	public void addTransactionToMember(Request request) {
 		Member member = members.search(request.getMemberId());
 		member.addTransaction(new Transaction(Double.parseDouble(request.getCartTotalPrice())));
 	}
-	
+
 	/*
-	 * @return Iterator<Result> of a member's transactions
+	 * Returns an iterator to Member. The iterator returned is a safe iterator, and
+	 * gets all the transactions of that member between a start and end date range.
+	 * 
+	 * @return void
 	 */
 	public Iterator<Result> getTransactions(Request request) {
 		Member member = members.search(request.getMemberId());
@@ -339,9 +343,9 @@ public class GroceryStore {
 	}
 
 	/**
-	 * Serializes the GroceryStore object
+	 * Serializes the Library object
 	 * 
-	 * @return true if the data could be saved
+	 * @return true iff the data could be saved
 	 */
 	public static boolean save() {
 		try {
@@ -349,7 +353,6 @@ public class GroceryStore {
 			ObjectOutputStream output = new ObjectOutputStream(file);
 			output.writeObject(store);
 			Member.save(output);
-			Member.retrieve(input);
 			file.close();
 			return true;
 		} catch (IOException ioe) {
@@ -358,8 +361,8 @@ public class GroceryStore {
 		}
 	}
 
-	/*
-	 * Retrieves a deserialized version of the GroceryStore from disk
+	/**
+	 * Retrieves a deserialized version of the library from disk
 	 * 
 	 * @return a GroceryStore object
 	 */
@@ -368,7 +371,7 @@ public class GroceryStore {
 			FileInputStream file = new FileInputStream("GroceryStoreData");
 			ObjectInputStream input = new ObjectInputStream(file);
 			store = (GroceryStore) input.readObject();
-//			Member.retrieve(input);
+			Member.retrieve(input);
 			return store;
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
@@ -378,10 +381,7 @@ public class GroceryStore {
 			return null;
 		}
 	}
-	
-	/*
-	 * @return a string description of the inventory of products and a list of all members
-	 */
+
 	@Override
 	public String toString() {
 		return inventory + "\n" + members;
