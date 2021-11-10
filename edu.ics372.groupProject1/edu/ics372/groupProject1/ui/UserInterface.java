@@ -14,6 +14,7 @@ import java.util.StringTokenizer;
 import edu.ics372.groupProject1.facade.GroceryStore;
 import edu.ics372.groupProject1.facade.Request;
 import edu.ics372.groupProject1.facade.Result;
+import edu.ics372.groupProject1.tests.TestBed;
 
 /**
  * 
@@ -54,6 +55,7 @@ public class UserInterface {
 			retrieve();
 		} else {
 			if (yesOrNo("Do you want to generate a test bed and invoke the functionality using asserts?")) {
+				TestBed.main(null);
 				store = GroceryStore.instance();
 			} else {
 				store = GroceryStore.instance();
