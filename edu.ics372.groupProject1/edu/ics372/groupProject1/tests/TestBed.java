@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 
 import edu.ics372.groupProject1.entities.Member;
 import edu.ics372.groupProject1.entities.Product;
@@ -91,13 +92,14 @@ public class TestBed {
 		for (int count = 0; count < members.length; count++) {
 			Request.instance().setMemberAddress(addresses[count]);
 			Request.instance().setMemberName(names[count]);
-			Request.instance().setMemberDate(dateFormat.format(dates[count]));
+			Request.instance().setDate(dates[count]);
 			Request.instance().setMemberFee("10");
 			Result result = GroceryStore.instance().enrollMember(Request.instance());
 			assert result.getResultCode() == Result.OPERATION_COMPLETED;
 			assert result.getMemberName().equals(names[count]);
 			assert result.getMemberPhone().equals(phones[count]);
-			assert result.getMemberDate().equals(dates[count]);
+			assert result.getMemberDate().equals(dates[count].get(Calendar.MONTH) + "/"
+					+ dates[count].get(Calendar.DATE) + "/" + dates[count].get(Calendar.YEAR));
 			assert result.getMemberFee() == 10;
 		}
 	}
@@ -139,10 +141,21 @@ public class TestBed {
 		// TODO Auto-generated method stub
 	}
 
+	private void TestListOrders() {
+		int i = 1;
+		for (Iterator<Result> orderList = GroceryStore.instance().listOrders(); orderList.hasNext();) {
+			Result result = (Result) orderList.next();
+			assert result.getOrderProductName().equals(storeItems[i]);
+			assert result.getOrderProductId().equals("P" + i);
+			assert result.getAmountOrdered().equals(Integer.toString(reorderLevel[i]));
+		}
+	}
+
 	public void TestAll() {
 		TestAddMember();
 		TestAddProduct();
 		// TestCheckOutCart();
+		TestListOrders();
 		TestProcessShipment();
 		// TestPrintTransactions();
 	}
