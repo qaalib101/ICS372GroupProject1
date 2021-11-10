@@ -1,7 +1,12 @@
 package edu.ics372.groupProject1.entities;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 /*
 * The class Transaction is an object that stores information about the
@@ -9,7 +14,9 @@ import java.util.GregorianCalendar;
 * the date of which that Transaction was constructed, and a method to
 * check if two given dates are within an acceptable range. Which that is
 * used for returning the member's transactions within the given range.
-*/
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
+ *
+ */
 public class Transaction implements Serializable {
 	/*
 	 * Instance variables
@@ -79,8 +86,15 @@ public class Transaction implements Serializable {
 	* @return the date as string format mm/dd/yy
 	*/
 
-	public String getDate() {
-		return date.get(Calendar.MONTH) + "/" + date.get(Calendar.DATE) + "/" + date.get(Calendar.YEAR);
+	public double getTransactionTotal() {
+		return transactionTotal;
+	}
+  
+	public void printTransaction() {
+		// NOTE: A user may visit the store more then one times in a single day
+		// print date on which the user visit for each visit
+		// print the total price paid for each visit
+		System.out.println("\nTransaction\n");
 	}
 	/*
 	* Returns a string description about the Transaction

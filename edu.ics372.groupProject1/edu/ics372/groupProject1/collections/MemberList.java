@@ -7,6 +7,12 @@ import java.util.List;
 
 import edu.ics372.groupProject1.entities.Member;
 
+/**
+ * The collection class for members
+ * 
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
+ *
+ */
 public class MemberList implements Iterable<Member>, Serializable {
 	private static final long serialVersionUID = 1L;
 	private List<Member> members = new LinkedList<Member>();
@@ -38,7 +44,7 @@ public class MemberList implements Iterable<Member>, Serializable {
 	 * Checks whether a member with a given member id exists.
 	 * 
 	 * @param memberID the id of the member
-	 * @return true if the member exists
+	 * @return member object if the member exists and null if not.
 	 * 
 	 */
 	public Member search(String memberID) {
@@ -66,6 +72,11 @@ public class MemberList implements Iterable<Member>, Serializable {
 		}
 	}
 
+	/**
+	 * The iterator of members
+	 * 
+	 * @return iterator of member objects
+	 */
 	public Iterator<Member> iterator() {
 		return members.iterator();
 	}

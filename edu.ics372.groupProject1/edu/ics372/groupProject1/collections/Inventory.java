@@ -7,6 +7,12 @@ import java.util.List;
 
 import edu.ics372.groupProject1.entities.Product;
 
+/**
+ * The collection class for products
+ * 
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
+ *
+ */
 public class Inventory implements Iterable<Product>, Serializable {
 	private static final long serialVersionUID = 1L;
 	private static Inventory inventory;
@@ -34,11 +40,12 @@ public class Inventory implements Iterable<Product>, Serializable {
 		return true;
 	}
 
-	private void add(Product product) {
-		// TODO Auto-generated method stub
-
-	}
-
+	/**
+	 * Method to search collection for product using it id
+	 * 
+	 * @param productID id of product to be searched for
+	 * @return product object found. Null if not found.
+	 */
 	public Product search(String productID) {
 		for (Iterator<Product> iterator = products.iterator(); iterator.hasNext();) {
 			Product product = (Product) iterator.next();
@@ -49,18 +56,24 @@ public class Inventory implements Iterable<Product>, Serializable {
 		return null;
 	}
 
+	public Product searchByName(String productName) {
+		for (Iterator<Product> iterator = products.iterator(); iterator.hasNext();) {
+			Product product = (Product) iterator.next();
+			if (product.getName().equals(productName)) {
+				return product;
+			}
+		}
+		return null;
+	}
+
 	/**
-	 * Returns an iterator to all books
+	 * Returns an iterator to all products
 	 * 
 	 * @return iterator to the collection
 	 */
 	public Iterator<Product> iterator() {
 		return products.iterator();
 
-	}
-
-	public List<Product> getInventoryList() {
-		return products;
 	}
 
 	/**

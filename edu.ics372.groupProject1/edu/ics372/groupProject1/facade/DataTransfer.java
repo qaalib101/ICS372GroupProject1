@@ -10,6 +10,8 @@ import edu.ics372.groupProject1.entities.Transaction;
  * The DataTransfer class is used to transfer data between the UserInterface and the GroceryStore class.
  * It also supports iteration for Member, Product and Order class by copying their fields 
  * and sending that information in either direction.
+ * 
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
  */
 
 public class DataTransfer {
@@ -18,6 +20,7 @@ public class DataTransfer {
 	private String memberAddress;
 	private String memberPhone;
 	private String memberDate;
+
 	private String memberFee;
 	private String productId;
 	private String productName;
@@ -89,6 +92,7 @@ public class DataTransfer {
 
 	public void setMemberFee(String memberFee) {
 		this.memberFee = memberFee;
+
 	}
 
 	/*
@@ -197,12 +201,6 @@ public class DataTransfer {
 		amountOrdered = order.getAmount();
 	}
 
-	/*
-	 * sets all transaction fields using the transaction parameter
-	 * 
-	 * @param transaction whose field should be copied
-	 * 
-	 */
 
 	public String getTransactionTotalPrice() {
 		return transactionTotalPrice;
@@ -228,8 +226,48 @@ public class DataTransfer {
 	 */
 
 	public void setTransactionFields(Transaction transaction) {
-		setTransactionDate(transaction.getDate());
-		setTransactionTotalPrice(transaction.getTotalPrice());
+		setTransactionDate(transaction.getTodaysDate());
+		setTransactionTotalPrice(Double.toString(transaction.getTransactionTotal()));
+	}
+
+	public StringBuilder getProductsToBeReordered() {
+		return productsToBeReordered;
+	}
+
+	public void setProductsToBeReordered(StringBuilder productsToBeReordered) {
+		this.productsToBeReordered = productsToBeReordered;
+	}
+
+	public String getIsProductReordered() {
+		return isProductReordered;
+	}
+
+	public void setIsProductReordered(String isProductReordered) {
+		this.isProductReordered = isProductReordered;
+	}
+
+	public String getCheckoutLineItem() {
+		return checkoutLineItem;
+	}
+
+	public void setCheckoutLineItem(String checkoutLineItem) {
+		this.checkoutLineItem = checkoutLineItem;
+	}
+
+	public String getCartTotalPrice() {
+		return cartTotalPrice;
+	}
+
+	public void setCartTotalPrice(String cartTotalPrice) {
+		this.cartTotalPrice = cartTotalPrice;
+	}
+
+	public String getProductCartQuantity() {
+		return productCartQuantity;
+	}
+
+	public void setProductCartQuantity(String productCartQuantity) {
+		this.productCartQuantity = productCartQuantity;
 	}
 
 	/*

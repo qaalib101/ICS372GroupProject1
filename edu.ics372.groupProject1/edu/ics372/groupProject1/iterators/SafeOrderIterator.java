@@ -6,16 +6,23 @@ import java.util.NoSuchElementException;
 import edu.ics372.groupProject1.entities.Order;
 import edu.ics372.groupProject1.facade.Result;
 
+/**
+ * This Iterator implementation is tailor-made to supply a "read-only" version
+ * of Order objects. The user should supply an iterator to Order as the
+ * parameter to the constructor.
+ * 
+ * @author Qaalib Farah, Ayden Sinn, Nate Goetsch, Leng Vang, John Quinlan
+ *
+ */
 public class SafeOrderIterator implements Iterator<Result> {
 	private Iterator<Order> iterator;
 	private Result result = new Result();
 
 	/**
-	 * This safe iterator class help support the iteration to Order.
-	 * It does so by setting the the Order fields into the class result
-	 * and returns the result.
+	 * This safe iterator class help support the iteration to Order. It does so by
+	 * setting the the Order fields into the class result and returns the result.
 	 * 
-	 * @param iterator Iterator<Product>
+	 * @param iterator Iterator<Order>
 	 */
 	public SafeOrderIterator(Iterator<Order> iterator) {
 		this.iterator = iterator;
