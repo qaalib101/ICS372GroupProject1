@@ -145,6 +145,8 @@ public class GroceryStore {
 		String productId = request.getProductId();
 		String memberId = request.getMemberId();
 		Member member = members.search(memberId);
+		String productName = request.getProductName();
+		Product product = inventory.searchByName(productName);
 		if (product == null) {
 			result.setResultCode(Result.PRODUCT_NOT_FOUND);
 			return result;
