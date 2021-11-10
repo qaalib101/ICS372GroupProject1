@@ -3,7 +3,6 @@ package edu.ics372.groupProject1.entities;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -39,6 +38,15 @@ public class Cart implements Serializable {
 		return totalPrice;
 	}
 
+	/**
+	 * @author jquin
+	 * 
+	 *         getTotalPrice. Returns the totalPrice field.
+	 * 
+	 * @param N/A
+	 * @return double
+	 * 
+	 */
 	public double getTotalPrice() {
 		return totalPrice;
 	}
@@ -59,6 +67,16 @@ public class Cart implements Serializable {
 		}
 	}
 
+	/**
+	 * @author jquin
+	 * 
+	 *         getReorderList. Returns the list of products to be reordered after
+	 *         checkout complete.
+	 * 
+	 * @param N/A
+	 * @return List<Product>
+	 * 
+	 */
 	public List<Product> getReorderList() {
 		return reorderList;
 	}
@@ -85,8 +103,8 @@ public class Cart implements Serializable {
 	 * getCartItems Method return a list of all the items in the cart.
 	 *
 	 */
-	public Iterator<CartItem> getCartItems() {
-		return cartItems.iterator();
+	public List<CartItem> getCartItems() {
+		return this.cartItems;
 	}
 
 	/**

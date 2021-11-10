@@ -1,6 +1,9 @@
 package edu.ics372.groupProject1.entities;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -18,20 +21,9 @@ public class Transaction implements Serializable {
 	public Transaction(int memberID, double transactionTotal) {
 		this.memberID = memberID;
 		todaysDate.setTime(new Date());
-		transactionTotal = transactionTotal;
+		this.transactionTotal = transactionTotal;
 		this.id = "T" + ++transactionID;
-	}
 
-	public void printTransaction() {
-		// NOTE: A user may visit the store more then one times in a single day
-		// print date on which the user visit for each visit
-		// print the total price paid for each visit
-		System.out.println("\nTransaction\n");
-	}
-
-	public Transaction(double totalPrice) {
-		this.totalPrice = totalPrice;
-		date = new GregorianCalendar();
 	}
 
 	/**
@@ -69,6 +61,13 @@ public class Transaction implements Serializable {
 
 	public double getTransactionTotal() {
 		return transactionTotal;
+	}
+
+	public void printTransaction() {
+		// NOTE: A user may visit the store more then one times in a single day
+		// print date on which the user visit for each visit
+		// print the total price paid for each visit
+		System.out.println("\nTransaction\n");
 	}
 //	public String getDate2() {
 //		return date2;

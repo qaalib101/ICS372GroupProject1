@@ -17,25 +17,71 @@ public class CartItem {
 	private double unitPrice;
 	DecimalFormat df = new DecimalFormat("0.00");
 
+	/**
+	 * @author jquin
+	 * 
+	 *         CartItem Class constructor.
+	 * 
+	 * @param Product, int
+	 * @return N/A
+	 * 
+	 */
 	public CartItem(Product product, int numberOfUnits) {
 		super();
 		this.product = product;
 		this.numberOfUnits = numberOfUnits;
 	}
 
+	/**
+	 * @author jquin
+	 * 
+	 *         getTotalItemPrice. Calculates the price total of the cart item.
+	 * 
+	 * @param N/A
+	 * @return double
+	 * 
+	 */
 	public double getTotalItemPrice() {
 		return this.getUnitPrice() * numberOfUnits;
 
 	}
 
+	/**
+	 * @author jquin
+	 * 
+	 *         getUnitPrice. returns the unit price field.
+	 * 
+	 * @param N/A
+	 * @return double
+	 * 
+	 */
 	public double getUnitPrice() {
 		return Double.parseDouble(product.getPrice());
 	}
 
+	/**
+	 * @author jquin
+	 * 
+	 *         getProduct. returns the product field.
+	 * 
+	 * @param N/A
+	 * @return Product
+	 * 
+	 */
 	public Product getProduct() {
 		return product;
 	}
 
+	/**
+	 * @author jquin
+	 * 
+	 *         getNumberOfUnits. returns the number of units of the particular item
+	 *         in the CartItem instance.
+	 * 
+	 * @param N/A
+	 * @return int
+	 * 
+	 */
 	public int getNumberOfUnits() {
 		return this.numberOfUnits;
 	}

@@ -265,13 +265,9 @@ public class UserInterface {
 				System.out.println("Product could not be checked out");
 			}
 		} while (yesOrNo("Check out more products?"));
-
-//		store.recoredTransaction(Request.instance());
-		// decided to include recoredTransaction() inside "printCheckout()" method
 		store.printCheckOut(Request.instance());
-
 	}
-  
+
 	/**
 	 * Prompts the user for information that is used to create a member.
 	 */
@@ -397,20 +393,7 @@ public class UserInterface {
 
 	// PRELIMINARY //Are we utilizing Calendar Objects for Dates or strings?
 	public void printTransactions() {
-//		// String date1, date2;
-//		Request.instance().setMemberId(getToken("Enter member id"));
-//		Request.instance()
-//				.setStartDate(getDate("Please enter the first date for which you want records from mm/dd/yy"));
-//		Request.instance().setEndDate(getDate("Please enter the second date for which you want records to mm/dd/yy"));
-//		Iterator<Result> result = store.getTransactions(Request.instance());
-//		while (result.hasNext()) {
-//			Result transaction = result.next();
-//			System.out.println(transaction.getTransactionDate() + " " + transaction.getTransactionTotalPrice() + "\n");
-//		}
-//		System.out.println("\n End of transactions \n");
-//		// Request.instance().setTransactionDate(getToken("Please enter the first date
-//		// for which you want records as mm/dd/yy"));
-//		//
+
 	}
 
 	/**
@@ -435,9 +418,9 @@ public class UserInterface {
 		System.out.println("List of Prodcuts (name, id, minimum reorder level)");
 		while (iterator.hasNext()) {
 			Result result = iterator.next();
-			System.out.println(result.getProductName() + " " + result.getProductId() + " " + result.getProductCurrentPrice()
-					+ result.getProductMinimumReorderLevel());
-					
+			System.out.println(result.getProductName() + " " + result.getProductId() + " "
+					+ result.getProductCurrentPrice() + result.getProductMinimumReorderLevel());
+
 		}
 		System.out.println("End of listing");
 	}

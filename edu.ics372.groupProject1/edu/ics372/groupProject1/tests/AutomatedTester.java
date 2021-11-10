@@ -97,6 +97,7 @@ public class AutomatedTester {
 		generatateTestData();
 		UI.retrieveProduct();
 		UI.checkoutCart();
+	}
 
 	public void testSearchMembership() {
 		Request.instance().setMemberId("M1");
@@ -105,7 +106,7 @@ public class AutomatedTester {
 		Request.instance().setMemberId("M4");
 		// assert Library.instance().searchMembership(Request.instance()) == null;
 	}
-	
+
 	/**
 	 * Tests a list of Members
 	 */
@@ -172,7 +173,6 @@ public class AutomatedTester {
 			assert expected.getAmountOrdered().equals(actual.getAmountOrdered());
 			i++;
 		}
-
 
 	public void testAll() {
 		testProcessShipment();
