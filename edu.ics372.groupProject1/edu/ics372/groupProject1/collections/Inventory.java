@@ -41,10 +41,10 @@ public class Inventory implements Iterable<Product>, Serializable {
 	}
 
 	/**
-	 * Method to search collection for product using it id
+	 * Searches for a product with the given ID
 	 * 
-	 * @param productID id of product to be searched for
-	 * @return product object found. Null if not found.
+	 * @param productID the id of product being searched for
+	 * @return product if object is found, null if not found
 	 */
 	public Product search(String productID) {
 		for (Iterator<Product> iterator = products.iterator(); iterator.hasNext();) {
@@ -56,6 +56,12 @@ public class Inventory implements Iterable<Product>, Serializable {
 		return null;
 	}
 
+	/**
+	 * Searches for a product with the given name
+	 * 
+	 * @param productName the name of the product being searched for
+	 * @return product if product is found, null if not found
+	 */
 	public Product searchByName(String productName) {
 		for (Iterator<Product> iterator = products.iterator(); iterator.hasNext();) {
 			Product product = (Product) iterator.next();
@@ -76,10 +82,7 @@ public class Inventory implements Iterable<Product>, Serializable {
 
 	}
 
-	/**
-	 * String form of the collection
-	 * 
-	 */
+	@Override
 	public String toString() {
 		return products.toString();
 	}
