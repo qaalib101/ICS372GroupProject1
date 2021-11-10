@@ -17,7 +17,7 @@ public class Member implements Serializable {
 	private String id;
 	private static final String MEMBER_STRING = "M";
 	private static int idCounter;
-	private List<Transaction> transactions = new LinkedList<Transaction>(); // make "List" Class for generics
+	private List<Transaction> transactions = new LinkedList<Transaction>();
 
 	/**
 	 * Creates a single member
@@ -43,18 +43,39 @@ public class Member implements Serializable {
 	 * @param date the date for which the transactions have to be retrieved
 	 * @return the iterator to the collection
 	 */
-	public Iterator<Result> getTransactionsBetweenDates(Calendar date1, Calendar date2) {
-		return new SafeTransactionIterator(
-				new FilteredIterator(transactions.iterator(), transaction -> transaction.datesInRange(date1, date2)));
+	public Iterator<Result> getTransactionsBetweenDates(Calendar startDate, Calendar endDate) {
+		return new SafeTransactionIterator(new FilteredIterator(getTransactionsInRange(startDate, endDate),
+				transaction -> transaction.datesInRange(startDate, endDate)));
+	}
+	
+	/*
+	 * Returns a list of transactions within the start and end date range
+	 * 
+	 * @param startDate
+	 * @param endDate
+	 * @return Iterator<Transaction>
+	 */
+	public Iterator<Transaction> getTransactionsInRange(Calendar startDate, Calendar endDate) {
+		List<Transaction> subTransactionsList = new LinkedList<Transaction>();
+		for (int index = 0; index < transactions.size(); index++) {
+			Transaction transaction = transactions.get(index);
+			// if transaction date is in range of given startDate and endDate, then add to
+			if (transaction.datesInRange(startDate, transaction.returnDate())
+					&& transaction.datesInRange(transaction.returnDate(), endDate)) {
+				subTransactionsList.add(transaction);
+			}
+		}
+		return subTransactionsList.iterator();
 	}
 
-	/**
-	 * Returns the list of all transactions for this member.
+	/*
+	 * Adds a given transaction to the transactions list
 	 * 
-	 * @return the iterator to the list of Transaction objects
+	 * @param transaction that is added to transaction list
+	 * @return void
 	 */
-	public Iterator<Transaction> getTransactions() {
-		return transactions.iterator();
+	public void addTransaction(Transaction transaction) {
+		transactions.add(transaction);
 	}
 
 	/**
