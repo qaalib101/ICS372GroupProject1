@@ -128,15 +128,11 @@ public class GroceryStore {
 	 * @return Result
 	 * 
 	 */
-
-	// TODO finish moving interface code to GroceryStore
-	// TODO remove reorderlist and utilize DataTransfer
 	public Result checkOutProduct(Request request) {
 		Result result = new Result();
 		String productId = request.getProductId();
 		String memberId = request.getMemberId();
 		Member member = members.search(memberId);
-		Product product = inventory.search(productId);
 		if (product == null) {
 			result.setResultCode(Result.PRODUCT_NOT_FOUND);
 			return result;

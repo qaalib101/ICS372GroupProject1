@@ -78,8 +78,9 @@ public class Member implements Serializable {
 	 * 
 	 * @return the iterator to the list of Transaction objects
 	 */
-	public Iterator<Transaction> getTransactions() {
-		return transactions.iterator();
+
+	public List<Transaction> getTransactions() {
+		return transactions;
 	}
 
 	/**

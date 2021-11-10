@@ -3,7 +3,6 @@ package edu.ics372.groupProject1.facade;
 import edu.ics372.groupProject1.entities.Member;
 import edu.ics372.groupProject1.entities.Order;
 import edu.ics372.groupProject1.entities.Product;
-import edu.ics372.groupProject1.entities.Transaction;
 
 /*
  * The DataTransfer class is used to transfer data between the UserInterface and the GroceryStore class.

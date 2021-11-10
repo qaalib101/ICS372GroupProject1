@@ -99,6 +99,7 @@ public class AutomatedTester {
 		generatateTestData();
 		UI.retrieveProduct();
 		UI.checkoutCart();
+	}
 
 	public void testSearchMembership() {
 		Request.instance().setMemberId("M1");

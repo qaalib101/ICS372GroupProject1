@@ -30,17 +30,9 @@ public class Transaction implements Serializable {
 	public Transaction(int memberID, double transactionTotal) {
 		this.memberID = memberID;
 		todaysDate.setTime(new Date());
-		transactionTotal = transactionTotal;
+		this.transactionTotal = transactionTotal;
 		this.id = "T" + ++transactionID;
 	}
-
-	public void printTransaction() {
-		// NOTE: A user may visit the store more then one times in a single day
-		// print date on which the user visit for each visit
-		// print the total price paid for each visit
-		System.out.println("\nTransaction\n");
-	}
-
 	/**
 	 * Checks whether this transaction is on the given date
 	 * 
@@ -77,6 +69,20 @@ public class Transaction implements Serializable {
 	public double getTransactionTotal() {
 		return transactionTotal;
 	}
+  
+	public void printTransaction() {
+		// NOTE: A user may visit the store more then one times in a single day
+		// print date on which the user visit for each visit
+		// print the total price paid for each visit
+		System.out.println("\nTransaction\n");
+	}
+//	public String getDate2() {
+//		return date2;
+//	}
+
+//	public void setDate2(String date2) {
+//		this.date2 = date2;
+//	}
 
 	@Override
 	public String toString() {

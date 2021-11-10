@@ -312,11 +312,7 @@ public class UserInterface {
 				System.out.println("Product could not be checked out");
 			}
 		} while (yesOrNo("Check out more products?"));
-
-//		store.recoredTransaction(Request.instance());
-		// decided to include recoredTransaction() inside "printCheckout()" method
 		store.printCheckOut(Request.instance());
-
 	}
 
 	/**
@@ -395,6 +391,15 @@ public class UserInterface {
 					.println("Changed price of " + result.getProductName() + " to $" + result.getProductCurrentPrice());
 			break;
 		}
+	}
+
+	/*
+	 * Prints all transactions for a member within a date range
+	 */
+
+	// PRELIMINARY //Are we utilizing Calendar Objects for Dates or strings?
+	public void printTransactions() {
+
 	}
 
 	/**
