@@ -198,7 +198,7 @@ public class GroceryStore {
 			System.out.println(itemDetails);
 		}
 		member.getCart().printCartTotal();
-		if (request.getProductsToBeReordered().length() != 0) {
+		if (request.getProductsToBeReordered() != null) {
 			System.out.println("The product(s), ");
 			System.out.println(Request.instance().getProductsToBeReordered());
 			System.out.println("are to be reordered.");

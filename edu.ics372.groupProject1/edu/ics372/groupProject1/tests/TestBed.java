@@ -1,9 +1,10 @@
 package edu.ics372.groupProject1.tests;
 
-import java.util.ArrayList;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.Iterator;
 
 import edu.ics372.groupProject1.entities.CartItem;
 import edu.ics372.groupProject1.entities.Member;
@@ -15,7 +16,7 @@ import edu.ics372.groupProject1.ui.UserInterface;
 
 /**
  * This class generates automated tests for the library system using asserts.
- * 
+ *
  * @author
  *
  */
@@ -39,6 +40,7 @@ public class TestBed {
 	private int[] reorderLevel = { 20, 20, 20, 20, 20, 30, 15, 15, 15, 10, 10, 15, 20, 20, 15, 16, 25, 14, 30, 15 };
 	private Product[] products = new Product[20];
 	private String[] ids = { "id1", "id2", "id3", "id4", "id5", "id6" };
+	private DateFormat dateFormat = new SimpleDateFormat("mm/dd/yyyy");
 
 	public void GeneratateTestData() {
 //		// create dates
@@ -83,13 +85,24 @@ public class TestBed {
 	 * Tests Member creation.
 	 */
 	public void TestAddMember() {
+		// create dates
+		for (int index = 0; index < years.length; index++) {
+			Calendar date = new GregorianCalendar(years[index], months[index], days[index]);
+			dates[index] = date;
+		}
+
 		for (int count = 0; count < members.length; count++) {
 			Request.instance().setMemberAddress(addresses[count]);
 			Request.instance().setMemberName(names[count]);
+			Request.instance().setDate(dates[count]);
+			Request.instance().setMemberFee("10");
 			Result result = GroceryStore.instance().enrollMember(Request.instance());
 			assert result.getResultCode() == Result.OPERATION_COMPLETED;
 			assert result.getMemberName().equals(names[count]);
 			assert result.getMemberPhone().equals(phones[count]);
+			assert result.getMemberDate().equals(dates[count].get(Calendar.MONTH) + "/"
+					+ dates[count].get(Calendar.DATE) + "/" + dates[count].get(Calendar.YEAR));
+			assert result.getMemberFee() == 10;
 		}
 	}
 
@@ -100,7 +113,7 @@ public class TestBed {
 		for (int count = 0; count < products.length; count++) {
 			Request.instance().setProductPrice(Double.toString(price[count]));
 			Request.instance().setProductName(storeItems[count]);
-			Request.instance().setProductMinimumReorderLevel(ids[count]);
+			Request.instance().setProductMinimumReorderLevel(Integer.toString(reorderLevel[count]));
 			Result result = GroceryStore.instance().addProduct(Request.instance());
 			assert result.getResultCode() == Result.OPERATION_COMPLETED;
 			assert result.getProductName().equals(storeItems[count]);
@@ -115,19 +128,37 @@ public class TestBed {
 
 	private void TestProcessShipment() {
 		// TODO Auto-generated method stub
-
+		for (int count = 0; count < products.length; count++) {
+			Request.instance().setProductId("P" + ++count);
+			Result result = GroceryStore.instance().processShipment(Request.instance());
+			assert result.getResultCode() == Result.OPERATION_COMPLETED;
+			assert result.getProductName().equals(storeItems[count]);
+			assert result.getProductPrice().equals(price[count]);
+			assert result.getProductQuantity().equals(Double.toString(2 * result.getProductMinimumReorderLevel()));
+		}
 	}
 
 	private void TestPrintTransactions() {
 		// TODO Auto-generated method stub
 	}
 
+	private void TestListOrders() {
+		int i = 1;
+		for (Iterator<Result> orderList = GroceryStore.instance().listOrders(); orderList.hasNext();) {
+			Result result = (Result) orderList.next();
+			assert result.getOrderProductName().equals(storeItems[i]);
+			assert result.getOrderProductId().equals("P" + i);
+			assert result.getAmountOrdered().equals(Integer.toString(reorderLevel[i]));
+		}
+	}
+
 	public void TestAll() {
 		TestAddMember();
 		TestAddProduct();
-		TestCheckOutCart();
+		// TestCheckOutCart();
+		TestListOrders();
 		TestProcessShipment();
-		TestPrintTransactions();
+		// TestPrintTransactions();
 	}
 
 	public static void main(String[] args) {

@@ -148,7 +148,7 @@ public class Member implements Serializable {
 	 * @return date joined
 	 */
 	public String getDate() {
-		return dateFormat.format(date);
+		return date.get(Calendar.MONTH) + "/" + date.get(Calendar.DATE) + "/" + date.get(Calendar.YEAR);
 	}
 
 	/**
